@@ -1,0 +1,2 @@
+class YxDetail < ApplicationRecord
+end

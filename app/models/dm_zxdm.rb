@@ -1,0 +1,2 @@
+class DmZxdm < ApplicationRecord
+end

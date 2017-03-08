@@ -1,0 +1,2 @@
+class ZyDetail < ApplicationRecord
+end
