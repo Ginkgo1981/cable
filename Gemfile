@@ -29,12 +29,17 @@ gem 'puma', '~> 3.0'
 
 
 gem 'rb-readline'
+gem 'redis'
+
+gem 'state_machine'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'pry'
   gem 'pry-nav'
   gem 'pry-rails'
+  gem 'annotate', git: 'https://github.com/ctran/annotate_models.git'
+
   #gem 'byebug', platform: :mri
 end
 
