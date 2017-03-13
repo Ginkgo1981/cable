@@ -17,7 +17,7 @@ module ApplicationCable
     private
     def find_verified_user
       pp '===== find_verified_user ====='
-      User.find_by_id(request.params['id']) || reject_unauthorized_connection
+      User.find_by_id(request.params['user_id']) || reject_unauthorized_connection
     end
 
 

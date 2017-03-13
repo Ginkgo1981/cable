@@ -3,7 +3,6 @@
 # Table name: teachers
 #
 #  id         :integer          not null, primary key
-#  user_id    :integer
 #  yxmc       :string(255)
 #  yxdm       :string(255)
 #  created_at :datetime         not null

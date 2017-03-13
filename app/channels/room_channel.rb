@@ -1,10 +1,10 @@
 class RoomChannel < ApplicationCable::Channel
-  periodically -> { ping }, every:5
+  periodically -> { ping }, every:8
   def subscribed
     # stream_from "messages"
     # stream_from "messages:#{current_user.id}"
     # stream_from "RoomChannel:#{current_user.id}"
-    stream_from "user:#{current_user.id}"
+    stream_from "user::#{current_user.id}"
     # stream_for current_user
     @index = 0
     current_user.online
@@ -40,17 +40,20 @@ class RoomChannel < ApplicationCable::Channel
   private
   def ping
 
-    $redis.cache('wechat_access_token', 'ssssssss', 2*60*60)
+    json  = $redis.zrange("user::#{current_user.id}",0,0).first
+    pp "====== json ====== #{json}"
+    if json
+      $redis.zrem("user::#{current_user.id}", json)
+      message = JSON.parse(json)
+      ActionCable.server.broadcast("user::#{current_user.id}",
+                                   message: {msg: message['content'],
+                                             id: message['id'],
+                                             time_stamp: Time.now.to_i,
+                                             marked: false})
+    else
 
-
-
-    #
-    # ActionCable.server.broadcast("user:#{current_user.id}",
-    #                              message: {msg: "hello,   #{current_user.name}",
-    #                                        id: @index,
-    #                                        time_stamp: Time.now.to_i,
-    #                                        marked: false})
-
+      pp '====== null ========'
+    end
     # User.create name: "sssssss"
     # pp "===== ping current_user #{current_user.id}======="
     #

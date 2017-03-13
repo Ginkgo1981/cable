@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170308162403) do
+ActiveRecord::Schema.define(version: 20170311155206) do
 
   create_table "bookmarkings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "user_id"
@@ -67,13 +67,21 @@ ActiveRecord::Schema.define(version: 20170308162403) do
   end
 
   create_table "staffs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "students", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "stories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "title"
+    t.string   "description"
+    t.text     "content",          limit: 65535
+    t.string   "coverage_img_url"
     t.integer  "user_id"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  create_table "students", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.string   "province"
     t.string   "city"
     t.string   "school"
@@ -90,7 +98,6 @@ ActiveRecord::Schema.define(version: 20170308162403) do
   end
 
   create_table "teachers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "user_id"
     t.string   "yxmc"
     t.string   "yxdm"
     t.datetime "created_at", null: false
@@ -98,17 +105,30 @@ ActiveRecord::Schema.define(version: 20170308162403) do
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.string   "cell",          limit: 50
+    t.string   "cell",                      limit: 50
     t.string   "passwd"
     t.string   "salt"
-    t.string   "name",                     default: ""
+    t.string   "name",                                 default: ""
     t.integer  "sex"
-    t.string   "email",         limit: 50
-    t.string   "token",         limit: 50
-    t.string   "identity_id",   limit: 50
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.string   "email",                     limit: 50
+    t.string   "token",                     limit: 50
+    t.string   "identity_id",               limit: 50
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.string   "identity_type"
+    t.string   "sms_auth_code"
+    t.string   "nick_name"
+    t.string   "avatar_url"
+    t.string   "union_id"
+    t.string   "mini_app_open_id"
+    t.string   "web_authorization_open_id"
+    t.string   "offical_account_open_id"
+    t.datetime "subscribe_at"
+    t.datetime "unsubscribe_at"
+    t.string   "device_info"
+    t.boolean  "register_status"
+    t.datetime "register_at"
+    t.boolean  "online_status"
   end
 
   create_table "yx_details", primary_key: "ID", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

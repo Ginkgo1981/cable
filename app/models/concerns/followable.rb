@@ -3,7 +3,7 @@ module Followable
   
   included do
     has_many :followings, :as => :followable
-    has_many :followed_by, :through => :followings, :class_name => :User, :source => :user
+    has_many :followed_by,-> { uniq }, :through => :followings, :class_name => :User, :source => :user
   end
 
 end

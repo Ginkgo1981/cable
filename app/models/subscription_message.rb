@@ -14,19 +14,15 @@
 #  attachment_type :string(255)
 #
 
-class Message < ApplicationRecord
-  include Bookmarkable
-  belongs_to :user
-  belongs_to :attachment, polymorphic: true, optional: true
-  belongs_to :receiver, class_name: User, optional: true
+class SubscriptionMessage < Message
+  after_create_commit :send_to_redis
 
-  def format_for_redis
-    {
-        id: self.id,
-        type: self.type,
-        content: self.content
-    }
+  private
+  def send_to_redis
+    teacher = self.user.identity
+    followed_by = teacher.followed_by
+    followed_by.each do |user|
+      $redis.zadd("user::#{user.id}", 100, JSON(self.format_for_redis))
+    end
   end
-  # after_create_commit {MessageBroadcastJob.perform_now self}
-
 end
