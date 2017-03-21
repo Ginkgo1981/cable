@@ -21,4 +21,7 @@
 #
 
 class YxDetail < ApplicationRecord
+
+
+
 end

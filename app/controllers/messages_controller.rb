@@ -2,16 +2,16 @@ class MessagesController < ApplicationController
 
 
   def list
-    messages = Message.limit(10).map{|msg| msg.format_for_redis}
+    messages = Message.with_type(params[:type]).limit(100).reverse_order.map { |msg| msg.format_for_redis }
     render json: {
         code: 0,
         data: messages
     }
   end
 
-  def send_point_message
-    message = PointMessage.create! user_id: 50,
-                                   content: params[:message],
+  def send_message
+    message = params[:message_type].constantize.create! user_id: params[:sender_id],
+                                   content: params[:content],
                                    receiver_id: params[:receiver_id],
                                    attachment_id: params[:attachment_id],
                                    attachment_type: params[:attachment_type]
@@ -20,12 +20,32 @@ class MessagesController < ApplicationController
         code: 0,
         message: 'send ok'
     }
-
   end
 
 
-  def show
 
+  def load_options
+    options = {
+        Story: [
+            {value:1, name: 't1'},
+            {value:2, name: 't2'},
+            {value:3, name: 't3'},
+            {value:4, name: 't4'}
+        ],
+        University: [
+            {value: 1, name: '南京大学'},
+            {value: 2, name: '南京林业大学'},
+            {value: 3, name: '南京工业大学'}
+        ]
+    }
 
+    render json: {
+        code: 0,
+        data: options
+    }
   end
+
+
 end
+
+

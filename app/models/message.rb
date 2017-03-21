@@ -16,6 +16,8 @@
 
 class Message < ApplicationRecord
   include Bookmarkable
+
+  scope :with_type, -> (type) {where(type: type)}
   belongs_to :user
   belongs_to :attachment, polymorphic: true, optional: true
   belongs_to :receiver, class_name: User, optional: true
@@ -23,8 +25,13 @@ class Message < ApplicationRecord
   def format_for_redis
     {
         id: self.id,
+        user_id: self.user_id,
+        receiver_id: self.receiver_id,
         type: self.type,
-        content: self.content
+        content: self.content,
+        created_at: self.created_at,
+        attachment_id: self.attachment_id,
+        attachment_type: self.attachment_type
     }
   end
   # after_create_commit {MessageBroadcastJob.perform_now self}

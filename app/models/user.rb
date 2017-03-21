@@ -32,6 +32,9 @@
 class User < ApplicationRecord
 
   # has_many :sended_messages, class_name: Message
+  scope :with_identity, ->(identity_type) {where(identity_type: identity_type)}
+
+
   belongs_to :identity, polymorphic: true, optional: true
   has_many :followings
   has_many :following_teachers, -> { uniq }, :source => :followable, :through => :followings, :source_type => :Teacher

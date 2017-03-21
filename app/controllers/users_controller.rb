@@ -42,9 +42,8 @@ class UsersController < ApplicationController
     end
   end
 
-
-  def user_list
-    users = User.limit(30).reverse_order.map { |user| user.format }
+  def list
+    users = User.with_identity(params[:identity_type]).limit(30).reverse_order.map { |user| user.format }
     render json: {
         code: 0,
         data: users

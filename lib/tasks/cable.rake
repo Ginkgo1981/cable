@@ -72,4 +72,34 @@ namespace :cable do
 
   end
 
+
+  desc 'gerenate universities'
+  task generate_universities: :environment do
+    YxDetail.all.each do |yx|
+      u = University.create name: yx.yxmc,
+          code: yx.yxdm,
+          city: yx.dq,
+          address: yx.xxdz,
+          website: yx.xxwz,
+          tel: yx.xxdh,
+          brief: yx.xxjj
+
+      pp u.id
+    end
+  end
+
+
+  desc 'generate majoys'
+  task generate_majors: :environment do
+    connection = ActiveRecord::Base.connection
+    University.all.each do |u|
+      sql = "select * from yx_zys where yxmc='#{u.name}'"
+      result = connection.exec_query(sql)
+      result.rows.each do |r|
+        u.majors.create! name: r[2], code: r[3]
+        pp r
+      end
+    end
+  end
+
 end

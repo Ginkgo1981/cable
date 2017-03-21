@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170311155206) do
+ActiveRecord::Schema.define(version: 20170315062924) do
 
   create_table "bookmarkings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "user_id"
@@ -38,6 +38,17 @@ ActiveRecord::Schema.define(version: 20170311155206) do
     t.string   "followable_type"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+  end
+
+  create_table "majors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "name"
+    t.string   "code"
+    t.integer  "university_id"
+    t.string   "goal"
+    t.string   "claim"
+    t.string   "course"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "message_bookmarkings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
@@ -104,6 +115,18 @@ ActiveRecord::Schema.define(version: 20170311155206) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "universities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "name"
+    t.string   "code"
+    t.string   "city"
+    t.string   "address"
+    t.string   "website"
+    t.string   "tel"
+    t.text     "brief",      limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.string   "cell",                      limit: 50
     t.string   "passwd"
@@ -144,6 +167,13 @@ ActiveRecord::Schema.define(version: 20170311155206) do
     t.text    "brief",   limit: 65535
     t.integer "IsMaked"
     t.index ["ID"], name: "PK_GK_sys_SchoolDetail", unique: true, using: :btree
+  end
+
+  create_table "yx_zys", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string "yxmc", limit: 64, null: false, collation: "utf8_general_ci"
+    t.string "yxdm", limit: 5,  null: false, collation: "utf8_general_ci"
+    t.string "zymc", limit: 64, null: false, collation: "utf8_general_ci"
+    t.string "zydm", limit: 6,  null: false, collation: "utf8_general_ci"
   end
 
   create_table "zy_details", primary_key: "ID", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
