@@ -16,6 +16,7 @@
 
 class Message < ApplicationRecord
   include Bookmarkable
+  include BeanFamily
 
   scope :with_type, -> (type) {where(type: type)}
   belongs_to :user

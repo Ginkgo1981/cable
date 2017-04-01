@@ -31,15 +31,19 @@
 
 class User < ApplicationRecord
 
+  include Taggable
+  include Followable
   # has_many :sended_messages, class_name: Message
   scope :with_identity, ->(identity_type) {where(identity_type: identity_type)}
-
-
   belongs_to :identity, polymorphic: true, optional: true
   has_many :followings
   has_many :following_teachers, -> { uniq }, :source => :followable, :through => :followings, :source_type => :Teacher
 
+
+
   before_create :generate_sms_auth_code, :generate_token
+
+
   # has_many :bookmarking
   # has_many :bookmarking_messages, :source => :bookmarkable, :through => :bookamrkings, :source_type => :Message
 
@@ -60,6 +64,8 @@ class User < ApplicationRecord
         identity_type: self.identity_type
     }
   end
+
+
 
   def generate_sms_auth_code
     self.sms_auth_code = '1234'

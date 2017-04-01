@@ -2,7 +2,7 @@ module Taggable
   extend ActiveSupport::Concern
   
   included do
-    has_many :taggs, as: :taggable
+    has_many :tags, as: :taggable
   end
 
 end

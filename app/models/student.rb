@@ -11,9 +11,19 @@
 #
 
 class Student < ApplicationRecord
-
   include Identity
+  include BeanFamily
+
   after_create_commit :create_welcome_message
+
+  def format
+    {
+        id: self.id,
+        province: self.province,
+        city: self.city,
+        school: self.school
+    }
+  end
 
 
   private

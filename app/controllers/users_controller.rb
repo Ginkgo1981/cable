@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
 
-  #凭验证码注册
   def register
     user = User.find_by cell: params[:cell]
     if user && params[:sms_auth_code] == user.sms_auth_code
@@ -30,7 +29,6 @@ class UsersController < ApplicationController
     }
   end
 
-  #发送手机验证码
   def send_sms_auth_code
     user = User.find_by cell: params[:cell]
     unless user
@@ -42,12 +40,24 @@ class UsersController < ApplicationController
     end
   end
 
-  def list
-    users = User.with_identity(params[:identity_type]).limit(30).reverse_order.map { |user| user.format }
-    render json: {
-        code: 0,
-        data: users
-    }
+
+  def student_list
+    students = Student.includes(:user, :bean).limit(30).reverse_order
+    render json: students,
+           meta: {code: 0},
+           each_serializer: StudentSerializer,
+           include_user: true
+           #adapter: :json_api,
+  end
+
+
+
+
+  def student_detail
+
+    student = Student.includes(:user, :bean).find_by dsin: params[:dsin]
+
+
   end
 
   def user_detail

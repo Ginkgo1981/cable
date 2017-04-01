@@ -2,11 +2,10 @@ class UniversitiesController < ApplicationController
 
 
   def list
-    universities = University.limit(30).map{|u| u.format_brief}
-    render json: {
-        code: 0,
-        data: universities
-    }
+    universities = University.includes(:bean).limit(30)
+    render json: universities,
+           meta: {code: 0},
+           each_serializer: UniversitySerializer
   end
 
   def show

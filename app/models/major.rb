@@ -14,27 +14,9 @@
 #
 
 class Major < ApplicationRecord
+  include BeanFamily
   belongs_to :university
 
 
-  def format_brief
-    {
-        id: self.id,
-        name: self.name,
-        code: self.code,
-    }
-  end
-
-
-  def format_detail
-    {
-        id: self.id,
-        name: self.name,
-        code: self.code,
-        goal: self.goal,
-        claim: self.claim,
-        course: self.course
-    }
-  end
 
 end

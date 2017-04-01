@@ -88,6 +88,32 @@ namespace :cable do
     end
   end
 
+  desc 'gerenate dsin to universities'
+  task generate_dsin_to_universities: :environment do
+    University.all.each do |university|
+      pp university.id
+      university.create_bean
+    end
+  end
+
+  desc 'gerenate dsin to major'
+  task generate_dsin_to_majors: :environment do
+    Major.all.each do |major|
+      pp major.id
+      major.create_bean
+    end
+  end
+
+  desc 'generate dsin to bean'
+  task generate_dsin_to_bean: :environment do
+    Bean.all.each do |bean|
+      bean.save!
+      pp bean.id
+    end
+
+  end
+
+
 
   desc 'generate majoys'
   task generate_majors: :environment do
@@ -96,8 +122,8 @@ namespace :cable do
       sql = "select * from yx_zys where yxmc='#{u.name}'"
       result = connection.exec_query(sql)
       result.rows.each do |r|
-        u.majors.create! name: r[2], code: r[3]
-        pp r
+        m = u.majors.create! name: r[2], code: r[3]
+        pp m.id
       end
     end
   end

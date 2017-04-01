@@ -10,9 +10,14 @@
 #
 
 class Teacher < ApplicationRecord
-
   include Identity
-  include Followable
-
+  include BeanFamily
+  def format
+    {
+        id:  self.id,
+        yxmc: self.yxmc,
+        yxdm: self.yxdm
+    }
+  end
 
 end
