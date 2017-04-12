@@ -8,11 +8,13 @@ class UniversitiesController < ApplicationController
            each_serializer: UniversitySerializer
   end
 
-  def show
-    university = University.find_by id: params[:id]
-    render json: {
-        code: 0,
-        data: university.format_detail}
+  def major_list
+    university = University.find_by_dsin params[:dsin]
+    majors = university.majors.preload(:bean)
+    render json: majors,
+           meta: {code: 0},
+           each_serializer: MajorSerializer,
+           include_brief: true
   end
 
 end

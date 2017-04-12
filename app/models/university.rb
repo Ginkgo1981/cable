@@ -15,8 +15,10 @@
 #
 
 class University < ApplicationRecord
-
   include BeanFamily
+  include Attachable
+
   has_many :majors
+  has_many :teachers
 
 end

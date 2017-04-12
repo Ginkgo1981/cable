@@ -1,10 +1,17 @@
 Rails.application.routes.draw do
 
-  get 'dsin/:dsin', to: 'units#dsin'
+  get 'dsin/uptoken', to: 'dsins#get_upload_token'
 
-  post 'tags/tag'
-  get 'tags/tags'
+  get 'dsin/:dsin', to: 'dsins#show'
+  post 'dsin/:dsin', to: 'dsins#update'
+  post 'dsin/:dsin/tag', to:'dsins#tag'
+  get 'dsin/:dsin/tags', to: 'dsins#tags'
+
+  post 'dsin/:dsin/save_photo', to: 'dsins#save_photo'
+  get 'dsin/:dsin/photos', to: 'dsins#get_photos'
+
   get 'tags/tag_list'
+  delete 'dsin/:dsin', to: 'dsins#delete'
 
   # post 'users/register', to: 'users#register'
   # post 'users/send_sms_auth_code', to: 'users#send_sms_auth_code'
@@ -13,6 +20,9 @@ Rails.application.routes.draw do
   # get 'users/:user_id', to: 'users#user_detail'
   # get 'users/student_detail/:student_id', to: 'users#student_detail'
 
+  post 'members/wechat_open_authorization',  to: 'members#wechat_open_authorization'
+  post 'members/send_sms_code',  to: 'members#send_sms_code'
+  # post 'members/login_with_wechat_code',  to: 'members#login_with_wechat_code'
 
 
   get 'messages/list/:type', to:'messages#list'
@@ -26,22 +36,16 @@ Rails.application.routes.draw do
 
   get 'admins/show'
   post 'messages/send_message', to: 'messages#send_message'
+
+
   get 'universities/list', to: 'universities#list'
-  get 'universities/:id', to: 'universities#show'
+  get 'universities/:dsin/major_list', to: 'universities#major_list'
 
 
   resources :users do
-
-    # member do
-    #   get 'student_detail'
-    # end
-
     collection do
       get :student_list
-      # get 'student_detail/:dsin', to: 'users#student_detail'
     end
-
-
   end
 
 

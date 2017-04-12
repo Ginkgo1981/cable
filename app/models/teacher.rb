@@ -2,22 +2,21 @@
 #
 # Table name: teachers
 #
-#  id         :integer          not null, primary key
-#  yxmc       :string(255)
-#  yxdm       :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :integer          not null, primary key
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  university_id :integer
+#  cell          :string(255)
+#  name          :string(255)
+#  duty          :string(255)
+#  status        :integer
 #
 
 class Teacher < ApplicationRecord
   include Identity
   include BeanFamily
-  def format
-    {
-        id:  self.id,
-        yxmc: self.yxmc,
-        yxdm: self.yxdm
-    }
-  end
+  belongs_to :university
+
+
 
 end

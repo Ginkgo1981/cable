@@ -42,7 +42,7 @@ class UsersController < ApplicationController
 
 
   def student_list
-    students = Student.includes(:user, :bean).limit(30).reverse_order
+    students = Student.includes(:user, :bean, {tags: :bean}).limit(30).reverse_order
     render json: students,
            meta: {code: 0},
            each_serializer: StudentSerializer,
@@ -51,22 +51,20 @@ class UsersController < ApplicationController
   end
 
 
-
-
-  def student_detail
-
-    student = Student.includes(:user, :bean).find_by dsin: params[:dsin]
-
-
-  end
-
-  def user_detail
-    user = User.find_by id: params[:user_id]
-    render json: {
-        code: 0,
-        data: {user: user.format}
-    }
-  end
+  # def student_detail
+  #
+  #   student = Student.includes(:user, :bean).find_by dsin: params[:dsin]
+  #
+  #
+  # end
+  #
+  # def user_detail
+  #   user = User.find_by id: params[:user_id]
+  #   render json: {
+  #       code: 0,
+  #       data: {user: user.format}
+  #   }
+  # end
 
 
 end

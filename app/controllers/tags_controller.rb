@@ -20,8 +20,5 @@ class TagsController < ApplicationController
     }
   end
 
-  def tag_list
 
-
-  end
 end

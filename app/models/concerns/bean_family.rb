@@ -6,7 +6,7 @@ module BeanFamily
 
   included do
     after_create {self.create_bean}
-    has_one :bean, as: :bean_family
+    has_one :bean, as: :bean_family, dependent: :destroy
   end
 
   module ClassMethods

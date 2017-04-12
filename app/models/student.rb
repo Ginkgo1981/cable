@@ -2,27 +2,48 @@
 #
 # Table name: students
 #
-#  id         :integer          not null, primary key
-#  province   :string(255)
-#  city       :string(255)
-#  school     :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id           :integer          not null, primary key
+#  province     :string(255)
+#  city         :string(255)
+#  school       :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  sat_score    :text(65535)
+#  sat_province :string(255)
 #
 
 class Student < ApplicationRecord
   include Identity
   include BeanFamily
+  include Taggable
+
+  serialize :sat_score, JSON
 
   after_create_commit :create_welcome_message
 
-  def format
-    {
-        id: self.id,
-        province: self.province,
-        city: self.city,
-        school: self.school
+  before_save :create_or_update_sat, if: :sat_score_changed?
+
+  def create_or_update_sat
+    if self.sat_province.nil?
+      self.sat_province = 'Jiangsu'
+    end
+    "#{self.sat_province}Sat".constantize.create! self.sat_score
+  end
+
+  def t
+
+    sta_score = {
+        score_chinese: 120,
+        score_english: 110,
+        score_math: 100,
+        score_sum: 330,
+        kl: 'kl',
+        km_1: 'km_1',
+        km_2: 'km_2',
+        score_km_1: 'A+',
+        score_km_2: 'B'
     }
+
   end
 
 

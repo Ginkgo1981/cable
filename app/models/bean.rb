@@ -12,7 +12,7 @@
 
 class Bean < ApplicationRecord
   before_save :generate_dsin
-  belongs_to :bean_family, :polymorphic => true
+  belongs_to :bean_family, :polymorphic => true, dependent: :destroy
 
 
   def self.find_by_dsin dsin

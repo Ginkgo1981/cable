@@ -27,6 +27,7 @@ module Cable
     # Skip views, helpers and assets when generating a new resource.
 
 
+    config.autoload_paths += Dir[Rails.root.join('app', 'models', '{**/}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'jobs', '{**/}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'serializers', '{**/}')]
     config.autoload_paths += Dir[Rails.root.join('lib', '{**/}')]
