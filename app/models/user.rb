@@ -29,15 +29,23 @@
 class User < ApplicationRecord
 
   include Followable
-  # has_many :sended_messages, class_name: Message
   scope :with_identity, ->(identity_type) {where(identity_type: identity_type)}
   belongs_to :identity, polymorphic: true, optional: true
   has_many :followings
   has_many :following_teachers, -> { uniq }, :source => :followable, :through => :followings, :source_type => :Teacher
 
+  has_many :forms
+  has_many :received_messages, class_name: Message, foreign_key: :user_id
+  has_many :sended_messages, class_name: Message, foreign_key: :sender_id
+
+  # has_many :messages,->(user){where("user_id=? or sender_id=?", user.id, user.id)}
+
+
   # has_many :bookmarking
   # has_many :bookmarking_messages, :source => :bookmarkable, :through => :bookamrkings, :source_type => :Message
 
+  delegate :dsin, to: :identity
+  before_create :generate_token
 
   def membership
     {
@@ -64,8 +72,7 @@ class User < ApplicationRecord
   end
 
   def generate_token
-    self.token = '1234567890'
+    self.token = SecureRandom.urlsafe_base64
   end
-
 
 end

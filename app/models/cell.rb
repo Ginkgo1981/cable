@@ -24,6 +24,11 @@ class Cell < ApplicationRecord
     true
   end
 
+  def self.verify_code!(cell, code)
+    cell = Cell.find_by cell:cell, code: code
+    cell ? true : false
+  end
+
 
   def generate_code
     self.code = '1234'

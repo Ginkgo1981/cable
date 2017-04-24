@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170410031354) do
+ActiveRecord::Schema.define(version: 20170424102157) do
 
   create_table "attachings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "attachable_id"
@@ -65,6 +65,17 @@ ActiveRecord::Schema.define(version: 20170410031354) do
     t.datetime "updated_at",      null: false
   end
 
+  create_table "forms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.integer  "user_id"
+    t.string   "form_id"
+    t.datetime "expired_at"
+    t.integer  "status"
+    t.string   "content"
+    t.string   "from"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "jiangsu_sats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "student_id"
     t.integer  "score_chinese"
@@ -107,14 +118,19 @@ ActiveRecord::Schema.define(version: 20170410031354) do
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.text     "content",         limit: 65535
-    t.integer  "user_id"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.string   "channel"
     t.string   "type"
-    t.integer  "receiver_id"
     t.integer  "attachment_id"
     t.string   "attachment_type"
+    t.datetime "expired_at"
+    t.integer  "state"
+    t.integer  "student_id"
+    t.integer  "teacher_id"
+    t.integer  "staff_id"
+    t.integer  "university_id"
+    t.string   "direction"
   end
 
   create_table "photos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
@@ -143,8 +159,6 @@ ActiveRecord::Schema.define(version: 20170410031354) do
   end
 
   create_table "students", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.string   "province"
-    t.string   "city"
     t.string   "school"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false

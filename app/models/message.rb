@@ -4,30 +4,39 @@
 #
 #  id              :integer          not null, primary key
 #  content         :text(65535)
-#  user_id         :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  channel         :string(255)
 #  type            :string(255)
-#  receiver_id     :integer
 #  attachment_id   :integer
 #  attachment_type :string(255)
+#  expired_at      :datetime
+#  state           :integer
+#  student_id      :integer
+#  teacher_id      :integer
+#  staff_id        :integer
+#  university_id   :integer
+#  direction       :string(255)
 #
 
 class Message < ApplicationRecord
   include Bookmarkable
   include BeanFamily
 
-  scope :with_type, -> (type) {where(type: type)}
-  belongs_to :user
+  belongs_to :student, optional: true
+  belongs_to :university, optional: true
+  belongs_to :teacher, optional: true
   belongs_to :attachment, polymorphic: true, optional: true
-  belongs_to :receiver, class_name: User, optional: true
+
+  scope :filter_by_type, -> (type) {where(type: type)}
+  scope :filter_by_entity, -> (entity){ where("#{entity.class.name.downcase.to_s}": entity)}
 
   def format_for_redis
     {
         id: self.id,
-        user_id: self.user_id,
-        receiver_id: self.receiver_id,
+        student_id: self.student_id,
+        teacher_id: self.teacher_id,
+        university_id: self.university_id,
         type: self.type,
         content: self.content,
         created_at: self.created_at,
@@ -35,6 +44,8 @@ class Message < ApplicationRecord
         attachment_type: self.attachment_type
     }
   end
+
+  #todo 20170423
   # after_create_commit {MessageBroadcastJob.perform_now self}
 
 end

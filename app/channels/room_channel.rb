@@ -32,17 +32,15 @@ class RoomChannel < ApplicationCable::Channel
 
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
-
     current_user.offline
   end
 
 
   private
   def ping
-
     json  = $redis.zrange("user::#{current_user.id}",0,0).first
-    pp "====== json ====== #{json}"
     if json
+      pp "[roo-channel] ping json #{json}"
       $redis.zrem("user::#{current_user.id}", json)
       message = JSON.parse(json)
       ActionCable.server.broadcast("user::#{current_user.id}",
@@ -52,16 +50,8 @@ class RoomChannel < ApplicationCable::Channel
                                              marked: false})
     else
 
-      pp '====== null ========'
+      pp '[room-channel] ping json nothing'
     end
-    # User.create name: "sssssss"
-    # pp "===== ping current_user #{current_user.id}======="
-    #
-    # if(current_user.id == 1)
-    #   pp "=******* ping current_user #{current_user.id}======="
-    #   sleep 3
-    # end
-    # @index = @index +1
     # ActionCable.server.broadcast("user:#{current_user.id}",
     #                              message: {msg: "hello, speperiodically #{current_user.name}, index: #{@index}"})
   end

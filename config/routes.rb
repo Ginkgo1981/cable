@@ -1,52 +1,47 @@
 Rails.application.routes.draw do
 
-  get 'dsin/uptoken', to: 'dsins#get_upload_token'
-
+  #dsin
   get 'dsin/:dsin', to: 'dsins#show'
   post 'dsin/:dsin', to: 'dsins#update'
-  post 'dsin/:dsin/tag', to:'dsins#tag'
-  get 'dsin/:dsin/tags', to: 'dsins#tags'
-
-  post 'dsin/:dsin/save_photo', to: 'dsins#save_photo'
-  get 'dsin/:dsin/photos', to: 'dsins#get_photos'
-
-  get 'tags/tag_list'
   delete 'dsin/:dsin', to: 'dsins#delete'
 
-  # post 'users/register', to: 'users#register'
-  # post 'users/send_sms_auth_code', to: 'users#send_sms_auth_code'
-  # post 'users/tag', to: 'users#tag'
-  # get 'users/list/:identity_type', to: 'users#list'
-  # get 'users/:user_id', to: 'users#user_detail'
-  # get 'users/student_detail/:student_id', to: 'users#student_detail'
+  #dsin photo
+  get 'dsin/uptoken', to: 'dsins#get_upload_token'
+  get 'dsin/:dsin/photos', to: 'dsins#get_photos'
+  post 'dsin/:dsin/save_photo', to: 'dsins#save_photo'
 
+
+  #dsin tags
+  get 'dsin/:dsin/tags', to: 'dsins#tags'
+  post 'dsin/:dsin/tag', to:'dsins#tag'
+  get 'tags/tag_list'
+
+  #members
   post 'members/wechat_open_authorization',  to: 'members#wechat_open_authorization'
+  post 'members/mini_app_authorization',  to: 'members#mini_app_authorization'
   post 'members/send_sms_code',  to: 'members#send_sms_code'
-  # post 'members/login_with_wechat_code',  to: 'members#login_with_wechat_code'
+  post 'members/bind_cell', to: 'members#bind_cell'
+  post 'members/bind_sat', to: 'members#bind_sat'
 
-
-  get 'messages/list/:type', to:'messages#list'
+  #messages
+  get 'messages/message_list', to:'messages#list'
   get 'messages/show'
   get 'messages/load_options/', to:'messages#load_options'
+  post 'messages/send_message', to: 'messages#send_message'
 
+  # get 'messages/:dsin/received_messages', to: 'messages#received_messages'
+  # get 'messages/:dsin/sended_messages', to: 'messages#sended_messages'
 
+  #stories
   get 'stories/show'
   get 'stories/list'
   post 'stories/create_story',  to: 'stories#create_story'
 
-  get 'admins/show'
-  post 'messages/send_message', to: 'messages#send_message'
-
-
+  #universities
   get 'universities/list', to: 'universities#list'
   get 'universities/:dsin/major_list', to: 'universities#major_list'
 
-
-  resources :users do
-    collection do
-      get :student_list
-    end
-  end
-
+  #users
+  get 'users/student_list', to: 'users#student_list'
 
 end

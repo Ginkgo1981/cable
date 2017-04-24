@@ -16,6 +16,8 @@ class Teacher < ApplicationRecord
   include Identity
   include BeanFamily
   belongs_to :university
+  has_many :messages
+
 
 
 
