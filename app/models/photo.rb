@@ -18,6 +18,14 @@ class Photo < ApplicationRecord
   has_one :Attaching,  as: :attachment, dependent: :destroy
 
 
+  def format
+    {
+        dsin:self.dsin,
+        id: self.id,
+        name: self.name,
+        key: self.key
+    }
+  end
 
 
 end

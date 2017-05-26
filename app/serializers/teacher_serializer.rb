@@ -1,3 +1,3 @@
 class TeacherSerializer < ApplicationSerializer
-  attributes :id
+  attributes :id, :dsin, :cell, :name
 end

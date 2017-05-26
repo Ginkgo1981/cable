@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170424102157) do
+ActiveRecord::Schema.define(version: 20170522023607) do
 
   create_table "attachings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "attachable_id"
@@ -98,8 +98,9 @@ ActiveRecord::Schema.define(version: 20170424102157) do
     t.string   "goal"
     t.string   "claim"
     t.string   "course"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.text     "content",       limit: 65535
   end
 
   create_table "message_bookmarkings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
@@ -117,13 +118,11 @@ ActiveRecord::Schema.define(version: 20170424102157) do
   end
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.text     "content",         limit: 65535
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.text     "content",       limit: 65535
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.string   "channel"
     t.string   "type"
-    t.integer  "attachment_id"
-    t.string   "attachment_type"
     t.datetime "expired_at"
     t.integer  "state"
     t.integer  "student_id"
@@ -131,6 +130,7 @@ ActiveRecord::Schema.define(version: 20170424102157) do
     t.integer  "staff_id"
     t.integer  "university_id"
     t.string   "direction"
+    t.string   "img_url"
   end
 
   create_table "photos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
@@ -153,9 +153,11 @@ ActiveRecord::Schema.define(version: 20170424102157) do
     t.string   "description"
     t.text     "content",          limit: 65535
     t.string   "coverage_img_url"
-    t.integer  "user_id"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.integer  "teacher_id"
+    t.integer  "university_id"
+    t.integer  "staff_id"
   end
 
   create_table "students", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
@@ -203,6 +205,8 @@ ActiveRecord::Schema.define(version: 20170424102157) do
     t.text     "brief",      limit: 65535
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.string   "logo"
+    t.string   "province"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|

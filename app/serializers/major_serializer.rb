@@ -1,5 +1,5 @@
 class MajorSerializer < ApplicationSerializer
-  attributes :id, :dsin, :code, :name
+  attributes :id, :dsin, :code, :name, :content
 
   attribute :goal, if: -> {instance_options[:include_brief]}
   attribute :claim, if: -> {instance_options[:include_brief]}

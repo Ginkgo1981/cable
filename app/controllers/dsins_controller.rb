@@ -1,12 +1,13 @@
 class DsinsController < ApplicationController
 
-  before_action :find_entity!, except: [:get_upload_token]
+  before_action :find_entity_by_dsin!, except: [:get_upload_token]
 
   def show
     render json: @entity,
            serializer: "#{@entity.class.to_s}Serializer".constantize,
            meta: {code: 0},
-           include_user: true
+           include_user: true,
+           include_tags: true
   end
 
   def update
@@ -63,10 +64,4 @@ class DsinsController < ApplicationController
     }
   end
 
-
-  private
-  def find_entity!
-    dsin = params[:dsin]
-    @entity = Bean.find_by_dsin dsin
-  end
 end

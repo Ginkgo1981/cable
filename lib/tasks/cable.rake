@@ -63,7 +63,6 @@ namespace :cable do
   task generate_subscription_messages: :environment do
 
 
-
   end
 
 
@@ -77,12 +76,12 @@ namespace :cable do
   task generate_universities: :environment do
     YxDetail.all.each do |yx|
       u = University.create name: yx.yxmc,
-          code: yx.yxdm,
-          city: yx.dq,
-          address: yx.xxdz,
-          website: yx.xxwz,
-          tel: yx.xxdh,
-          brief: yx.xxjj
+                            code: yx.yxdm,
+                            city: yx.dq,
+                            address: yx.xxdz,
+                            website: yx.xxwz,
+                            tel: yx.xxdh,
+                            brief: yx.xxjj
 
       pp u.id
     end
@@ -114,8 +113,7 @@ namespace :cable do
   end
 
 
-
-  desc 'generate majoys'
+  desc 'generate majors'
   task generate_majors: :environment do
     connection = ActiveRecord::Base.connection
     University.all.each do |u|
@@ -126,6 +124,84 @@ namespace :cable do
         pp m.id
       end
     end
+  end
+
+
+  desc 'set city & province'
+  task set_province_to_university: :environment do
+    #
+    # %W(  南京大学
+    #     东南大学
+    #     南京航空航天大学
+    #     南京理工大学
+    #     河海大学
+    #     南京农业大学
+    #     中国药科大学
+    #     南京邮电大学
+    #     南京林业大学
+    #     南京信息工程大学
+    #     南京工业大学
+    #     南京师范大学
+    #     南京财经大学
+    #     南京医科大学
+    #     南京中医药大学
+    #     南京审计学院
+    #     南京体育学院
+    #     南京艺术学院
+    #     南京工程学院
+    #     南京晓庄学院
+    #     江苏警官学院
+    #     金陵科技学院
+    #     三江学院
+    #     南京森林警察学院*
+    #     江苏联合职业技术学院
+    #     南京工业职业技术学院
+    #     南京交通职业技术学院
+    #     南京化工职业技术学院
+    #     江苏经贸职业技术学院
+    #     南京信息职业技术学院
+    #     南京特殊教育职业技术学院
+    #     江苏海事职业技术学院
+    #     南京铁道职业技术学院
+    #     江苏城市职业学院
+    #     南京机电职业技术学院
+    #     南京旅游职业学院
+    #     应天职业技术学院
+    #     钟山职业技术学院
+    #     正德职业技术学院
+    #     金肯职业技术学院
+    #     南京视觉艺术职业学院
+    #     江苏建康职业学院
+    #     南京城市职业学院
+    #     江苏第二师范学院).each do |name|
+    #
+    #   u = University.find_by(name: name)
+    #   if u
+    #     u.province = '江苏'
+    #     u.city = '南京'
+    #     u.save!
+    #     pp "#{u.name} saved"
+    #   end
+    # end
+
+
+    %W(
+        江苏大学
+        江苏科技大学
+        镇江市高等专科学校
+        江苏农林职业技术学院
+        金山职业技术学院
+      ).each do |name|
+        u = University.find_by(name: name)
+        if u
+          u.province = '江苏'
+          u.city = '镇江'
+          u.save!
+          pp "#{u.name} saved"
+        end
+    end
+
+
   end
 
 end

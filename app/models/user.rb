@@ -38,9 +38,6 @@ class User < ApplicationRecord
   has_many :received_messages, class_name: Message, foreign_key: :user_id
   has_many :sended_messages, class_name: Message, foreign_key: :sender_id
 
-  # has_many :messages,->(user){where("user_id=? or sender_id=?", user.id, user.id)}
-
-
   # has_many :bookmarking
   # has_many :bookmarking_messages, :source => :bookmarkable, :through => :bookamrkings, :source_type => :Message
 
@@ -55,20 +52,21 @@ class User < ApplicationRecord
         identity_type: self.identity_type,
         union_id: self.union_id,
         nickname: self.nickname,
-        country: self.country,
+        name: self.name,
+        sex: self.name,
         province: self.province,
         city: self.city,
         headimgurl: self.headimgurl,
-        language: self.language
+        identity: self.identity.format
     }
   end
 
   def offline
-    pp '======== offline ==========='
+    pp "[user-model] offine user_id: #{self.id}"
   end
 
   def online
-    pp ' ========== online =========='
+    pp "[user-model] offine online: #{self.id}"
   end
 
   def generate_token

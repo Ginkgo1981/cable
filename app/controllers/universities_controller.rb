@@ -1,8 +1,9 @@
 class UniversitiesController < ApplicationController
+  before_action :find_user_by_token!, only: [:university_list, :major_list]
 
 
-  def list
-    universities = University.includes(:bean).limit(30)
+  def university_list
+    universities = University.includes(:bean)
     render json: universities,
            meta: {code: 0},
            each_serializer: UniversitySerializer
@@ -15,6 +16,14 @@ class UniversitiesController < ApplicationController
            meta: {code: 0},
            each_serializer: MajorSerializer,
            include_brief: true
+  end
+
+  def create_major
+    teacher = @user.identity
+    university = teacher.university
+    university.majors.create! name: params[:name],
+                              content: params[:content]
+    render json: {code: 0, message: 'succ'}
   end
 
 end

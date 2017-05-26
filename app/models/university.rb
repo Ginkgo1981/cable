@@ -12,6 +12,8 @@
 #  brief      :text(65535)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  logo       :string(255)
+#  province   :string(255)
 #
 
 class University < ApplicationRecord
@@ -20,5 +22,17 @@ class University < ApplicationRecord
   has_many :majors
   has_many :teachers
   has_many :messages
+  has_many :stories
+  has_many :point_messages
+
+  def format
+    {
+        id: self.id,
+        dsin: self.dsin,
+        name: self.name,
+        logo: self.logo
+    }
+
+  end
 
 end

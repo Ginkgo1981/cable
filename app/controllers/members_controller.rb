@@ -59,6 +59,10 @@ class MembersController < ApplicationController
     render json: {code: 0, member: user.membership}
   end
 
+
+
+
+
   def bind_cell
     Cell.verify_code! params[:cell], params[:sms_code]
     @user.update! cell: params[:cell], name: params[:name]
@@ -68,7 +72,6 @@ class MembersController < ApplicationController
 
 
   def bind_sat
-    binding.pry
     @user.forms.create! form_id: params[:form_id], from: 'bind_sat'
     student = @user.identity
     student.sat_score = params[:sat]

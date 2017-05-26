@@ -18,4 +18,23 @@ class CableException < Exception
   end
 
 
+  class TypeError < CableException
+    def initialize(msg = nil)
+      msg ||= '类型不对'
+      super
+      @code = 1002
+    end
+  end
+
+  class PermissionError < CableException
+
+    def initialize(msg = nil)
+      msg ||= '没有权限'
+      super
+      @code = 1003
+    end
+  end
+
+
+
 end

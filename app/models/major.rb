@@ -11,12 +11,21 @@
 #  course        :string(255)
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  content       :text(65535)
 #
 
 class Major < ApplicationRecord
   include BeanFamily
   belongs_to :university
 
+  def format
+    {
+        id: self.id,
+        name: self.name,
+        dsin: self.dsin,
+        content: self.content
+    }
+  end
 
 
 end

@@ -17,6 +17,20 @@ class Teacher < ApplicationRecord
   include BeanFamily
   belongs_to :university
   has_many :messages
+  delegate :nickname, to: :user, allow_nil: true
+
+
+  def format
+    {
+        id: self.id,
+        dsin: self.dsin,
+        cell: self.cell,
+        name: self.name,
+        duty: self.duty,
+        status: self.status,
+        university: self.university.format
+    }
+  end
 
 
 

@@ -15,14 +15,26 @@ class Student < ApplicationRecord
   include BeanFamily
   include Taggable
   has_many :messages
+  has_many :point_messages
 
   serialize :sat_score, JSON
-  after_create_commit :create_welcome_message
+  # todo
+  # after_create_commit :create_welcome_message
   before_save :create_or_update_sat, if: :sat_score_changed?
 
+  delegate :name, to: :user
+  delegate :nickname, to: :user
   delegate :province, to: :user
   delegate :city, to: :user
 
+  def format
+    {
+        dsin: self.dsin,
+        school: self.school,
+        sat_province: self.sat_province,
+        sat_score: self.sat_score
+    }
+  end
 
 
   def create_or_update_sat

@@ -1,14 +1,14 @@
 Rails.application.routes.draw do
 
-  #dsin
-  get 'dsin/:dsin', to: 'dsins#show'
-  post 'dsin/:dsin', to: 'dsins#update'
-  delete 'dsin/:dsin', to: 'dsins#delete'
-
   #dsin photo
   get 'dsin/uptoken', to: 'dsins#get_upload_token'
   get 'dsin/:dsin/photos', to: 'dsins#get_photos'
   post 'dsin/:dsin/save_photo', to: 'dsins#save_photo'
+
+  #dsin
+  get 'dsin/:dsin', to: 'dsins#show'
+  post 'dsin/:dsin', to: 'dsins#update'
+  delete 'dsin/:dsin', to: 'dsins#delete'
 
 
   #dsin tags
@@ -24,22 +24,23 @@ Rails.application.routes.draw do
   post 'members/bind_sat', to: 'members#bind_sat'
 
   #messages
-  get 'messages/message_list', to:'messages#list'
+  post 'messages/list', to:'messages#message_list'
+  post 'messages/batch_send_messages', to: 'messages#batch_send_messages'
+  post 'messages/ask_message', to: 'messages#ask_message'
   get 'messages/show'
   get 'messages/load_options/', to:'messages#load_options'
-  post 'messages/send_message', to: 'messages#send_message'
-
-  # get 'messages/:dsin/received_messages', to: 'messages#received_messages'
-  # get 'messages/:dsin/sended_messages', to: 'messages#sended_messages'
 
   #stories
   get 'stories/show'
-  get 'stories/list'
+  get 'stories/list/:dsin',  to: 'stories#list'
   post 'stories/create_story',  to: 'stories#create_story'
 
   #universities
-  get 'universities/list', to: 'universities#list'
+  get 'universities/list', to: 'universities#university_list'
   get 'universities/:dsin/major_list', to: 'universities#major_list'
+
+  #新建专业
+  post 'universities/create_major', to: 'universities#create_major'
 
   #users
   get 'users/student_list', to: 'users#student_list'

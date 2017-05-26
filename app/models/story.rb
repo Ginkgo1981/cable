@@ -7,24 +7,27 @@
 #  description      :string(255)
 #  content          :text(65535)
 #  coverage_img_url :string(255)
-#  user_id          :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  teacher_id       :integer
+#  university_id    :integer
+#  staff_id         :integer
 #
 
 class Story < ApplicationRecord
-
-
+  include BeanFamily
+  belongs_to :university, optional: true
+  belongs_to :teacher,  optional: true
+  belongs_to :staff,  optional: true
 
   def format
     {
-        id: self.id,
+        dsin: self.dsin,
+        coverage_img_url: self.coverage_img_url,
         title: self.title,
-        description:  self.description,
-        content: self.content,
-        user_id: self.user_id
+        description: self.description,
+        content: self.content
     }
   end
-
 
 end
