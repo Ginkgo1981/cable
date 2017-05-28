@@ -47,11 +47,11 @@ class RoomChannel < ApplicationCable::Channel
       message = JSON.parse(json)
       RoomChannel.broadcast_to(current_user,
                                message: {msg: message,
-
+                                         time_stamp: Time.now.to_i,
+                                         marked: false})
+    else
       pp '[room-channel] ping json nothing'
-    end                    time_stamp: Time.now.to_i,
-        marked: false})
-  else
+    end
   end
 
 

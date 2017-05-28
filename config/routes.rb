@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   post 'members/send_sms_code',  to: 'members#send_sms_code'
   post 'members/bind_cell', to: 'members#bind_cell'
   post 'members/bind_sat', to: 'members#bind_sat'
+  post 'members/follow/:dsin', to: 'members#follow'
+  get  'members/followings',  to: 'member#followings'
 
   #messages
   post 'messages/list', to:'messages#message_list'
@@ -38,6 +40,7 @@ Rails.application.routes.draw do
   #universities
   get 'universities/list', to: 'universities#university_list'
   get 'universities/:dsin/major_list', to: 'universities#major_list'
+  get 'universities/:dsin', to: 'universities#show'
 
   #新建专业
   post 'universities/create_major', to: 'universities#create_major'

@@ -33,6 +33,7 @@ class User < ApplicationRecord
   belongs_to :identity, polymorphic: true, optional: true
   has_many :followings
   has_many :following_teachers, -> { uniq }, :source => :followable, :through => :followings, :source_type => :Teacher
+  has_many :following_universities, -> { uniq }, :source => :followable, :through => :followings, :source_type => :University
 
   has_many :forms
   has_many :received_messages, class_name: Message, foreign_key: :user_id
@@ -57,7 +58,8 @@ class User < ApplicationRecord
         province: self.province,
         city: self.city,
         headimgurl: self.headimgurl,
-        identity: self.identity.format
+        identity: self.identity.format,
+        following_universities: self.following_universities.map { |u| u.format}
     }
   end
 

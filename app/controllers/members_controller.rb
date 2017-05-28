@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
 
-  before_action :find_user!, only: %w(bind_cell bind_sat)
+  before_action :find_user_by_token!, only: %w(bind_cell bind_sat follow followings)
 
 
   #teacher
@@ -33,6 +33,22 @@ class MembersController < ApplicationController
     render json: {code: 0, member: user.membership}
   end
 
+
+  def follow
+    bean = Bean.find_by_dsin params[:dsin]
+    @user.following_universities << bean if bean.is_a? University
+    @user.following_teachers << bean if bean.is_a? Teacher
+    render json: {code: 0, msg: 'succ'}
+  end
+
+
+  # def followings
+  #   following_teachers = @user.following_teachers
+  #   following_universities = @user.following_universities
+  #   render json: {code: 0,
+  #                 following_teachers: @user.following_teachers.map { |t| t.format},
+  #                 following_universities: @user.following_universities.map { |u| u.format}}
+  # end
 
   #student
   def mini_app_authorization
@@ -107,7 +123,7 @@ class MembersController < ApplicationController
     end
   end
 
-  def find_user!
-    @user = User.find_by! token: params[:token]
-  end
+  # def find_user!
+  #   @user = User.find_by! token: params[:token]
+  # end
 end

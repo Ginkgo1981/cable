@@ -16,22 +16,18 @@ class Following < ApplicationRecord
 
 
 
-  after_create_commit :create_following_succ_message
-
-
-
-
-  private
-  def create_following_succ_message
-    teacher = self.followable
-    #to student
-    PointMessage.create! user: self.user,
-                         content: "#{self.user.name} 你已成功关注老师 #{teacher.user.name}",
-                         receiver: self.user
-    #to teacher
-    PointMessage.create! user: self.user,
-                         content: "#{teacher.user.name}, 学生#{self.user.name}关注你",
-                         receiver: teacher.user
-  end
+  # after_create_commit :create_following_succ_message
+  # private
+  # def create_following_succ_message
+  #   teacher = self.followable
+  #   #to student
+  #   PointMessage.create! user: self.user,
+  #                        content: "#{self.user.name} 你已成功关注老师 #{teacher.user.name}",
+  #                        receiver: self.user
+  #   #to teacher
+  #   PointMessage.create! user: self.user,
+  #                        content: "#{teacher.user.name}, 学生#{self.user.name}关注你",
+  #                        receiver: teacher.user
+  # end
 
 end

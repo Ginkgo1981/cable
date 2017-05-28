@@ -7,7 +7,9 @@ class DsinsController < ApplicationController
            serializer: "#{@entity.class.to_s}Serializer".constantize,
            meta: {code: 0},
            include_user: true,
-           include_tags: true
+           include_tags: true,
+           include_stories: !!params[:include_stories], #UniversitySerializer
+           include_majors: !! params[:include_majors] #UniversitySerializer
   end
 
   def update
