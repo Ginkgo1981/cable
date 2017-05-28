@@ -53,7 +53,7 @@ task :setup => :environment do
   queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml' and 'secrets.yml'."]
 
 
-  queue! "sudo ln -nfs #{deploy_to}/#{shared_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
+  # queue! "sudo ln -nfs #{deploy_to}/#{shared_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
 
   queue! %[mkdir -p "#{deploy_to}/shared/pids/"]
 
