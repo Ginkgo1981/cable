@@ -21,7 +21,6 @@
 log
 log/**
 tmp/**
-Gemfile.lock
 bin/**
 
 # Ignore Byebug command history file.
