@@ -1,5 +1,5 @@
 class UniversitiesController < ApplicationController
-  before_action :find_user_by_token!, only: [:university_list, :major_list]
+  before_action :find_user_by_token!, only: [:major_list]
   before_action :find_entity_by_dsin!, only: [:show]
 
 
