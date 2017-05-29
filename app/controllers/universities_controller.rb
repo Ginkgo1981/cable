@@ -12,7 +12,7 @@ class UniversitiesController < ApplicationController
   # end
 
   def university_list
-    universities = University.includes(:bean)
+    universities = University.includes(:bean).where(province: '江苏')
     render json: universities,
            meta: {code: 0},
            each_serializer: UniversitySerializer
