@@ -2,7 +2,6 @@ class MembersController < ApplicationController
 
   before_action :find_user_by_token!, only: %w(bind_cell bind_sat follow followings)
 
-
   #teacher
   def wechat_open_authorization
     wechat_client = WechatOpenClient.new
@@ -41,7 +40,6 @@ class MembersController < ApplicationController
     render json: {code: 0, msg: 'succ'}
   end
 
-
   # def followings
   #   following_teachers = @user.following_teachers
   #   following_universities = @user.following_universities
@@ -74,10 +72,6 @@ class MembersController < ApplicationController
     end
     render json: {code: 0, member: user.membership}
   end
-
-
-
-
 
   def bind_cell
     Cell.verify_code! params[:cell], params[:sms_code]
@@ -122,8 +116,4 @@ class MembersController < ApplicationController
       raise("get_session_key fail")
     end
   end
-
-  # def find_user!
-  #   @user = User.find_by! token: params[:token]
-  # end
 end

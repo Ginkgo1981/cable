@@ -20,7 +20,7 @@ class Cell < ApplicationRecord
         mobile: self.cell,
         text: "【霖跃科技】您的验证码是#{self.code}"
     }
-    # resp = Faraday.post url, data
+    resp = Faraday.post url, data
     true
   end
 
@@ -31,8 +31,8 @@ class Cell < ApplicationRecord
 
 
   def generate_code
-    self.code = '1234'
-    # self.code = SecureRandom.random_number(10000).to_s.ljust(4, '0')
+    # self.code = '1234'
+    self.code = SecureRandom.random_number(10000).to_s.ljust(4, '0')
   end
 
 end
