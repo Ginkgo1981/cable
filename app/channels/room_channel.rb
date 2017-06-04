@@ -18,18 +18,31 @@ class RoomChannel < ApplicationCable::Channel
     #                                        time_stamp: Time.now.to_i,
     #                                        marked: false})
 
-    json = $redis.zrange("student::#{current_user.id}", 0, 0).first
-    if json
-      pp "[room-channel] speak json: #{json}"
-      $redis.zrem("student::#{current_user.id}", json)
-      message = JSON.parse(json)
+
+    if data['message'] == 'start-pull'
+
+      message = NotificationMessage.last
       RoomChannel.broadcast_to(current_user,
-                               message: {msg: message,
+                               message: {msg: message.format_for_redis,
+                                         display: 'verify-university',
                                          time_stamp: Time.now.to_i,
-                                         marked: false})
-    else
-      pp "[room-channel] speak json: nothing"
+                                         marked: true})
+
+
     end
+    # json = $redis.zrange("user::#{current_user.id}", 0, 0).first
+    # if json
+    #   pp "[room-channel] speak json: #{json}"
+    #   $redis.zrem("student::#{current_user.id}", json)
+    #   message = JSON.parse(json)
+    #   RoomChannel.broadcast_to(current_user,
+    #                            message: {msg: message,
+    #                                      display: 'message',
+    #                                      time_stamp: Time.now.to_i,
+    #                                      marked: false})
+    # else
+    #   pp "[room-channel] speak json"
+    # end
   end
 
 
@@ -40,17 +53,17 @@ class RoomChannel < ApplicationCable::Channel
 
   private
   def ping
-    json = $redis.zrange("student::#{current_user.id}", 0, 0).first
+    json = $redis.zrange("user::#{current_user.id}", 0, 0).first
     if json
       pp "[roo-channel] ping json #{json}"
-      $redis.zrem("student::#{current_user.id}", json)
+      $redis.zrem("user::#{current_user.id}", json)
       message = JSON.parse(json)
       RoomChannel.broadcast_to(current_user,
                                message: {msg: message,
                                          time_stamp: Time.now.to_i,
                                          marked: false})
     else
-      pp '[room-channel] ping json nothing'
+      pp '[room-channel] ping json'
     end
   end
 

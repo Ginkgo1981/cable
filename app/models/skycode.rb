@@ -6,16 +6,24 @@
 #  campaign_id   :integer
 #  university_id :integer
 #  teacher_id    :integer
-#  address       :string(255)
+#  name          :string(255)
+#  note          :string(255)
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #
 
 class Skycode < ApplicationRecord
-  includes BeanFamily
-  belongs_to :university
-  belongs_to :campaign
-  belongs_to :teacher
+  include BeanFamily
+  include Followable
+  belongs_to :university, optional: true
+  belongs_to :campaign,  optional: true
+  belongs_to :teacher, optional: true
+
+
+
+  def using?
+    self.teacher_id || self.university_id
+  end
 
 
 end

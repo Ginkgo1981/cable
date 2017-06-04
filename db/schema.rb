@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170601124917) do
+ActiveRecord::Schema.define(version: 20170604012708) do
 
   create_table "attachings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "attachable_id"
@@ -38,9 +38,10 @@ ActiveRecord::Schema.define(version: 20170601124917) do
   end
 
   create_table "campaigns", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "name"
     t.integer  "university_id"
     t.integer  "teacher_id"
-    t.string   "address"
+    t.string   "note"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
@@ -66,11 +67,11 @@ ActiveRecord::Schema.define(version: 20170601124917) do
   end
 
   create_table "followings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "user_id"
     t.integer  "followable_id"
     t.string   "followable_type"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "student_id"
   end
 
   create_table "forms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
@@ -151,18 +152,12 @@ ActiveRecord::Schema.define(version: 20170601124917) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "skycode_students", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "skycode_id"
-    t.integer  "student_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "skycodes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "campaign_id"
     t.integer  "university_id"
     t.integer  "teacher_id"
-    t.string   "address"
+    t.string   "name"
+    t.string   "note"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
@@ -199,6 +194,14 @@ ActiveRecord::Schema.define(version: 20170601124917) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "tagged_by"
+  end
+
+  create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "name"
+    t.string   "status"
+    t.string   "redirect_to"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "teacher_contacts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|

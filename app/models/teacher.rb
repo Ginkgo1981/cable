@@ -15,9 +15,12 @@
 class Teacher < ApplicationRecord
   include Identity
   include BeanFamily
-  belongs_to :university
+  belongs_to :university, optional: true
   has_many :messages
+  has_many :campaigns
+  has_many :skycodes
   delegate :nickname, to: :user, allow_nil: true
+
 
 
   def format
@@ -28,11 +31,8 @@ class Teacher < ApplicationRecord
         name: self.name,
         duty: self.duty,
         status: self.status,
-        university: self.university.format
+        university: self.university.try(:format)
     }
   end
-
-
-
 
 end

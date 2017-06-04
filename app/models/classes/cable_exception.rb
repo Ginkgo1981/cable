@@ -1,4 +1,4 @@
-class CableException < Exception
+class CableException < RuntimeError
   attr_reader :code
 
   class TeacherNotFound < CableException
@@ -35,6 +35,21 @@ class CableException < Exception
     end
   end
 
+  class SkycodeNotFound < CableException
+    def initialize(msg = nil)
+      msg ||= '没有找到 skycode'
+      super
+      @code = 1004
+    end
+  end
+
+  class SkycodeAlreadyBinded < CableException
+    def initialize(msg = nil)
+      msg ||= 'skycode已被绑定'
+      super
+      @code = 1005
+    end
+  end
 
 
 end

@@ -19,11 +19,17 @@ Rails.application.routes.draw do
   #members
   post 'members/wechat_open_authorization',  to: 'members#wechat_open_authorization'
   post 'members/mini_app_authorization',  to: 'members#mini_app_authorization'
+  post 'members/mini_app_authorization_teacher',  to: 'members#mini_app_authorization_teacher'
+
+
+
+
   post 'members/send_sms_code',  to: 'members#send_sms_code'
   post 'members/bind_cell', to: 'members#bind_cell'
   post 'members/bind_sat', to: 'members#bind_sat'
+
   post 'members/follow/:dsin', to: 'members#follow'
-  get  'members/followings',  to: 'member#followings'
+  # get  'members/followings',  to: 'member#followings'
 
   #messages
   post 'messages/list', to:'messages#message_list'
@@ -45,7 +51,19 @@ Rails.application.routes.draw do
   #新建专业
   post 'universities/create_major', to: 'universities#create_major'
 
-  #users
-  get 'users/student_list', to: 'users#student_list'
+  #students
+  get 'students/student_list/:dsin', to: 'students#student_list'
+
+
+  #campaigns / skycodes
+  get  'campaigns/campaign_list/:dsin', to: 'campaigns#campaign_list'
+  get  'campaigns/skycode_list/:dsin', to:  'campaigns#skycode_list'
+  post 'campaigns/binding_skycode/:dsin', to:  'campaigns#binding_skycode'
+
+
+  #scan skycodes
+  post 'campaigns/student_scan_skycode', to: 'campaigns#student_scan_skycode'
+  post 'campaigns/teacher_scan_skycode', to: 'campaigns#teacher_scan_skycode'
+
 
 end

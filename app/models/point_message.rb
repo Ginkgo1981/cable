@@ -25,8 +25,9 @@ class PointMessage < Message
   def send_to_redis
 
     if self.direction == 'up'
+      $redis.zadd("user::#{self.teacher.user.id}", 100, JSON(self.format_for_redis))
     else
-      $redis.zadd("student::#{self.student.user.id}", 100, JSON(self.format_for_redis))
+      $redis.zadd("user::#{self.student.user.id}", 100, JSON(self.format_for_redis))
     end
   end
 

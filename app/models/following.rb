@@ -3,15 +3,15 @@
 # Table name: followings
 #
 #  id              :integer          not null, primary key
-#  user_id         :integer
 #  followable_id   :integer
 #  followable_type :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  student_id      :integer
 #
 
 class Following < ApplicationRecord
-  belongs_to :user
+  belongs_to :student
   belongs_to :followable, :polymorphic => true
 
 

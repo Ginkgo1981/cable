@@ -17,12 +17,17 @@ class Student < ApplicationRecord
   has_many :messages
   has_many :point_messages
 
+  has_many :followings
+  has_many :following_teachers, -> { uniq }, :source => :followable, :through => :followings, :source_type => :Teacher
+  has_many :following_universities, -> { uniq }, :source => :followable, :through => :followings, :source_type => :University
+
   serialize :sat_score, JSON
   # todo
   # after_create_commit :create_welcome_message
   before_save :create_or_update_sat, if: :sat_score_changed?
 
   delegate :name, to: :user
+  delegate :headimgurl, to: :user
   delegate :nickname, to: :user
   delegate :province, to: :user
   delegate :city, to: :user

@@ -19,11 +19,15 @@
 class University < ApplicationRecord
   include BeanFamily
   include Attachable
+  include Followable
+
+
   has_many :majors
   has_many :teachers
   has_many :messages
   has_many :stories
   has_many :point_messages
+  has_many :campaigns
 
   def format
     {

@@ -28,13 +28,8 @@
 
 class User < ApplicationRecord
 
-  include Followable
   scope :with_identity, ->(identity_type) {where(identity_type: identity_type)}
   belongs_to :identity, polymorphic: true, optional: true
-  has_many :followings
-  has_many :following_teachers, -> { uniq }, :source => :followable, :through => :followings, :source_type => :Teacher
-  has_many :following_universities, -> { uniq }, :source => :followable, :through => :followings, :source_type => :University
-
   has_many :forms
   has_many :received_messages, class_name: Message, foreign_key: :user_id
   has_many :sended_messages, class_name: Message, foreign_key: :sender_id
@@ -59,7 +54,7 @@ class User < ApplicationRecord
         city: self.city,
         headimgurl: self.headimgurl,
         identity: self.identity.format,
-        following_universities: self.following_universities.map { |u| u.format}
+        following_universities: self.identity.is_a?(Student) ? self.identity.following_universities.map { |u| u.format} : []
     }
   end
 

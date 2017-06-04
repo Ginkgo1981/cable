@@ -35,18 +35,16 @@ class MembersController < ApplicationController
 
   def follow
     bean = Bean.find_by_dsin params[:dsin]
-    @user.following_universities << bean if bean.is_a? University
-    @user.following_teachers << bean if bean.is_a? Teacher
+    @student.following_universities << bean if bean.is_a? University
+    @student.following_teachers << bean if bean.is_a? Teacher
     render json: {code: 0, msg: 'succ'}
   end
 
-  # def followings
-  #   following_teachers = @user.following_teachers
-  #   following_universities = @user.following_universities
-  #   render json: {code: 0,
-  #                 following_teachers: @user.following_teachers.map { |t| t.format},
-  #                 following_universities: @user.following_universities.map { |u| u.format}}
-  # end
+  def followings
+    render json: {code: 0,
+                  following_teachers: @student.following_teachers.map { |t| t.format},
+                  following_universities: @student.following_universities.map { |u| u.format}}
+  end
 
   #student
   def mini_app_authorization
@@ -72,6 +70,36 @@ class MembersController < ApplicationController
     end
     render json: {code: 0, member: user.membership}
   end
+
+
+  #teacher
+  def mini_app_authorization_teacher
+    code = params[:code]
+    app_id = 'wx8887d1994c33935c'
+    app_secret = '209161ceb742e880116fdf6f6414f997'
+    session = wx_get_session_key(code, app_id, app_secret)
+    session_key = session['session_key']
+    encrypted_data = params[:encrypted_data]
+    iv = params[:iv]
+    info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
+    user = User.find_by miniapp_openid: info[:openId]
+    unless user
+      teacher = Teacher.create!
+      user = teacher.create_user miniapp_openid: info[:openId],
+                                 nickname: info[:nickName],
+                                 sex: info[:gender],
+                                 language: info[:language],
+                                 city: info[:city],
+                                 province: info[:province],
+                                 headimgurl: info[:avatarUrl],
+                                 union_id: info[:unionId]
+    end
+    render json: {code: 0, member: user.membership}
+  end
+
+
+
+
 
   def bind_cell
     Cell.verify_code! params[:cell], params[:sms_code]
