@@ -52,4 +52,14 @@ class CableException < RuntimeError
   end
 
 
+
+  class UniversityNotFound < CableException
+    def initialize(msg = nil)
+      msg ||= '未找到学校'
+      super
+      @code = 1006
+    end
+  end
+
+
 end

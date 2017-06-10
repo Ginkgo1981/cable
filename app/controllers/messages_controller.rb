@@ -1,6 +1,6 @@
 class MessagesController < ApplicationController
 
-  before_action :find_user_by_token!, only: [:message_list, :batch_send_messages, :ask_message]
+  before_action :find_user_by_token!, only: [:message_list, :batch_send_messages, :send_message]
 
   def message_list
     messages = @user.identity.messages.preload([student: :user], [student: :bean], [university: :bean], [teacher: :bean], :bean).reverse_order
@@ -25,13 +25,30 @@ class MessagesController < ApplicationController
     render json: {code: 0, msg: 'succ'}
   end
 
-  def ask_message
-    university = Bean.find_by_dsin params[:university_dsin]
-    message = @student.point_messages.create! content: params[:content],
-                                              university: university,
-                                              direction: 'up'
-    @user.forms.create! form_id: params[:formId], from: 'bind_cell'
-    render json: {code: 0, message: {msg: message.format_for_redis,
+  def send_message
+    to = Bean.find_by_dsin params[:dsin]
+
+    if @student
+      message = @student.point_messages.create! content: params[:content],
+                                                university: to,
+                                                direction: 'teacher'
+    elsif @teacher
+      message = @teacher.point_messages.create! content: params[:content],
+                                                student: to,
+                                                university: @university,
+                                                direction: 'student'
+    end
+
+    if params[:photo_key]
+      p = Photo.create! key: params[:photo_key]
+      message.attached_photos << p
+    end
+
+    if params[:formId]
+      @user.forms.create! form_id: params[:formId], from: 'ask_message'
+    end
+
+    render json: {code: 0, message: {msg: message.reload.format_for_redis,
                                      time_stamp: Time.now.to_i,
                                      marked: true}
     }

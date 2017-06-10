@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170604012708) do
+ActiveRecord::Schema.define(version: 20170610015208) do
 
   create_table "attachings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "attachable_id"
@@ -71,7 +71,8 @@ ActiveRecord::Schema.define(version: 20170604012708) do
     t.string   "followable_type"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.integer  "student_id"
+    t.string   "follower_id"
+    t.string   "follower_type"
   end
 
   create_table "forms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
@@ -237,12 +238,12 @@ ActiveRecord::Schema.define(version: 20170604012708) do
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.string   "cell",           limit: 50
+    t.string   "cell",            limit: 50
     t.integer  "sex"
-    t.string   "token",          limit: 50
-    t.string   "identity_id",    limit: 50
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "token",           limit: 50
+    t.string   "identity_id",     limit: 50
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.string   "identity_type"
     t.string   "union_id"
     t.datetime "subscribe_at"
@@ -258,6 +259,7 @@ ActiveRecord::Schema.define(version: 20170604012708) do
     t.string   "headimgurl"
     t.string   "language"
     t.string   "name"
+    t.integer  "last_message_id",            default: 0
   end
 
   create_table "yx_details", primary_key: "ID", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

@@ -17,14 +17,14 @@ class Student < ApplicationRecord
   has_many :messages
   has_many :point_messages
 
-  has_many :followings
-  has_many :following_teachers, -> { uniq }, :source => :followable, :through => :followings, :source_type => :Teacher
-  has_many :following_universities, -> { uniq }, :source => :followable, :through => :followings, :source_type => :University
+  has_many :followings, as: :follower
+  has_many :following_teachers, -> { uniq }, :through => :followings,  :source => :followable, :source_type => :Teacher
+  has_many :following_universities, -> { uniq }, :through => :followings, :source => :followable, :source_type => :University
 
   serialize :sat_score, JSON
   # todo
   # after_create_commit :create_welcome_message
-  before_save :create_or_update_sat, if: :sat_score_changed?
+  # before_save :create_or_update_sat, if: :sat_score_changed?
 
   delegate :name, to: :user
   delegate :headimgurl, to: :user
@@ -35,6 +35,10 @@ class Student < ApplicationRecord
   def format
     {
         dsin: self.dsin,
+        nickname: self.nickname,
+        headimgurl:  self.headimgurl,
+        province: self.province,
+        city:  self.city,
         school: self.school,
         sat_province: self.sat_province,
         sat_score: self.sat_score

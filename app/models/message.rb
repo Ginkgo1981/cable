@@ -26,35 +26,31 @@ class Message < ApplicationRecord
   belongs_to :student, optional: true
   belongs_to :university, optional: true
   belongs_to :teacher, optional: true
-  # belongs_to :attachment, polymorphic: true, optional: true
 
-  scope :filter_by_type, -> (type) {where(type: type)}
-  scope :filter_by_entity, -> (entity){ where("#{entity.class.name.downcase.to_s}": entity)}
+  # scope :filter_by_type, -> (type) {where(type: type)}
+  # scope :filter_by_entity, -> (entity){ where("#{entity.class.name.downcase.to_s}": entity)}
 
-  # before_create :set_university
   def format_for_redis
-    {
-        dsin: self.dsin,
-        type: self.type,
-        img_url: self.img_url,
-        content: self.content,
-        created_at: self.created_at,
-        university: self.university.try(:format),
-        direction: self.direction || 'down',
-        attached_stories: self.attached_stories.map{|s| s.format},
-        attached_photos: self.attached_photos.map{|p| p.format},
-        attached_majors: self.attached_majors.map{|m| m.format}
-    }
+    if json = $redis.get(self.dsin)
+      JSON.parse(json)
+    else
+      fommatted = {
+          dsin: self.dsin,
+          type: self.type,
+          img_url: self.img_url,
+          content: self.content,
+          created_at: self.created_at,
+          university: (self.university || University.last).try(:format),
+          student: self.student.try(:format),
+          direction: self.direction || 'student',
+          attached_stories: self.attached_stories.map{|s| s.format},
+          attached_photos: self.attached_photos.map{|p| p.format},
+          attached_majors: self.attached_majors.map{|m| m.format},
+          attached_tasks: self.attached_tasks.map{|t| t.format},
+          attached_students: self.attached_students.map{|s| s.format}
+      }
+      $redis.set(self.dsin, JSON(fommatted))
+      fommatted
+    end
   end
-
-  # after_create_commit {MessageBroadcastJob.perform_now self}
-
-  # private
-  # def set_university
-  #   if self.teacher_id
-  #     teacher = Teacher.find self.teacher_id
-  #     self.university = teacher.university
-  #   end
-  # end
-
 end

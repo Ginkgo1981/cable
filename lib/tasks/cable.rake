@@ -1,25 +1,22 @@
 namespace :cable do
 
 
-  desc 'clean'
-  task clean: :environment do
-
-    #user delete_all
-    Student.delete_all
-    Staff.delete_all
-    Teacher.delete_all
-    User.delete_all
-
-
-    #message delete_all
-    Message.delete_all
-    $redis.flushall
-
-
-    #relation_delete_all
-    Following.delete_all
-
+  desc 'setup'
+  task setup: :environment do
+    u = University.last
+    u.name ='天马志愿团队'
+    u.logo = 'http://images.gaokao2017.cn/skymatter-logo.png'
+    u.save
   end
+
+  desc 'new student notification'
+  task new_student_notification: :environment do
+    s = Student.last
+    n = NotificationMessage.create! direction: 'teacher',
+                                    content: "欢迎新同学 #{s.nickname} 加入"
+    n.attached_students << s
+  end
+
 
 
   desc 'generate notification message'

@@ -7,11 +7,12 @@
 #  followable_type :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  student_id      :integer
+#  follower_id     :string(255)
+#  follower_type   :string(255)
 #
 
 class Following < ApplicationRecord
-  belongs_to :student
+  belongs_to :follower, :polymorphic => true
   belongs_to :followable, :polymorphic => true
 
 

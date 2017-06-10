@@ -1,5 +1,6 @@
 class RoomChannel < ApplicationCable::Channel
-  periodically -> { ping }, every:10
+  periodically -> { ping }, every: 10
+
   def subscribed
     # stream_from "messages"
     # stream_from "messages:#{current_user.id}"
@@ -21,12 +22,11 @@ class RoomChannel < ApplicationCable::Channel
 
     if data['message'] == 'start-pull'
 
-      message = NotificationMessage.last
-      RoomChannel.broadcast_to(current_user,
-                               message: {msg: message.format_for_redis,
-                                         display: 'verify-university',
-                                         time_stamp: Time.now.to_i,
-                                         marked: true})
+      # message = NotificationMessage.last
+      # RoomChannel.broadcast_to(current_user,
+      #                          message: {msg: message.format_for_redis,
+      #                                    time_stamp: Time.now.to_i,
+      #                                    marked: true})
 
 
     end
@@ -50,20 +50,23 @@ class RoomChannel < ApplicationCable::Channel
     current_user.offline
   end
 
-
   private
   def ping
     json = $redis.zrange("user::#{current_user.id}", 0, 0).first
-    if json
-      pp "[roo-channel] ping json #{json}"
-      $redis.zrem("user::#{current_user.id}", json)
-      message = JSON.parse(json)
+    message =
+        if json
+          pp "[roo-channel] ping json #{json}"
+          $redis.zrem("user::#{current_user.id}", json)
+          JSON.parse(json)
+        else
+          current_user.next_notification_message
+        end
+
+    if message
       RoomChannel.broadcast_to(current_user,
-                               message: {msg: message,
+                               message: {msg: message.format_for_redis,
                                          time_stamp: Time.now.to_i,
                                          marked: false})
-    else
-      pp '[room-channel] ping json'
     end
   end
 

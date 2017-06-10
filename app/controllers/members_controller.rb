@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
 
-  before_action :find_user_by_token!, only: %w(bind_cell bind_sat follow followings)
+  before_action :find_user_by_token!, only: %w(update_teacher bind_cell bind_sat follow followings)
 
   #teacher
   def wechat_open_authorization
@@ -35,22 +35,43 @@ class MembersController < ApplicationController
 
   def follow
     bean = Bean.find_by_dsin params[:dsin]
-    @student.following_universities << bean if bean.is_a? University
-    @student.following_teachers << bean if bean.is_a? Teacher
+    if @student
+      @student.following_universities << bean if bean.is_a? University
+      @student.following_teachers << bean if bean.is_a? Teacher
+    end
+
+    if @teacher
+      @teacher.following_students << bean if bean.is_a? Student
+    end
     render json: {code: 0, msg: 'succ'}
   end
 
   def followings
-    render json: {code: 0,
-                  following_teachers: @student.following_teachers.map { |t| t.format},
-                  following_universities: @student.following_universities.map { |u| u.format}}
+    followings =
+        if @student
+          {
+
+              following_teachers: @student.following_teachers.map { |t| t.format },
+              following_universities: @student.following_universities.map { |u| u.format }
+          }
+        else
+          {
+              following_students: @teacher.following_students.map { |t| t.format}
+          }
+        end
+    render json: {code: 0, followings: followings}
   end
 
   #student
   def mini_app_authorization
     code = params[:code]
-    app_id = 'wxdfbc374fc090fd7c'
-    app_secret = '6f851272e083c60764ccf17ca956379d'
+    if params[:app_name] == '天马志愿'
+      app_id = 'wxdfbc374fc090fd7c'
+      app_secret = '6f851272e083c60764ccf17ca956379d'
+    else
+      app_id = 'wx8887d1994c33935c'
+      app_secret = '209161ceb742e880116fdf6f6414f997'
+    end
     session = wx_get_session_key(code, app_id, app_secret)
     session_key = session['session_key']
     encrypted_data = params[:encrypted_data]
@@ -72,55 +93,64 @@ class MembersController < ApplicationController
   end
 
 
-  #teacher
-  def mini_app_authorization_teacher
-    code = params[:code]
-    app_id = 'wx8887d1994c33935c'
-    app_secret = '209161ceb742e880116fdf6f6414f997'
-    session = wx_get_session_key(code, app_id, app_secret)
-    session_key = session['session_key']
-    encrypted_data = params[:encrypted_data]
-    iv = params[:iv]
-    info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
-    user = User.find_by miniapp_openid: info[:openId]
-    unless user
-      teacher = Teacher.create!
-      user = teacher.create_user miniapp_openid: info[:openId],
-                                 nickname: info[:nickName],
-                                 sex: info[:gender],
-                                 language: info[:language],
-                                 city: info[:city],
-                                 province: info[:province],
-                                 headimgurl: info[:avatarUrl],
-                                 union_id: info[:unionId]
-    end
-    render json: {code: 0, member: user.membership}
+  # #teacher
+  # def mini_app_authorization_teacher
+  #   code = params[:code]
+  #   session = wx_get_session_key(code, app_id, app_secret)
+  #   session_key = session['session_key']
+  #   encrypted_data = params[:encrypted_data]
+  #   iv = params[:iv]
+  #   info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
+  #   user = User.find_by miniapp_openid: info[:openId]
+  #   unless user
+  #     teacher = Teacher.create!
+  #     user = teacher.create_user miniapp_openid: info[:openId],
+  #                                nickname: info[:nickName],
+  #                                sex: info[:gender],
+  #                                language: info[:language],
+  #                                city: info[:city],
+  #                                province: info[:province],
+  #                                headimgurl: info[:avatarUrl],
+  #                                union_id: info[:unionId]
+  #   end
+  #   render json: {code: 0, member: user.membership}
+  # end
+
+
+  def update_teacher
+    university = Bean.find_by_dsin params[:university_dsin]
+    raise CableException::UniversityNotFound unless university
+    @teacher.update! name: params[:name],
+                     duty: params[:duty],
+                     university: university
+    render json: {code: 0, member: @teacher.user.membership}
   end
-
-
-
 
 
   def bind_cell
     Cell.verify_code! params[:cell], params[:sms_code]
     @user.update! cell: params[:cell], name: params[:name]
     @user.forms.create! form_id: params[:form_id], from: 'bind_cell'
-    render json: { code: 0, message: 'succ' }
+    render json: {code: 0, message: 'succ'}
   end
 
 
   def bind_sat
     @user.forms.create! form_id: params[:form_id], from: 'bind_sat'
     student = @user.identity
-    student.sat_score = params[:sat]
-    student.save
-    render json: { code: 0, message: 'succ' }
+    student.sat_score = {
+        score: params[:score],
+        km: params[:km],
+        dj: params[:dj]
+    }
+    student.save!
+    render json: {code: 0, member: @user.membership}
   end
 
   def send_sms_code
     cell = Cell.create! cell: params[:cell]
     cell.send_sms
-    render json: { code: 0, message: 'succ' }
+    render json: {code: 0, message: 'succ'}
   end
 
   private

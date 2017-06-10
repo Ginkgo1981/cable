@@ -9,6 +9,9 @@ module Attachable               # 可以附着附件的
     has_many :attached_stories,:through => :attachings, :source => :attachment, :source_type => :Story
     has_many :attached_majors, :through => :attachings, :source => :attachment, :source_type => :Major
     has_many :attached_tasks, :through => :attachings, :source => :attachment, :source_type => :Task
+    has_many :attached_students, :through => :attachings, :source => :attachment, :source_type => :Student
+    has_many :attached_teachers,  :through => :attachings, :source => :attachment, :source_type => :Teacher
+    has_many :attached_universities, :through => :attachings, :source => :attachment, :source_type => :University
 
     def attachments
       self.attachings.map{ |i| i.attachment }
