@@ -15,9 +15,10 @@ gem 'mysql2'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 
+gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
+gem 'carrierwave-base64', git: 'https://github.com/SkyMatters/carrierwave-base64.git', branch: 'master'
 gem 'carrierwave-qiniu', '~> 1.1.0'
-
-
+gem 'rqrcode'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
@@ -38,6 +39,7 @@ gem 'state_machine'
 gem 'active_model_serializers'
 gem 'qiniu'
 gem 'listen', '~> 3.0.5'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

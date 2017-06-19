@@ -40,6 +40,8 @@ class User < ApplicationRecord
   has_many :groups, through: :user_groups
   has_one :wishcard
 
+  has_one :qr_code, as: :codeable
+
   # delegate :dsin, to: :identity
   before_create :generate_token
 
