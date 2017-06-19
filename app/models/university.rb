@@ -14,13 +14,13 @@
 #  updated_at :datetime         not null
 #  logo       :string(255)
 #  province   :string(255)
+#  hot        :integer          default(0)
 #
 
 class University < ApplicationRecord
   include BeanFamily
   include Attachable
   include Followable
-
 
   has_many :majors
   has_many :teachers
@@ -34,7 +34,9 @@ class University < ApplicationRecord
         id: self.id,
         dsin: self.dsin,
         name: self.name,
-        logo: self.logo
+        logo: self.logo,
+        resource_type: 'University'
+
     }
 
   end

@@ -29,17 +29,35 @@
 
 class User < ApplicationRecord
 
+  include BeanFamily
   scope :with_identity, ->(identity_type) { where(identity_type: identity_type) }
   belongs_to :identity, polymorphic: true, optional: true
   has_many :forms
   has_many :received_messages, class_name: Message, foreign_key: :user_id
   has_many :sended_messages, class_name: Message, foreign_key: :sender_id
-  delegate :dsin, to: :identity
+  #group
+  has_many :user_groups
+  has_many :groups, through: :user_groups
+  has_one :wishcard
+
+  # delegate :dsin, to: :identity
   before_create :generate_token
+
+
+  def format_basic
+    {
+        dsin: self.dsin,
+        nickname: self.nickname,
+        province: self.province,
+        city: self.city,
+        headimgurl: self.headimgurl
+    }
+  end
 
   def membership
     {
         id: self.id,
+        dsin: self.dsin,
         cell: self.cell,
         token: self.token,
         identity_type: self.identity_type,
@@ -51,10 +69,29 @@ class User < ApplicationRecord
         city: self.city,
         headimgurl: self.headimgurl,
         identity: self.identity.format,
-        following_universities: self.identity.is_a?(Student) ? self.identity.following_universities.map { |u| u.format } : []
+        wishcard: {dsin: self.wishcard.try(:dsin)},
+        following_universities: self.identity.is_a?(Student) ? self.identity.following_universities.map { |u| u.format } : [] #todo refactor
     }
   end
 
+  def allow_send_notification_message?
+
+    #todo
+    true
+
+  end
+
+
+  def allow_send_point_message?
+    true
+
+  end
+
+
+  def allow_send_subscription_message?
+    true
+
+  end
 
   def next_notification_message
     message =
@@ -63,7 +100,8 @@ class User < ApplicationRecord
         else
           $redis.lindex 'notification_teacher', self.last_message_id
         end
-    self.increment!(:last_message_id) if message
+    return nil unless message
+    self.increment!(:last_message_id)
     JSON.parse(message)
   end
 

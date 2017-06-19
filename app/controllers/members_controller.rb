@@ -1,6 +1,12 @@
 class MembersController < ApplicationController
 
-  before_action :find_user_by_token!, only: %w(update_teacher bind_cell bind_sat follow followings)
+  before_action :find_user_by_token!, only: [:update_teacher, :bind_cell, :bind_sat, :follow,
+                                             :following_teachers, :following_universities, :following_students, :following_skycodes,
+                                             :wechat_group,
+                                             :like_comment, :create_wishcard,:forward_wishcard]
+
+  before_action :find_entity_by_dsin!, only: [:like_comment, :forward_wishcard]
+
 
   #teacher
   def wechat_open_authorization
@@ -32,7 +38,6 @@ class MembersController < ApplicationController
     render json: {code: 0, member: user.membership}
   end
 
-
   def follow
     bean = Bean.find_by_dsin params[:dsin]
     if @student
@@ -43,23 +48,68 @@ class MembersController < ApplicationController
     if @teacher
       @teacher.following_students << bean if bean.is_a? Student
     end
+    render json: {code: 0, msg: '关注成功'}
+  end
+
+
+  def create_wishcard
+    cities = (params[:cities] || []).map{|c| c['name']}
+    universities = (params[:universities] || []).map{|c| c['name']}
+    majors = (params[:majors] || []).map{|c| c['name']}
+    wishcard = @user.create_wishcard cities: cities,
+                                     universities: universities,
+                                     majors: majors,
+                                     introdution: params[:introdution]
+    render json: {code: 0, dsin: wishcard.dsin}
+  end
+
+  def forward_wishcard
+    binding.pry
+    wishcard = @entity
+    group  = Group.find_or_create_by! group_id: params[:group_id]
+    wishcard.following_groups << group unless wishcard.following_groups.exists? group
     render json: {code: 0, msg: 'succ'}
   end
 
-  def followings
-    followings =
-        if @student
-          {
 
-              following_teachers: @student.following_teachers.map { |t| t.format },
-              following_universities: @student.following_universities.map { |u| u.format }
-          }
-        else
-          {
-              following_students: @teacher.following_students.map { |t| t.format}
-          }
-        end
-    render json: {code: 0, followings: followings}
+  #我在追
+  def following_teachers
+    teachers = @student.following_teachers
+    render json: teachers,
+           each_serializer: TeacherSerializer,
+           meta: {code: 0}
+  end
+
+
+  def following_universities
+    universites = @student.following_universities
+    render json: universites,
+           each_serializer: UniversitySerializer,
+           meta: {code: 0}
+  end
+
+  def following_students
+    students = @teacher.following_students
+    render json: students,
+           each_serializer: StudentSerializer,
+           meta: {code: 0}
+  end
+
+
+  def following_skycodes
+    skycodes = @user.identity.following_skycodes
+    render json: skycodes,
+           each_serializer: SkycodeSerializer,
+           meta: {code: 0}
+  end
+
+
+  def like_comment
+    @entity.like_comment(@user, params[:comment])
+    likings = @entity.reload.likings.preload({user: [identity: :bean]})
+    render json: likings,
+           each_serializer: LikingSerializer,
+           meta: {code: 0}
   end
 
   #student
@@ -77,6 +127,8 @@ class MembersController < ApplicationController
     encrypted_data = params[:encrypted_data]
     iv = params[:iv]
     info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
+
+
     user = User.find_by miniapp_openid: info[:openId]
     unless user
       student = Student.create!
@@ -89,32 +141,28 @@ class MembersController < ApplicationController
                                  headimgurl: info[:avatarUrl],
                                  union_id: info[:unionId]
     end
-    render json: {code: 0, member: user.membership}
+    render json: {code: 0, member: user.membership, session_key: session_key}
   end
 
 
-  # #teacher
-  # def mini_app_authorization_teacher
-  #   code = params[:code]
-  #   session = wx_get_session_key(code, app_id, app_secret)
-  #   session_key = session['session_key']
-  #   encrypted_data = params[:encrypted_data]
-  #   iv = params[:iv]
-  #   info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
-  #   user = User.find_by miniapp_openid: info[:openId]
-  #   unless user
-  #     teacher = Teacher.create!
-  #     user = teacher.create_user miniapp_openid: info[:openId],
-  #                                nickname: info[:nickName],
-  #                                sex: info[:gender],
-  #                                language: info[:language],
-  #                                city: info[:city],
-  #                                province: info[:province],
-  #                                headimgurl: info[:avatarUrl],
-  #                                union_id: info[:unionId]
-  #   end
-  #   render json: {code: 0, member: user.membership}
-  # end
+  def wechat_group
+    if params[:app_name] == '天马志愿'
+      app_id = 'wxdfbc374fc090fd7c'
+      app_secret = '6f851272e083c60764ccf17ca956379d'
+    else
+      app_id = 'wx8887d1994c33935c'
+      app_secret = '209161ceb742e880116fdf6f6414f997'
+    end
+    encrypted_data = params[:encrypted_data]
+    session_key = params[:session_key]
+    iv = params[:iv]
+    info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
+    openGId = info[:openGId]
+    group = Group.find_or_create_by! group_id: openGId
+    group.users << @user
+    render json: {code: 0, msg: 'succ'}
+
+  end
 
 
   def update_teacher

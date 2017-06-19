@@ -12,13 +12,8 @@
 #
 
 class Campaign < ApplicationRecord
-
   include BeanFamily
   include Followable
   belongs_to :university
   has_many :skycodes
-
-
-
-
 end

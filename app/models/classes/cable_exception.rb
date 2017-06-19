@@ -51,8 +51,6 @@ class CableException < RuntimeError
     end
   end
 
-
-
   class UniversityNotFound < CableException
     def initialize(msg = nil)
       msg ||= '未找到学校'
@@ -61,5 +59,42 @@ class CableException < RuntimeError
     end
   end
 
+
+
+  class NotAllowedSendNotificationMessage < CableException
+    def initialize(msg = nil)
+      msg ||= '您不能群发通知类信息'
+      super
+      @code = 1007
+    end
+  end
+
+  class NotAllowedSendPointMessage < CableException
+    def initialize(msg = nil)
+      msg ||= '您不能发送信息'
+      super
+      @code = 1008
+    end
+  end
+
+
+  class NotAllowedSendSubscriptionMessage < CableException
+    def initialize(msg = nil)
+      msg ||= '您不能发送订阅类信息'
+      super
+      @code = 1009
+    end
+  end
+
+
+
+
+  class NotFoundGroup < CableException
+    def initialize(msg = nil)
+      msg ||= '不能找到群组'
+      super
+      @code = 1010
+    end
+  end
 
 end

@@ -15,20 +15,14 @@
 class Teacher < ApplicationRecord
   include Identity
   include BeanFamily
+  include Followable
+
   belongs_to :university, optional: true
-  # has_many :messages
   has_many :campaigns
   has_many :skycodes
   delegate :nickname, to: :user, allow_nil: true
-
   has_many :point_messages
-
-  has_many :followings, as: :follower
-  has_many :following_students, -> { uniq }, :through => :followings,  :source => :followable, :source_type => :Student
-
-
-  has_many :followed_by, as: :followable, class_name: :Following
-  has_many :followed_students, :through => :followed_by,  :source => :follower, :source_type => :Student
+  has_many :notification_messages
 
 
   def format
@@ -39,7 +33,8 @@ class Teacher < ApplicationRecord
         name: self.name,
         duty: self.duty,
         status: self.status,
-        university: self.university.try(:format)
+        university: self.university.try(:format),
+        resource_type: 'Teacher'
     }
   end
 

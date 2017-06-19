@@ -64,7 +64,7 @@ class RoomChannel < ApplicationCable::Channel
 
     if message
       RoomChannel.broadcast_to(current_user,
-                               message: {msg: message.format_for_redis,
+                               message: {msg: message,
                                          time_stamp: Time.now.to_i,
                                          marked: false})
     end

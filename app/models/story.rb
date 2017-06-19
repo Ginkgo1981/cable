@@ -22,6 +22,7 @@ class Story < ApplicationRecord
 
   def format
     {
+        resource_type: 'Story',
         dsin: self.dsin,
         coverage_img_url: self.coverage_img_url,
         title: self.title,

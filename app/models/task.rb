@@ -15,6 +15,7 @@ class Task < ApplicationRecord
 
   def format
     {
+        resource_type: 'Task',
         dsin: self.dsin,
         name: self.name,
         status: self.status,

@@ -35,8 +35,9 @@ class Message < ApplicationRecord
       JSON.parse(json)
     else
       fommatted = {
+          # resource_type: 'Message',
           dsin: self.dsin,
-          type: self.type,
+          resource_type: self.type,
           img_url: self.img_url,
           content: self.content,
           created_at: self.created_at,

@@ -14,12 +14,13 @@ class Student < ApplicationRecord
   include Identity
   include BeanFamily
   include Taggable
+  include Followable
+
+
   has_many :messages
   has_many :point_messages
+  has_many :notification_messages
 
-  has_many :followings, as: :follower
-  has_many :following_teachers, -> { uniq }, :through => :followings,  :source => :followable, :source_type => :Teacher
-  has_many :following_universities, -> { uniq }, :through => :followings, :source => :followable, :source_type => :University
 
   serialize :sat_score, JSON
   # todo
@@ -32,6 +33,10 @@ class Student < ApplicationRecord
   delegate :province, to: :user
   delegate :city, to: :user
 
+
+
+
+
   def format
     {
         dsin: self.dsin,
@@ -41,7 +46,8 @@ class Student < ApplicationRecord
         city:  self.city,
         school: self.school,
         sat_province: self.sat_province,
-        sat_score: self.sat_score
+        sat_score: self.sat_score,
+        resource_type: 'Student'
     }
   end
 

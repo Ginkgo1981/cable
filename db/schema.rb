@@ -10,7 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170610015208) do
+ActiveRecord::Schema.define(version: 20170616160244) do
+
+  create_table "askcards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "attachings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "attachable_id"
@@ -54,6 +59,13 @@ ActiveRecord::Schema.define(version: 20170610015208) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "cities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "name"
+    t.integer  "hot"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "dm_zxdm", primary_key: "xxdm", id: :string, limit: 12, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "sxdm", limit: 9,   null: false
     t.string "xxmc", limit: 100, null: false
@@ -86,6 +98,13 @@ ActiveRecord::Schema.define(version: 20170610015208) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "group_id"
+    t.integer  "init_user_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   create_table "jiangsu_sats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer  "student_id"
     t.integer  "score_chinese"
@@ -99,6 +118,22 @@ ActiveRecord::Schema.define(version: 20170610015208) do
     t.string   "score_km_2"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+  end
+
+  create_table "likings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.integer  "user_id"
+    t.integer  "likable_id"
+    t.string   "likable_type"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "comment"
+  end
+
+  create_table "major_hots", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "name"
+    t.integer  "hot",        default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "majors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
@@ -231,10 +266,18 @@ ActiveRecord::Schema.define(version: 20170610015208) do
     t.string   "website"
     t.string   "tel"
     t.text     "brief",      limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.string   "logo"
     t.string   "province"
+    t.integer  "hot",                      default: 0
+  end
+
+  create_table "user_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.integer  "user_id"
+    t.string   "group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
@@ -260,6 +303,19 @@ ActiveRecord::Schema.define(version: 20170610015208) do
     t.string   "language"
     t.string   "name"
     t.integer  "last_message_id",            default: 0
+  end
+
+  create_table "wishcards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.integer  "user_id"
+    t.text     "cities",        limit: 65535
+    t.text     "universities",  limit: 65535
+    t.text     "majors",        limit: 65535
+    t.text     "introdution",   limit: 65535
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.integer  "count_of_like",               default: 0
+    t.string   "nickname"
+    t.string   "headimgurl"
   end
 
   create_table "yx_details", primary_key: "ID", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

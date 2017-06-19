@@ -1,5 +1,5 @@
 class StudentSerializer < ApplicationSerializer
-  attributes :id, :name, :headimgurl, :nickname, :province, :city, :school, :dsin
+  attributes :id,  :headimgurl, :nickname, :province, :city, :school, :dsin
   has_one :user , if: -> {instance_options[:include_user]}
   has_many :tags, if: -> {instance_options[:include_tags]}
   attribute :sat_score

@@ -12,6 +12,44 @@ class DsinsController < ApplicationController
            include_majors: !! params[:include_majors] #UniversitySerializer
   end
 
+
+  def likings
+    likings = @entity.likings.preload({user: [identity: :bean]})
+    render json: likings,
+           each_serializer: LikingSerializer,
+           meta: {code: 0}
+  end
+
+  # def format_show
+  #   render json: {code: 0, entity: @entity.format}
+  # end
+
+
+  def followed_by_students
+    students = @entity.followed_by_students
+    render json: students,
+           each_serializer: StudentSerializer,
+           meta: {code: 0}
+  end
+
+
+  def followed_by_teachers
+    teachers = @entity.followed_by_teachers
+    render json: teachers,
+           each_serializer: TeacherSerializer,
+           meta: {code: 0}
+  end
+
+  def followed_by_universities
+    universities = @entity.followed_by_universities
+    render json: universities,
+           each_serializer: UniversitySerializer,
+           meta: {code: 0}
+
+  end
+
+
+
   def update
     res = @entity.update!(params[:entity].except(:dsin, :id, '$$index').permit!.to_h)
     render json: {meta: {code: 0, message: 'succ'}}

@@ -19,14 +19,12 @@
 #
 
 class SubscriptionMessage < Message
-  after_create_commit :send_to_redis
 
-  private
   def send_to_redis
-    teacher = self.user.identity
-    followed_by = teacher.followed_by
-    followed_by.each do |user|
-      $redis.zadd("user::#{user.id}", 100, JSON(self.format_for_redis))
-    end
+    # teacher = self.user.identity
+    # followed_by = teacher.followed_by
+    # followed_by.each do |user|
+    #   $redis.zadd("user::#{user.id}", 100, JSON(self.format_for_redis))
+    # end
   end
 end

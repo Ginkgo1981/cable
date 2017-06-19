@@ -11,13 +11,48 @@ class UniversitiesController < ApplicationController
   #          include_tags: true
   # end
 
-  def university_list
-    universities = University.includes(:bean).where(province: '江苏')
-    render json: universities,
-           meta: {code: 0},
-           each_serializer: UniversitySerializer
+  # def university_list
+  #   universities = University.includes(:bean).where(province: '江苏')
+  #   render json: universities,
+  #          meta: {code: 0},
+  #          each_serializer: UniversitySerializer
+  # end
+
+  def university_dsin_list
+    res =
+      if json = $redis.get('university_dsin_list')
+        JSON.parse(json)
+      else
+        universities = University.where(hot: 1).map {|u| {name: u.name, dsin: u.dsin}}
+        $redis.set('university_dsin_list', JSON(universities))
+        universities
+      end
+    render json: {code: 0, data: res}
   end
 
+  def city_dsin_list
+    res =
+        if json = $redis.get('city_dsin_list')
+          JSON.parse(json)
+        else
+          cities = City.all.map {|u| {name: u.name, dsin: u.dsin}}
+          $redis.set('city_dsin_list', JSON(cities))
+          cities
+        end
+    render json: {code: 0, data: res}
+  end
+
+  def major_dsin_list
+    res =
+        if json = $redis.get('major_dsin_list')
+          JSON.parse(json)
+        else
+          majors = MajorHot.all.map {|u| {name: u.name, dsin: u.dsin}}
+          $redis.set('major_dsin_list', JSON(majors))
+          majors
+        end
+    render json: {code: 0, data: res}
+  end
   def major_list
     university = University.find_by_dsin params[:dsin]
     majors = university.majors.preload(:bean)

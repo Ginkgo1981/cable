@@ -8,4 +8,8 @@ module Likable
 
   end
 
+  def like_comment(user, comment)
+    self.likings.create! user: user,
+                         comment: comment
+  end
 end

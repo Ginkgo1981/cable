@@ -20,8 +20,7 @@
 
 class NotificationMessage < Message
 
-   # after_create_commit :send_to_redis
-  def send_to_notification_queue
+  def send_to_redis
     if self.direction == 'student'
       $redis.rpush 'notification_student', JSON(self.format_for_redis)
     else

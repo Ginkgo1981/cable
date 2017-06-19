@@ -23,7 +23,8 @@ class Photo < ApplicationRecord
         dsin:self.dsin,
         id: self.id,
         name: self.name,
-        key: self.key
+        key: self.key,
+        resource_type: 'Photo'
     }
   end
 

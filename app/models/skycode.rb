@@ -19,10 +19,18 @@ class Skycode < ApplicationRecord
   belongs_to :campaign,  optional: true
   belongs_to :teacher, optional: true
 
-
-
   def using?
     self.teacher_id || self.university_id
+  end
+
+  def format
+    {
+        dsin: self.dsin,
+        name: self.name,
+        teacher: self.teacher.format,
+        university: self.university.format,
+        resource_type: 'Skycode'
+    }
   end
 
 
