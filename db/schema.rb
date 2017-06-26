@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170619054919) do
+ActiveRecord::Schema.define(version: 20170626162228) do
 
   create_table "askcards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.datetime "created_at", null: false
@@ -66,6 +66,26 @@ ActiveRecord::Schema.define(version: 20170619054919) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "companies", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "company_name"
+    t.string   "company_city"
+    t.string   "company_category"
+    t.string   "company_kind"
+    t.string   "company_scale"
+    t.string   "company_address"
+    t.string   "company_zip"
+    t.string   "company_website"
+    t.string   "company_hr"
+    t.string   "company_mobile"
+    t.text     "company_description",    limit: 65535
+    t.string   "company_tel"
+    t.string   "company_email"
+    t.string   "company_origin_url"
+    t.string   "company_origin_website"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
   create_table "dm_zxdm", primary_key: "xxdm", id: :string, limit: 12, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "sxdm", limit: 9,   null: false
     t.string "xxmc", limit: 100, null: false
@@ -118,6 +138,25 @@ ActiveRecord::Schema.define(version: 20170619054919) do
     t.string   "score_km_2"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+  end
+
+  create_table "jobs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string   "job_name"
+    t.string   "job_salary_range"
+    t.string   "job_recruitment_num"
+    t.string   "job_published_at"
+    t.string   "job_type"
+    t.string   "job_category"
+    t.string   "job_city"
+    t.string   "job_mini_education"
+    t.string   "job_mini_experience"
+    t.string   "job_language"
+    t.text     "job_description",     limit: 65535
+    t.string   "job_majors"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "company_id"
+    t.text     "job_tags",            limit: 65535
   end
 
   create_table "likings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|

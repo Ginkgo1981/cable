@@ -39,6 +39,12 @@ gem 'state_machine'
 gem 'active_model_serializers'
 gem 'qiniu'
 gem 'listen', '~> 3.0.5'
+gem 'soap2r'
+
+gem 'elasticsearch-model'
+gem 'elasticsearch-persistence'
+gem 'elasticsearch-rails'
+gem 'elasticsearch-dsl'
 
 
 group :development, :test do
