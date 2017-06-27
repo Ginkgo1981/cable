@@ -22,17 +22,14 @@
 #
 
 class Job < ApplicationRecord
+  include BeanFamily
   include Searchable
   belongs_to :company
 
   serialize :job_tags, Array
 
 
-  def self.create_from_json json
 
-
-
-  end
 
 
 

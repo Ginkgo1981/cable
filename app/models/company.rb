@@ -23,16 +23,24 @@
 #
 
 class Company < ApplicationRecord
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  include BeanFamily
+  after_touch() { __elasticsearch__.index_document }
+
+
+  settings number_of_shards: 3 do
+    mappings do
+      indexes :company_name, type: :string, analyzer: 'ik_smart'
+      indexes :company_description, type: :string, analyzer: 'ik_smart'
+    end
+  end
 
 
   has_many :jobs
 
-
-
-  def as_indexed_json
-
-  end
-
-
+  # Company.search query: { match_phrase: { company_name: '宝徽' } }
+  # res = Company.search(query: { match: { company_name: '宝马' } }, highlight: {fields: {company_name: {}}}).results.first.highlight
 
 end

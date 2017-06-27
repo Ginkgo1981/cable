@@ -33,7 +33,7 @@ gem 'rqrcode'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 gem 'faraday'
-gem 'rb-readline'
+# gem 'rb-readline'
 gem 'redis'
 gem 'state_machine'
 gem 'active_model_serializers'
