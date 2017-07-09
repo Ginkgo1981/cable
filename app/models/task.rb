@@ -2,10 +2,10 @@
 #
 # Table name: tasks
 #
-#  id          :integer          not null, primary key
-#  name        :string(255)
-#  status      :string(255)
-#  redirect_to :string(255)
+#  id          :uuid             not null, primary key
+#  name        :string
+#  status      :string
+#  redirect_to :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #

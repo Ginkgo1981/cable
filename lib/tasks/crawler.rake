@@ -2,6 +2,14 @@ require 'soap/wsdlDriver'
 namespace :crawler do
   desc 'read from redis then sink to elasticksearch'
   task fetch_then_sinkto_es: :environment do
+
+
+    logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+
+
+    logger.tagged('BCX') { logger.info 'Stuff' }
+
+
     feature_ws_url = 'http://localhost:8082/AxisWS/asia.wildfire.Featurer?wsdl'
     soap_client = SOAP::WSDLDriverFactory.new(feature_ws_url).create_rpc_driver
     queue = 'crawler:company_job_json_queue'

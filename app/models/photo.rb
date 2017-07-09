@@ -2,10 +2,10 @@
 #
 # Table name: photos
 #
-#  id         :integer          not null, primary key
-#  name       :string(255)
-#  key        :string(255)
-#  img_url    :string(255)
+#  id         :uuid             not null, primary key
+#  name       :string
+#  key        :string
+#  img_url    :string
 #  height     :integer
 #  width      :integer
 #  created_at :datetime         not null

@@ -1,10 +1,9 @@
 class CreateStudents < ActiveRecord::Migration[5.0]
   def change
-    create_table :students do |t|
-      t.integer :user_id
-      t.string :province
-      t.string :city
-      t.string :school
+    create_table :students, id: :uuid do |t|
+      t.string :university
+      t.string :major
+      t.string :name
       t.timestamps
     end
   end

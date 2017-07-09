@@ -2,10 +2,10 @@
 #
 # Table name: qr_codes
 #
-#  id            :integer          not null, primary key
-#  image         :string(255)
-#  codeable_id   :integer
-#  codeable_type :string(255)
+#  id            :uuid             not null, primary key
+#  image         :string
+#  codeable_id   :uuid
+#  codeable_type :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #

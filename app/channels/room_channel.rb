@@ -1,5 +1,5 @@
 class RoomChannel < ApplicationCable::Channel
-  periodically -> { ping }, every: 10
+  # periodically -> { ping }, every: 10
 
   def subscribed
     # stream_from "messages"

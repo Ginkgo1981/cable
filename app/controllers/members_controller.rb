@@ -38,80 +38,6 @@ class MembersController < ApplicationController
     render json: {code: 0, member: user.membership}
   end
 
-  def follow
-    bean = Bean.find_by_dsin params[:dsin]
-    if @student
-      @student.following_universities << bean if bean.is_a? University
-      @student.following_teachers << bean if bean.is_a? Teacher
-    end
-
-    if @teacher
-      @teacher.following_students << bean if bean.is_a? Student
-    end
-    render json: {code: 0, msg: '关注成功'}
-  end
-
-
-  def create_wishcard
-    cities = (params[:cities] || []).map{|c| c['name']}
-    universities = (params[:universities] || []).map{|c| c['name']}
-    majors = (params[:majors] || []).map{|c| c['name']}
-    wishcard = @user.create_wishcard cities: cities,
-                                     universities: universities,
-                                     majors: majors,
-                                     introdution: params[:introdution]
-    render json: {code: 0, dsin: wishcard.dsin}
-  end
-
-  def forward_wishcard
-    binding.pry
-    wishcard = @entity
-    group  = Group.find_or_create_by! group_id: params[:group_id]
-    wishcard.following_groups << group unless wishcard.following_groups.exists? group
-    render json: {code: 0, msg: 'succ'}
-  end
-
-
-  #我在追
-  def following_teachers
-    teachers = @student.following_teachers
-    render json: teachers,
-           each_serializer: TeacherSerializer,
-           meta: {code: 0}
-  end
-
-
-  def following_universities
-    universites = @student.following_universities
-    render json: universites,
-           each_serializer: UniversitySerializer,
-           meta: {code: 0}
-  end
-
-  def following_students
-    students = @teacher.following_students
-    render json: students,
-           each_serializer: StudentSerializer,
-           meta: {code: 0}
-  end
-
-
-  def following_skycodes
-    skycodes = @user.identity.following_skycodes
-    render json: skycodes,
-           each_serializer: SkycodeSerializer,
-           meta: {code: 0}
-  end
-
-
-  def like_comment
-    @entity.like_comment(@user, params[:comment])
-    likings = @entity.reload.likings.preload({user: [identity: :bean]})
-    render json: likings,
-           each_serializer: LikingSerializer,
-           meta: {code: 0}
-  end
-
   #student
   def mini_app_authorization
     code = params[:code]
@@ -128,7 +54,6 @@ class MembersController < ApplicationController
     iv = params[:iv]
     info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
 
-
     user = User.find_by miniapp_openid: info[:openId]
     unless user
       student = Student.create!
@@ -140,10 +65,11 @@ class MembersController < ApplicationController
                                  province: info[:province],
                                  headimgurl: info[:avatarUrl],
                                  union_id: info[:unionId]
+
+      student.resumes.create!
     end
     render json: {code: 0, member: user.membership, session_key: session_key}
   end
-
 
   def wechat_group
     if params[:app_name] == '天马志愿'
@@ -158,22 +84,23 @@ class MembersController < ApplicationController
     iv = params[:iv]
     info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
     openGId = info[:openGId]
-    group = Group.find_or_create_by! group_id: openGId
+    group = Group.find_or_create_by! group_no: openGId
     group.users << @user
     render json: {code: 0, msg: 'succ'}
-
   end
 
+  def follow
+    bean = Bean.find_by_dsin params[:dsin]
+    if @student
+      @student.following_universities << bean if bean.is_a? University
+      @student.following_teachers << bean if bean.is_a? Teacher
+    end
 
-  def update_teacher
-    university = Bean.find_by_dsin params[:university_dsin]
-    raise CableException::UniversityNotFound unless university
-    @teacher.update! name: params[:name],
-                     duty: params[:duty],
-                     university: university
-    render json: {code: 0, member: @teacher.user.membership}
+    if @teacher
+      @teacher.following_students << bean if bean.is_a? Student
+    end
+    render json: {code: 0, msg: '关注成功'}
   end
-
 
   def bind_cell
     Cell.verify_code! params[:cell], params[:sms_code]
@@ -182,24 +109,58 @@ class MembersController < ApplicationController
     render json: {code: 0, message: 'succ'}
   end
 
-
-  def bind_sat
-    @user.forms.create! form_id: params[:form_id], from: 'bind_sat'
-    student = @user.identity
-    student.sat_score = {
-        score: params[:score],
-        km: params[:km],
-        dj: params[:dj]
-    }
-    student.save!
-    render json: {code: 0, member: @user.membership}
-  end
-
   def send_sms_code
     cell = Cell.create! cell: params[:cell]
     cell.send_sms
     render json: {code: 0, message: 'succ'}
   end
+
+  # def create_wishcard
+  #   cities = (params[:cities] || []).map{|c| c['name']}
+  #   universities = (params[:universities] || []).map{|c| c['name']}
+  #   majors = (params[:majors] || []).map{|c| c['name']}
+  #   wishcard = @user.create_wishcard cities: cities,
+  #                                    universities: universities,
+  #                                    majors: majors,
+  #                                    introdution: params[:introdution]
+  #   render json: {code: 0, dsin: wishcard.dsin}
+  # end
+
+  # def forward_wishcard
+  #   binding.pry
+  #   wishcard = @entity
+  #   group  = Group.find_or_create_by! group_id: params[:group_id]
+  #   wishcard.following_groups << group unless wishcard.following_groups.exists? group
+  #   render json: {code: 0, msg: 'succ'}
+  # end
+
+
+  # #我在追
+  # def following_teachers
+  #   teachers = @student.following_teachers
+  #   render json: teachers,
+  #          each_serializer: TeacherSerializer,
+  #          meta: {code: 0}
+  # end
+  #
+  # def following_students
+  #   students = @teacher.following_students
+  #   render json: students,
+  #          each_serializer: StudentSerializer,
+  #          meta: {code: 0}
+  # end
+
+
+  # def like_comment
+  #   @entity.like_comment(@user, params[:comment])
+  #   likings = @entity.reload.likings.preload({user: [identity: :bean]})
+  #   render json: likings,
+  #          each_serializer: LikingSerializer,
+  #          meta: {code: 0}
+  # end
+
+
+
 
   private
   def decrypt(session_key, app_id, encrypted_data, iv)

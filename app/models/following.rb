@@ -2,13 +2,13 @@
 #
 # Table name: followings
 #
-#  id              :integer          not null, primary key
-#  followable_id   :integer
-#  followable_type :string(255)
+#  id              :uuid             not null, primary key
+#  followable_id   :uuid
+#  followable_type :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  follower_id     :string(255)
-#  follower_type   :string(255)
+#  follower_id     :uuid
+#  follower_type   :uuid
 #
 
 class Following < ApplicationRecord

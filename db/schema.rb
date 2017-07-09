@@ -10,48 +10,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170626162228) do
+ActiveRecord::Schema.define(version: 20170703152142) do
 
-  create_table "askcards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+  enable_extension "hstore"
+  enable_extension "pgcrypto"
+  enable_extension "uuid-ossp"
 
-  create_table "attachings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "attachable_id"
+  create_table "attachings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "attachable_id"
     t.string   "attachable_type"
-    t.integer  "attachment_id"
+    t.uuid     "attachment_id"
     t.string   "attachment_type"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
 
-  create_table "beans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "bean_family_id"
+  create_table "beans", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "bean_family_id"
     t.string   "bean_family_type"
     t.string   "dsin"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
 
-  create_table "bookmarkings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "user_id"
-    t.integer  "bookmarkable_id"
+  create_table "bookmarkings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.uuid     "bookmarkable_id"
     t.string   "bookmarkable_type"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
   end
 
-  create_table "campaigns", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.string   "name"
-    t.integer  "university_id"
-    t.integer  "teacher_id"
-    t.string   "note"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  create_table "cells", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "cells", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "cell"
     t.string   "code"
     t.integer  "status"
@@ -59,14 +51,14 @@ ActiveRecord::Schema.define(version: 20170626162228) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "cities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "cities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
     t.integer  "hot"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "companies", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "companies", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "company_name"
     t.string   "company_city"
     t.string   "company_category"
@@ -77,38 +69,50 @@ ActiveRecord::Schema.define(version: 20170626162228) do
     t.string   "company_website"
     t.string   "company_hr"
     t.string   "company_mobile"
-    t.text     "company_description",    limit: 65535
+    t.text     "company_description"
     t.string   "company_tel"
     t.string   "company_email"
     t.string   "company_origin_url"
     t.string   "company_origin_website"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
-  create_table "dm_zxdm", primary_key: "xxdm", id: :string, limit: 12, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "sxdm", limit: 9,   null: false
-    t.string "xxmc", limit: 100, null: false
-    t.index ["xxdm"], name: "PK_GK_DM_zxdm_1", unique: true, using: :btree
+  create_table "educations", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "resume_id"
+    t.string   "university"
+    t.string   "major"
+    t.string   "degree"
+    t.text     "courses",                 array: true
+    t.text     "images",                  array: true
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "dm_zxdms", primary_key: "xxdm", id: :string, limit: 12, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "sxdm", limit: 9,   null: false
-    t.string "xxmc", limit: 100, null: false
-    t.index ["xxdm"], name: "PK_GK_DM_zxdm_1", unique: true, using: :btree
+  create_table "experiences", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "resume_id"
+    t.string   "title"
+    t.text     "content"
+    t.text     "images",                  array: true
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "followings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "followable_id"
+  create_table "followings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "followable_id"
     t.string   "followable_type"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.string   "follower_id"
-    t.string   "follower_type"
+    t.uuid     "follower_id"
+    t.uuid     "follower_type"
   end
 
-  create_table "forms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "user_id"
+  create_table "forms", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
     t.string   "form_id"
     t.datetime "expired_at"
     t.integer  "status"
@@ -118,29 +122,25 @@ ActiveRecord::Schema.define(version: 20170626162228) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.string   "group_id"
-    t.integer  "init_user_id"
+  create_table "groups", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "group_no"
+    t.uuid     "init_user_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
 
-  create_table "jiangsu_sats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "student_id"
-    t.integer  "score_chinese"
-    t.integer  "score_english"
-    t.integer  "score_math"
-    t.integer  "score_sum"
-    t.string   "kl"
-    t.string   "km_1"
-    t.string   "km_2"
-    t.string   "score_km_1"
-    t.string   "score_km_2"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+  create_table "honors", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "resume_id"
+    t.string   "title"
+    t.text     "content"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.text     "images",                  array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "jobs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "jobs", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "job_name"
     t.string   "job_salary_range"
     t.string   "job_recruitment_num"
@@ -151,73 +151,69 @@ ActiveRecord::Schema.define(version: 20170626162228) do
     t.string   "job_mini_education"
     t.string   "job_mini_experience"
     t.string   "job_language"
-    t.text     "job_description",     limit: 65535
-    t.string   "job_majors"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.integer  "company_id"
-    t.text     "job_tags",            limit: 65535
+    t.text     "job_description"
+    t.text     "job_majors",                       array: true
+    t.text     "job_tags",                         array: true
+    t.uuid     "company_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
-  create_table "likings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "user_id"
-    t.integer  "likable_id"
+  create_table "likings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.uuid     "likable_id"
     t.string   "likable_type"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.string   "comment"
   end
 
-  create_table "major_hots", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "major_hots", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
     t.integer  "hot",        default: 0
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
 
-  create_table "majors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "majors", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
     t.string   "code"
-    t.integer  "university_id"
+    t.uuid     "university_id"
     t.string   "goal"
     t.string   "claim"
     t.string   "course"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.text     "content",       limit: 65535
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
-  create_table "message_bookmarkings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "message_id"
-    t.integer  "user_id"
+  create_table "message_bookmarkings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "message_id"
+    t.uuid     "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "message_likings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "message_id"
-    t.integer  "user_id"
+  create_table "message_likings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "message_id"
+    t.uuid     "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.text     "content",       limit: 65535
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.string   "channel"
+  create_table "messages", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.text     "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "type"
     t.datetime "expired_at"
     t.integer  "state"
-    t.integer  "student_id"
-    t.integer  "teacher_id"
-    t.integer  "staff_id"
-    t.integer  "university_id"
+    t.uuid     "student_id"
+    t.uuid     "staff_id"
     t.string   "direction"
     t.string   "img_url"
   end
 
-  create_table "photos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "photos", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
     t.string   "key"
     t.string   "img_url"
@@ -227,59 +223,68 @@ ActiveRecord::Schema.define(version: 20170626162228) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "qr_codes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "qr_codes", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "image"
-    t.integer  "codeable_id"
+    t.uuid     "codeable_id"
     t.string   "codeable_type"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
 
-  create_table "skycodes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "campaign_id"
-    t.integer  "university_id"
-    t.integer  "teacher_id"
-    t.string   "name"
-    t.string   "note"
+  create_table "resumes", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "student_id"
+    t.string   "job_intention"
+    t.string   "job_cities"
+    t.string   "job_kind"
+    t.string   "job_title"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
 
-  create_table "staffs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "skills", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "resume_id"
+    t.string   "title"
+    t.string   "content"
+    t.string   "category"
+    t.text     "images",                  array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "stories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "staffs", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stories", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "title"
     t.string   "description"
-    t.text     "content",          limit: 65535
+    t.text     "content"
     t.string   "coverage_img_url"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "teacher_id"
-    t.integer  "university_id"
-    t.integer  "staff_id"
+    t.uuid     "user_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
-  create_table "students", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.string   "school"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.text     "sat_score",    limit: 65535
-    t.string   "sat_province"
+  create_table "students", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "university"
+    t.string   "major"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "taggable_id"
+  create_table "tags", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "taggable_id"
     t.string   "taggable_type"
     t.string   "name"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.integer  "tagged_by"
+    t.uuid     "tagged_by"
   end
 
-  create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "tasks", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
     t.string   "status"
     t.string   "redirect_to"
@@ -287,57 +292,42 @@ ActiveRecord::Schema.define(version: 20170626162228) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "teacher_contacts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.string   "university_id"
-    t.string   "cell"
-    t.string   "name"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  create_table "teachers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.integer  "university_id"
-    t.string   "cell"
-    t.string   "name"
-    t.string   "duty"
-    t.integer  "status"
-  end
-
-  create_table "universities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "universities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
     t.string   "code"
     t.string   "city"
     t.string   "address"
     t.string   "website"
     t.string   "tel"
-    t.text     "brief",      limit: 65535
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.text     "brief"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.string   "logo"
     t.string   "province"
-    t.integer  "hot",                      default: 0
+    t.integer  "hot",        default: 0
   end
 
-  create_table "user_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "user_id"
-    t.string   "group_id"
+  create_table "user_groups", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.uuid     "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "cell",            limit: 50
     t.integer  "sex"
     t.string   "token",           limit: 50
-    t.string   "identity_id",     limit: 50
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.uuid     "identity_id"
     t.string   "identity_type"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "union_id"
     t.datetime "subscribe_at"
     t.datetime "unsubscribe_at"
+    t.string   "device_info"
+    t.boolean  "register_status"
+    t.datetime "register_at"
     t.boolean  "online_status"
     t.string   "openweb_openid"
     t.string   "mp_openid"
@@ -349,53 +339,6 @@ ActiveRecord::Schema.define(version: 20170626162228) do
     t.string   "headimgurl"
     t.string   "language"
     t.string   "name"
-    t.integer  "last_message_id",            default: 0
-  end
-
-  create_table "wishcards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.integer  "user_id"
-    t.text     "cities",        limit: 65535
-    t.text     "universities",  limit: 65535
-    t.text     "majors",        limit: 65535
-    t.text     "introdution",   limit: 65535
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.integer  "count_of_like",               default: 0
-    t.string   "nickname"
-    t.string   "headimgurl"
-  end
-
-  create_table "yx_details", primary_key: "ID", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string  "yxdm",    limit: 5,     null: false
-    t.string  "yxmc",    limit: 64,    null: false
-    t.string  "dq",      limit: 50
-    t.string  "xxdz",    limit: 50
-    t.string  "xxwz",    limit: 50
-    t.string  "xxdh",    limit: 50
-    t.text    "xxjj",    limit: 65535
-    t.text    "zsjz",    limit: 65535
-    t.text    "zxxx",    limit: 65535
-    t.text    "brief",   limit: 65535
-    t.integer "IsMaked"
-    t.index ["ID"], name: "PK_GK_sys_SchoolDetail", unique: true, using: :btree
-  end
-
-  create_table "yx_zys", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.string "yxmc", limit: 64, null: false, collation: "utf8_general_ci"
-    t.string "yxdm", limit: 5,  null: false, collation: "utf8_general_ci"
-    t.string "zymc", limit: 64, null: false, collation: "utf8_general_ci"
-    t.string "zydm", limit: 6,  null: false, collation: "utf8_general_ci"
-  end
-
-  create_table "zy_details", primary_key: "ID", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "zydm",        limit: 50,    null: false
-    t.string "zymc",        limit: 50,    null: false
-    t.string "ccdm",        limit: 50,    null: false
-    t.text   "goal",        limit: 65535
-    t.text   "claim",       limit: 65535
-    t.text   "trunkcourse", limit: 65535
-    t.text   "course",      limit: 65535
-    t.index ["ID"], name: "PK_GK_zy_Detail", unique: true, using: :btree
   end
 
 end

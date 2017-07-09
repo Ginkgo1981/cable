@@ -2,9 +2,9 @@
 #
 # Table name: cells
 #
-#  id         :integer          not null, primary key
-#  cell       :string(255)
-#  code       :string(255)
+#  id         :uuid             not null, primary key
+#  cell       :string
+#  code       :string
 #  status     :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

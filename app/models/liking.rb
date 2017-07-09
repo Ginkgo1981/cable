@@ -2,13 +2,13 @@
 #
 # Table name: likings
 #
-#  id           :integer          not null, primary key
-#  user_id      :integer
-#  likable_id   :integer
-#  likable_type :string(255)
+#  id           :uuid             not null, primary key
+#  user_id      :uuid
+#  likable_id   :uuid
+#  likable_type :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  comment      :string(255)
+#  comment      :string
 #
 
 class Liking < ApplicationRecord

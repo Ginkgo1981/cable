@@ -1,6 +1,6 @@
 class CreateUniversities < ActiveRecord::Migration[5.0]
   def change
-    create_table :universities do |t|
+    create_table :universities, id: :uuid do |t|
       t.string  "name"
       t.string  "code"
       t.string  "city"

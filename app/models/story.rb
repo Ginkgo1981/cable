@@ -2,16 +2,14 @@
 #
 # Table name: stories
 #
-#  id               :integer          not null, primary key
-#  title            :string(255)
-#  description      :string(255)
-#  content          :text(65535)
-#  coverage_img_url :string(255)
+#  id               :uuid             not null, primary key
+#  title            :string
+#  description      :string
+#  content          :text
+#  coverage_img_url :string
+#  user_id          :uuid
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  teacher_id       :integer
-#  university_id    :integer
-#  staff_id         :integer
 #
 
 class Story < ApplicationRecord

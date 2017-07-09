@@ -421,9 +421,7 @@ namespace :cable do
      "国防科学技术大学",
     ].each do |name|
       pp name
-      u = University.find_by name: name
-      u.hot = 1
-      u.save
+      University.create! name: name
     end
   end
 
@@ -970,14 +968,9 @@ namespace :cable do
          "餐饮管理与服务",
          "高分子材料与工程",
         ].uniq.sort.each do |name|
-
-
           pp name
-          MajorHot.create! name: name
-
+          Major.create! name: name
         end
-
-    pp hot_majors.count
   end
 
 

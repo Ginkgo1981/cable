@@ -2,13 +2,13 @@
 #
 # Table name: forms
 #
-#  id         :integer          not null, primary key
-#  user_id    :integer
-#  form_id    :string(255)
+#  id         :uuid             not null, primary key
+#  user_id    :uuid
+#  form_id    :string
 #  expired_at :datetime
 #  status     :integer
-#  content    :string(255)
-#  from       :string(255)
+#  content    :string
+#  from       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

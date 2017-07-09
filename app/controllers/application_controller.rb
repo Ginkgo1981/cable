@@ -6,9 +6,9 @@ class ApplicationController < ActionController::API
   def find_user_by_token!
     @user = User.find_by! token: request.env['HTTP_TOKEN']
     @identity = @user.identity
-    @teacher = @identity if @identity.is_a? Teacher
+    # @teacher = @identity if @identity.is_a? Teacher
     @student = @identity if @identity.is_a? Student
-    @university = @teacher.university if @teacher
+    # @university = @teacher.university if @teacher
   end
 
   def find_entity_by_dsin!

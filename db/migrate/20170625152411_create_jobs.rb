@@ -1,6 +1,6 @@
 class CreateJobs < ActiveRecord::Migration[5.0]
   def change
-    create_table :jobs do |t|
+    create_table :jobs, id: :uuid do |t|
       t.string :job_name
       t.string :job_salary_range
       t.string :job_recruitment_num
@@ -11,8 +11,10 @@ class CreateJobs < ActiveRecord::Migration[5.0]
       t.string :job_mini_education
       t.string :job_mini_experience
       t.string :job_language
-      t.string :job_description
-      t.string :job_majors
+      t.text :job_description
+      t.text :job_majors, array: true
+      t.text :job_tags, array: true
+      t.uuid :company_id
       t.timestamps
     end
   end

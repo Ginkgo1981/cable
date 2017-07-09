@@ -2,31 +2,31 @@
 #
 # Table name: companies
 #
-#  id                     :integer          not null, primary key
-#  company_name           :string(255)
-#  company_city           :string(255)
-#  company_category       :string(255)
-#  company_kind           :string(255)
-#  company_scale          :string(255)
-#  company_address        :string(255)
-#  company_zip            :string(255)
-#  company_website        :string(255)
-#  company_hr             :string(255)
-#  company_mobile         :string(255)
-#  company_description    :text(65535)
-#  company_tel            :string(255)
-#  company_email          :string(255)
-#  company_origin_url     :string(255)
-#  company_origin_website :string(255)
+#  company_name           :string
+#  company_city           :string
+#  company_category       :string
+#  company_kind           :string
+#  company_scale          :string
+#  company_address        :string
+#  company_zip            :string
+#  company_website        :string
+#  company_hr             :string
+#  company_mobile         :string
+#  company_description    :text
+#  company_tel            :string
+#  company_email          :string
+#  company_origin_url     :string
+#  company_origin_website :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  id                     :uuid             not null, primary key
 #
 
 class Company < ApplicationRecord
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
-  include BeanFamily
+
   after_touch() { __elasticsearch__.index_document }
 
 
@@ -37,8 +37,7 @@ class Company < ApplicationRecord
     end
   end
 
-
-  has_many :jobs
+  has_many :jobs, dependent: :destroy
 
   # Company.search query: { match_phrase: { company_name: '宝徽' } }
   # res = Company.search(query: { match: { company_name: '宝马' } }, highlight: {fields: {company_name: {}}}).results.first.highlight

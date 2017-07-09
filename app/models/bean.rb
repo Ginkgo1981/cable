@@ -2,10 +2,10 @@
 #
 # Table name: beans
 #
-#  id               :integer          not null, primary key
-#  bean_family_id   :integer
-#  bean_family_type :string(255)
-#  dsin             :string(255)
+#  id               :uuid             not null, primary key
+#  bean_family_id   :uuid
+#  bean_family_type :string
+#  dsin             :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

@@ -2,10 +2,10 @@
 #
 # Table name: bookmarkings
 #
-#  id                :integer          not null, primary key
-#  user_id           :integer
-#  bookmarkable_id   :integer
-#  bookmarkable_type :string(255)
+#  id                :uuid             not null, primary key
+#  user_id           :uuid
+#  bookmarkable_id   :uuid
+#  bookmarkable_type :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #

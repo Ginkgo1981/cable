@@ -1,26 +1,31 @@
-default: &default
-  pool: 5
-  timeout: 5000
-  charset: utf8mb4
-  encoding: utf8mb4
-  collation: utf8mb4_unicode_ci
-
 development:
-  <<: *default
-  adapter: mysql2
+  adapter: postgresql
+  encoding: unicode
   database: cable_development
-  username: root
+  pool: 5
+  username: chenjian
   password:
-  host: localhost
-
 
 production:
-  <<: *default
-  adapter: mysql2
-  database: cable_production
-  username: root
-  password: jian.chen
-  host: localhost
+  adapter: postgresql
+  encoding: unicode
+  database: loop2x_dev
+  pool: 5
+  username: chenjian
+  password:
+alicloud:
+  adapter: postgresql
+  encoding: unicode
+  database: loop2x_dev
+  pool: 5
+  username: chenjian
+  password:
 
 
-
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: loop2x_test
+  pool: 5
+  username: chenjian
+  password:

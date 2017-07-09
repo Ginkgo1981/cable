@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
 
+
+  #resume
+  get 'resumes/show_component/:type/:id', to: 'resumes#show_component'
+  post 'resumes/delete_component/:type/:id', to: 'resumes#delete_component'
+  post 'resumes/:resume_id/save_component/:type', to: 'resumes#save_component'
+  get 'resumes/:resume_id', to: 'resumes#get_resume'
+
   #dsin photo
   get 'dsin/uptoken', to: 'dsins#get_upload_token'
   get 'dsin/:dsin/photos', to: 'dsins#get_photos'
@@ -8,6 +15,7 @@ Rails.application.routes.draw do
   #dsin
   get 'dsin/:dsin', to: 'dsins#show'
   get 'format_show/:dsin', to: 'dsins#format_show'
+  get 'get_resume_by_dsin/:dsin', to: 'dsins#get_resume_by_dsin'
   post 'dsin/:dsin', to: 'dsins#update'
   delete 'dsin/:dsin', to: 'dsins#delete'
 
@@ -75,7 +83,7 @@ Rails.application.routes.draw do
 
   #universities
   get 'universities/list', to: 'universities#university_list'
-  get 'universities/:dsin/major_list', to: 'universities#major_list'
+  # get 'universities/:dsin/major_list', to: 'universities#major_list'
   get 'universities/:dsin', to: 'universities#show'
 
   #新建专业
@@ -109,9 +117,12 @@ Rails.application.routes.draw do
 
 
   #资源库
-  get 'university_dsin_list', to: 'universities#university_dsin_list'
-  get 'city_dsin_list', to: 'universities#city_dsin_list'
-  get 'major_dsin_list', to: 'universities#major_dsin_list'
+  # get 'university_dsin_list', to: 'universities#university_dsin_list'
+  # get 'city_dsin_list', to: 'universities#city_dsin_list'
+  # get 'major_dsin_list', to: 'universities#major_dsin_list'
 
+  get 'university_list', to: 'resources#university_list'
+  get 'city_list', to: 'resources#city_list'
+  get 'major_list', to: 'resources#major_list'
 
 end

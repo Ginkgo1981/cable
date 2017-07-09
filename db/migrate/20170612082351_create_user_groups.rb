@@ -1,8 +1,8 @@
 class CreateUserGroups < ActiveRecord::Migration[5.0]
   def change
-    create_table :user_groups do |t|
-      t.integer :user_id
-      t.string :group_id
+    create_table :user_groups,id: :uuid do |t|
+      t.uuid :user_id
+      t.uuid :group_id
       t.timestamps
     end
   end

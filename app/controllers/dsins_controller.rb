@@ -20,6 +20,14 @@ class DsinsController < ApplicationController
            meta: {code: 0}
   end
 
+
+
+  # def get_resume_by_dsin
+  #   student = @entity
+  #   resume = student.format_with_dsin
+  #   render json: {code: 0, resume: resume}
+  # end
+
   # def format_show
   #   render json: {code: 0, entity: @entity.format}
   # end
@@ -33,22 +41,20 @@ class DsinsController < ApplicationController
   end
 
 
-  def followed_by_teachers
-    teachers = @entity.followed_by_teachers
-    render json: teachers,
-           each_serializer: TeacherSerializer,
-           meta: {code: 0}
-  end
+  # def followed_by_teachers
+  #   teachers = @entity.followed_by_teachers
+  #   render json: teachers,
+  #          each_serializer: TeacherSerializer,
+  #          meta: {code: 0}
+  # end
 
-  def followed_by_universities
-    universities = @entity.followed_by_universities
-    render json: universities,
-           each_serializer: UniversitySerializer,
-           meta: {code: 0}
-
-  end
-
-
+  # def followed_by_universities
+  #   universities = @entity.followed_by_universities
+  #   render json: universities,
+  #          each_serializer: UniversitySerializer,
+  #          meta: {code: 0}
+  #
+  # end
 
   def update
     res = @entity.update!(params[:entity].except(:dsin, :id, '$$index').permit!.to_h)

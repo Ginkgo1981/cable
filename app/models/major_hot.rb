@@ -2,8 +2,8 @@
 #
 # Table name: major_hots
 #
-#  id         :integer          not null, primary key
-#  name       :string(255)
+#  id         :uuid             not null, primary key
+#  name       :string
 #  hot        :integer          default(0)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

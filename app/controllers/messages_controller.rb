@@ -61,10 +61,8 @@ class MessagesController < ApplicationController
     }
   end
 
-
   def send_notification_message
     raise CableException::NotAllowedSendNotificationMessage unless @user.allow_send_notification_message?
-
     message =
         if @student && @user.allow_send_notification?
           @student.notification_messages.create! content: params[:content],
@@ -92,15 +90,8 @@ class MessagesController < ApplicationController
     }
   end
 
-
   def send_subscription_message
     raise CableException::NotAllowedSendSubscriptionMessage unless @user.allow_send_subscription_message?
-
-
-
-
-
-
   end
 
 end

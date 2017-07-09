@@ -1,6 +1,6 @@
 class CreatePhotos < ActiveRecord::Migration[5.0]
   def change
-    create_table :photos do |t|
+    create_table :photos, id: :uuid do |t|
       t.string :name
       t.string :key
       t.string :img_url

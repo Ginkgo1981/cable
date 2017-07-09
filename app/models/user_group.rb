@@ -2,9 +2,9 @@
 #
 # Table name: user_groups
 #
-#  id         :integer          not null, primary key
-#  user_id    :integer
-#  group_id   :string(255)
+#  id         :uuid             not null, primary key
+#  user_id    :uuid
+#  group_id   :uuid
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
