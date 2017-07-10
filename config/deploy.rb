@@ -17,7 +17,7 @@ set :domain, '139.224.65.151'
 set :application, 'cable'
 set :deploy_to, "/home/deploy/apps/#{application}"
 set :repository, 'git@github.com:Ginkgo1981/cable.git'
-set :branch, 'master'
+set :branch, 'pg'
 set :user, 'deploy'
 
 # For system-wide RVM install.
