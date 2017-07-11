@@ -1,0 +1,3 @@
+bundle exec rake channel:enqueue_links > /mnt/logs/enqueue_stout.log 2>&1
+
+bundle exec rake  analyzer:fetch_then_analyze > /mnt/logs/analyzer_stout.log 2>&1

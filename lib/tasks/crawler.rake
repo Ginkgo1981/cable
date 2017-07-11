@@ -25,12 +25,13 @@ namespace :crawler do
           #job_json
           job_json = company_job_json.select{|k,v| k =~ /job/}
           job = Job.create! job_json.merge({company: company})
-          puts "[crawler] sink-to-es succ 0 '#{company.company_name}-#{job.job_name}'"
+          puts "[cable] sink-to-es succ 0 '#{company.company_name}-#{job.job_name}'"
         else
-          puts "[crawler] sink-to-es empty 0 ''"
+          sleep 10
+          puts "[cable] sink-to-es empty 0 ''"
         end
       rescue Exception => e
-        puts "[crawler] sink-to-es error 0 '#{e.to_s}'"
+        puts "[cable] sink-to-es error 0 '#{e.to_s}'"
       end
     end
   end
