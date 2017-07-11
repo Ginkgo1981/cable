@@ -44,6 +44,10 @@ gem 'elasticsearch-rails'
 gem 'elasticsearch-dsl'
 gem 'uuidtools'
 
+gem 'mechanize'
+gem 'nokogiri'
+
+
 group :development, :test do
   gem 'pry'
   gem 'pry-nav'

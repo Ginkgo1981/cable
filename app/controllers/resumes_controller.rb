@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: resumes
+#
+#  id            :uuid             not null, primary key
+#  student_id    :uuid
+#  job_intention :string
+#  job_cities    :string
+#  job_kind      :string
+#  job_title     :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 class ResumesController < ApplicationController
   before_action :find_resume!, only: [:get_resume, :save_component]
   def get_resume

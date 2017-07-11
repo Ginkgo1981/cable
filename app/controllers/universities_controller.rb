@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: universities
+#
+#  id         :uuid             not null, primary key
+#  name       :string
+#  code       :string
+#  city       :string
+#  address    :string
+#  website    :string
+#  tel        :string
+#  brief      :text
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  logo       :string
+#  province   :string
+#  hot        :integer          default(0)
+#
+
 class UniversitiesController < ApplicationController
   before_action :find_entity_by_dsin!, only: [:show]
 

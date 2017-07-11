@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: students
+#
+#  id         :uuid             not null, primary key
+#  university :string
+#  major      :string
+#  name       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class StudentsController < ApplicationController
 
   # before_action :find_user_by_token!, only: [:student_list]

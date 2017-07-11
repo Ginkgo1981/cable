@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: students
+#
+#  id         :uuid             not null, primary key
+#  university :string
+#  major      :string
+#  name       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class StudentSerializer < ApplicationSerializer
   attributes :id,  :headimgurl, :nickname, :province, :city, :school, :dsin
   has_one :user , if: -> {instance_options[:include_user]}
