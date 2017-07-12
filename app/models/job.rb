@@ -47,9 +47,9 @@ class Job < ApplicationRecord
     company =res_company.records.first
     if company.nil?
       company = Company.create! company_json
-      puts "[cable] create-company new 0 '#{company.company_name}'"
+      puts "[cable] create_company new 0 '#{company.company_name}'"
     else
-      puts "[cable] create-company dup 0 '#{company.company_name}'"
+      puts "[cable] create_company dup 0 '#{company.company_name}'"
     end
     #job
     job_json = company_job_json.select{|k,v| k =~ /job/}
@@ -65,9 +65,9 @@ class Job < ApplicationRecord
     job = res_job.results.first
     if job.nil?
       job = Job.create! job_json.merge({company: company})
-      puts "[cable] create-job new 0 '#{job.job_name}'"
+      puts "[cable] create_job new 0 '#{job.job_name}'"
     else
-      puts "[cable] create-job dup 0 '#{job.job_name}'"
+      puts "[cable] create_job dup 0 '#{job.job_name}'"
     end
   end
 

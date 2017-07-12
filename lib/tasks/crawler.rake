@@ -24,13 +24,13 @@ namespace :crawler do
           # #comapny_json
           # company = Company.create_after_check company_json
           # #job_json
-          puts "[cable] sink-to-es succ 0 '#{company.company_name}-#{job.job_name}'"
+          # puts "[cable] sink-to-es succ 0 '#{company.company_name}-#{job.job_name}'"
         else
           sleep 10
-          puts "[cable] sink-to-es empty 0 ''"
+          puts "[cable] sink empty 0 ''"
         end
       rescue Exception => e
-        puts "[cable] sink-to-es error 0 '#{e.to_s}'"
+        puts "[cable] sink error 0 '#{e.to_s}'"
       end
     end
   end
