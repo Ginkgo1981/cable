@@ -57,7 +57,7 @@ class Job < ApplicationRecord
             query: {
                 bool: {
                     must: [
-                        { match_phrase: { 'job_name' => job_json['Java开发工程师'] } },
+                        { match_phrase: { 'job_name' => job_json['job_name'] } },
                         { match_phrase: { 'company.company_name' => company.name} }
                     ]
                 }
