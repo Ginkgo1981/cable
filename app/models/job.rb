@@ -39,17 +39,47 @@ class Job < ApplicationRecord
     end
   end
 
+
+  def self.create_after_check(company_job_json) #目前实现的是 elastic search方式, 另一种方式 pg
+    #company
+    company_json = company_job_json.select { |k, v| k =~ /company/ }
+    res_company = Company.search query: {match_phrase: {company_name: company_json['company_name']}}
+    company =res_company.records.first
+    if company.nil?
+      company = Company.create! company_json
+      puts "[cable] create-company new 0 '#{company.name}'"
+    else
+      puts "[cable] create-company dup 0 '#{company.name}'"
+    end
+    #job
+    job_json = company_job_json.select{|k,v| k =~ /job/}
+    res_job = Job.search \
+            query: {
+                bool: {
+                    must: [
+                        { match_phrase: { 'job_name' => job_json['Java开发工程师'] } },
+                        { match_phrase: { 'company.company_name' => company.name} }
+                    ]
+                }
+            }
+    job = res_job.results.first
+    if job.nil?
+      job = Job.create! job_json.merge({company: company})
+      puts "[cable] create-job new 0 '#{job.name}'"
+    else
+      puts "[cable] create-job dup 0 '#{job.name}'"
+    end
+  end
+
   def as_indexed_json(options={})
     self.as_json(
-        include: { company: { only: [ :company_id, :company_name, :company_city, :company_category, :company_kind, :company_scale,
-                                      :company_address, :company_zip, :company_website, :company_hr, :company_mobile, :company_description,
-                                      :company_tel, :company_email, :company_origin_url, :company_origin_website
+        include: {company: {only: [:company_id, :company_name, :company_city, :company_category, :company_kind, :company_scale,
+                                   :company_address, :company_zip, :company_website, :company_hr, :company_mobile, :company_description,
+                                   :company_tel, :company_email, :company_origin_url, :company_origin_website
 
         ]
         }})
   end
-
-
 
 
 end

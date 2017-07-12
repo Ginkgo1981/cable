@@ -19,12 +19,11 @@ namespace :crawler do
           response = soap_client.doFeature([document].collect { |p| p.nil? ? "{}" : p.to_json.to_s })
           job_tags = response['return'].split(',').map{|p| p.split('=')[0]}
           company_job_json.merge! job_tags: job_tags
-          #comapny_json
-          company_json = company_job_json.select{|k,v| k =~ /company/}
-          company = Company.create! company_json
-          #job_json
-          job_json = company_job_json.select{|k,v| k =~ /job/}
-          job = Job.create! job_json.merge({company: company})
+
+          Job.create_after_check(company_job_json)
+          # #comapny_json
+          # company = Company.create_after_check company_json
+          # #job_json
           puts "[cable] sink-to-es succ 0 '#{company.company_name}-#{job.job_name}'"
         else
           sleep 10

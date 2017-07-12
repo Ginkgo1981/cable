@@ -30,6 +30,8 @@ class Company < ApplicationRecord
   after_touch() { __elasticsearch__.index_document }
 
 
+
+
   settings number_of_shards: 3 do
     mappings do
       indexes :company_name, type: :string, analyzer: 'ik_smart'
