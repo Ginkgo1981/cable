@@ -1,7 +1,7 @@
 require 'soap/wsdlDriver'
 namespace :crawler do
   desc 'read from redis then sink to elasticksearch'
-  task fetch_then_sink_to_es: :environment do
+  task sink: :environment do
 
     # logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
     # logger.tagged('BCX') { logger.info 'Stuff' }
@@ -27,10 +27,10 @@ namespace :crawler do
           # puts "[cable] sink-to-es succ 0 '#{company.company_name}-#{job.job_name}'"
         else
           sleep 10
-          puts "[cable] sink empty 0 ''"
+          puts "[cable] sink empty 0 '' ''"
         end
       rescue Exception => e
-        puts "[cable] sink error 0 '#{e.to_s}'"
+        puts "[cable] sink error 0 '#{e.to_s}' ''"
       end
     end
   end

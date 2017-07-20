@@ -19,6 +19,7 @@
 #  company_id          :uuid
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  job_origin_url      :string
 #
 
 class Job < ApplicationRecord
@@ -47,9 +48,9 @@ class Job < ApplicationRecord
     company =res_company.records.first
     if company.nil?
       company = Company.create! company_json
-      puts "[cable] create_company new 0 '#{company.company_name}'"
+      puts "[cable] create_company new 0 '#{company.company_origin_url}' ''"
     else
-      puts "[cable] create_company dup 0 '#{company.company_name}'"
+      puts "[cable] create_company dup 0 '#{company.company_origin_url}' ''"
     end
     #job
     job_json = company_job_json.select{|k,v| k =~ /job/}
@@ -65,9 +66,9 @@ class Job < ApplicationRecord
     job = res_job.results.first
     if job.nil?
       job = Job.create! job_json.merge({company: company})
-      puts "[cable] create_job new 0 '#{job.job_name}'"
+      puts "[cable] create_job new 0 '#{job.job_origin_url}' ''"
     else
-      puts "[cable] create_job dup 0 '#{job.job_name}'"
+      puts "[cable] create_job dup 0 '#{job.job_origin_url}' ''"
     end
   end
 
@@ -75,7 +76,7 @@ class Job < ApplicationRecord
     self.as_json(
         include: {company: {only: [:company_id, :company_name, :company_city, :company_category, :company_kind, :company_scale,
                                    :company_address, :company_zip, :company_website, :company_hr, :company_mobile, :company_description,
-                                   :company_tel, :company_email, :company_origin_url, :company_origin_website
+                                   :company_tel, :company_email, :company_origin_url
 
         ]
         }})
