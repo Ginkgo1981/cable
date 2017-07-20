@@ -40,7 +40,6 @@ class Job < ApplicationRecord
     end
   end
 
-
   def self.create_after_check(company_job_json) #目前实现的是 elastic search方式, 另一种方式 pg
     #company
     company_json = company_job_json.select { |k, v| k =~ /company/ }
@@ -48,9 +47,9 @@ class Job < ApplicationRecord
     company =res_company.records.first
     if company.nil?
       company = Company.create! company_json
-      puts "[cable] create_company new 0 '#{company.company_origin_url}' ''"
+      puts "[cable] create_company new 0 '#{company.company_name}' '#{company.company_origin_url}'"
     else
-      puts "[cable] create_company dup 0 '#{company.company_origin_url}' ''"
+      puts "[cable] create_company dup 0 '#{company.company_name}' '#{company.company_origin_url}'"
     end
     #job
     job_json = company_job_json.select{|k,v| k =~ /job/}
@@ -66,9 +65,9 @@ class Job < ApplicationRecord
     job = res_job.results.first
     if job.nil?
       job = Job.create! job_json.merge({company: company})
-      puts "[cable] create_job new 0 '#{job.job_origin_url}' ''"
+      puts "[cable] create_job new 0 '#{job.job_name}' '#{job.job_origin_url}'"
     else
-      puts "[cable] create_job dup 0 '#{job.job_origin_url}' ''"
+      puts "[cable] create_job dup 0 '#{job.job_name}' '#{job.job_origin_url}'"
     end
   end
 

@@ -23,6 +23,16 @@ class Redis
     end
   end
 
+  def get_from_queues(queues)
+    queues.each do |queue|
+      value = zrange(queue, 0, 0).first
+      if value
+        zrem(queue, value)
+        return value
+      end
+    end
+    nil
+  end
 end
 
 
