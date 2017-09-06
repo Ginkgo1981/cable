@@ -40,6 +40,54 @@ class Job < ApplicationRecord
     end
   end
 
+  def format
+    self.as_indexed_json
+  end
+
+  def search_definition
+    definition = search {
+      query do
+        function_score do
+          query do
+                multi_match do
+                  query    'fixed fixie'
+                  operator 'or'
+                  fields   %w[ title^10 body ]
+                end
+          end
+
+          functions << { script_score: { script: '_score * doc["rating"].value' } }
+        end
+      end
+
+      aggregation :tags do
+        terms do
+          field 'tags'
+          aggregation :avg_view_count do
+            avg field: 'view_count'
+          end
+        end
+      end
+      aggregation :frequency do
+        date_histogram do
+          field    'creation_date'
+          interval 'month'
+          format   'yyyy-MM'
+          aggregation :comments do
+            stats field: 'comment_count'
+          end
+        end
+      end
+      aggregation :comment_count_stats do
+        stats field: 'comment_count'
+      end
+      highlight fields: {
+          title: { fragment_size: 50 },
+          body:  { fragment_size: 50 }
+      }
+    }
+  end
+
   def self.create_after_check(company_job_json) #目前实现的是 elastic search方式, 另一种方式 pg
     #company
     company_json = company_job_json.select { |k, v| k =~ /company/ }
@@ -73,7 +121,7 @@ class Job < ApplicationRecord
 
   def as_indexed_json(options={})
     self.as_json(
-        include: {company: {only: [:company_id, :company_name, :company_city, :company_category, :company_kind, :company_scale,
+        include: {company: {only: [:id, :company_name, :company_city, :company_category, :company_kind, :company_scale,
                                    :company_address, :company_zip, :company_website, :company_hr, :company_mobile, :company_description,
                                    :company_tel, :company_email, :company_origin_url
 

@@ -14,7 +14,7 @@
 class Redis
 
   def cache(key, value, expire=nil)
-    if  get(key).nil?
+    if get(key).nil?
       set(key, value)
       expire(key, expire) if expire
       value
@@ -36,14 +36,17 @@ class Redis
 end
 
 
-conf_file = File.join('config','redis.yml')
+conf_file = File.join('config', 'redis.yml')
 
-$redis = if File.exists?(conf_file)
-  conf = YAML.load(File.read(conf_file))
-  conf[Rails.env.to_s].blank? ? Redis.new : Redis.new(conf[Rails.env.to_s])
-else
-  Redis.new
-end
+redis = if File.exists?(conf_file)
+           conf = YAML.load(File.read(conf_file))
+           conf[Rails.env.to_s].blank? ? Redis.new : Redis.new(conf[Rails.env.to_s])
+         else
+           Redis.new
+         end
+$redis = Redis::Namespace.new(:cable, :redis => redis)
+
+
 # To clear out the db before each test
 $redis.flushdb if Rails.env == "test"
 

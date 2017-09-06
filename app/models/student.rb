@@ -28,11 +28,12 @@ class Student < ApplicationRecord
 
   def format
     {
+        id: self.id,
         name: self.name,
-        nickname: self.nickname,
-        headimgurl:  self.headimgurl,
-        province: self.province,
-        city:  self.city,
+        # nickname: self.nickname,
+        # headimgurl:  self.headimgurl,
+        # province: self.province,
+        # city:  self.city,
         university: self.university,
         major: self.major
     }

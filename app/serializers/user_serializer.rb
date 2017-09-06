@@ -27,6 +27,8 @@
 #  headimgurl      :string
 #  language        :string
 #  name            :string
+#  latitude        :float
+#  longitude       :float
 #
 
 class UserSerializer < ApplicationSerializer

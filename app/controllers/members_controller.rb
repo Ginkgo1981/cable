@@ -2,10 +2,11 @@ class MembersController < ApplicationController
 
   before_action :find_user_by_token!, only: [:update_teacher, :bind_cell, :bind_sat, :follow,
                                              :following_teachers, :following_universities, :following_students, :following_skycodes,
-                                             :wechat_group,
-                                             :like_comment, :create_wishcard,:forward_wishcard]
+                                             :wechat_group,:wechat_phone,
+                                             :like_comment,:update_profile,
+                                             :my_resumes]
 
-  before_action :find_entity_by_dsin!, only: [:like_comment, :forward_wishcard]
+  # before_action :find_entity_by_dsin!, only: [:like_comment, :forward_wishcard]
 
 
   #teacher
@@ -36,6 +37,11 @@ class MembersController < ApplicationController
                         cell: params[:cell]
     teacher.user = user
     render json: {code: 0, member: user.membership}
+  end
+
+  def update_profile
+    @user.update params[:requestParams].permit(:latitude,:longitude).to_h
+    render json: {code: 0, msg: 'succ'}
   end
 
   #student
@@ -86,6 +92,24 @@ class MembersController < ApplicationController
     openGId = info[:openGId]
     group = Group.find_or_create_by! group_no: openGId
     group.users << @user
+    render json: {code: 0, msg: 'succ'}
+  end
+
+  def wechat_phone
+    if params[:app_name] == '天马志愿'
+      app_id = 'wxdfbc374fc090fd7c'
+      app_secret = '6f851272e083c60764ccf17ca956379d'
+    else
+      app_id = 'wx8887d1994c33935c'
+      app_secret = '209161ceb742e880116fdf6f6414f997'
+    end
+    encrypted_data = params[:encrypted_data]
+    session_key = params[:session_key]
+    iv = params[:iv]
+    info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
+
+    @user.cell = info[:phoneNumber]
+    @user.save!
     render json: {code: 0, msg: 'succ'}
   end
 
@@ -158,8 +182,6 @@ class MembersController < ApplicationController
   #          each_serializer: LikingSerializer,
   #          meta: {code: 0}
   # end
-
-
 
 
   private

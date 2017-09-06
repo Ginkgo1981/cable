@@ -1,9 +1,8 @@
 class ResourcesController < ApplicationController
 
 
-
   def university_list
-    res =
+    universities =
         if json = $redis.get('university_list')
           JSON.parse(json)
         else
@@ -11,16 +10,24 @@ class ResourcesController < ApplicationController
           $redis.set('university_list', JSON(universities))
           universities
         end
-    render json: {code: 0, data: res}
+    filtered =
+        if params[:latitude]
+          University.by_distance(:origin => [params[:latitude], params[:longitude]]).limit(10).map(&:name)
+        else
+          []
+        end
+    render json: {code: 0, data: {
+        universities: universities,
+        filtered_universities: filtered
+    }}
   end
-
 
   def city_list
     res =
         if json = $redis.get('city_list')
           JSON.parse(json)
         else
-          cities = City.all.map {|u| u.name }
+          cities = City.all.map { |u| u.name }
           $redis.set('city_list', JSON(cities))
           cities
         end
@@ -33,7 +40,7 @@ class ResourcesController < ApplicationController
         if json = $redis.get('major_list')
           JSON.parse(json)
         else
-          majors = Major.all.map {|u| u.name}
+          majors = Major.all.map { |u| u.name }
           $redis.set('major_list', JSON(majors))
           majors
         end

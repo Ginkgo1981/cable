@@ -26,11 +26,17 @@ class TagsController < ApplicationController
 
   def tags
     taggable = params[:taggable_type].constantize.find_by(:id => params[:taggable_id])
-    tags = taggable.tags.map { |tag| tag.format}
+    tags = taggable.tags.map { |tag| tag.format }
     render json: {
         code: 0,
         data: tags
     }
+  end
+
+
+  def libs
+    tags = File.open("features/#{params[:category]}.txt").read.split(/\n/)
+    render json: {code: 0, data: { tags: tags }}
   end
 
 

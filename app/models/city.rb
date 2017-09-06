@@ -10,7 +10,7 @@
 #
 
 class City < ApplicationRecord
-  include BeanFamily
+  # include BeanFamily
 
 
 end

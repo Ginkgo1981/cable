@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170720084045) do
+ActiveRecord::Schema.define(version: 20170906153438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -203,15 +203,14 @@ ActiveRecord::Schema.define(version: 20170720084045) do
 
   create_table "messages", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.text     "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.string   "type"
     t.datetime "expired_at"
     t.integer  "state"
-    t.uuid     "student_id"
-    t.uuid     "staff_id"
-    t.string   "direction"
     t.string   "img_url"
+    t.uuid     "receiver_id"
+    t.uuid     "sender_id"
   end
 
   create_table "photos", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -350,6 +349,8 @@ ActiveRecord::Schema.define(version: 20170720084045) do
     t.string   "logo"
     t.string   "province"
     t.integer  "hot",        default: 0
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
   create_table "user_groups", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -384,6 +385,8 @@ ActiveRecord::Schema.define(version: 20170720084045) do
     t.string   "headimgurl"
     t.string   "language"
     t.string   "name"
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
 end

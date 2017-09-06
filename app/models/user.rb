@@ -27,6 +27,8 @@
 #  headimgurl      :string
 #  language        :string
 #  name            :string
+#  latitude        :float
+#  longitude       :float
 #
 
 class User < ApplicationRecord
@@ -45,12 +47,15 @@ class User < ApplicationRecord
   # delegate :dsin, to: :identity
   before_create :generate_token
 
-  def format_basic
+  def format
     {
+        id: self.id,
         nickname: self.nickname,
         province: self.province,
         city: self.city,
-        headimgurl: self.headimgurl
+        headimgurl: self.headimgurl,
+        identity: identity.format,
+        identity_type: identity_type
     }
   end
 

@@ -15,6 +15,8 @@
 #  logo       :string
 #  province   :string
 #  hot        :integer          default(0)
+#  latitude   :float
+#  longitude  :float
 #
 
 class UniversitiesController < ApplicationController

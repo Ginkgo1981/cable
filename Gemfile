@@ -5,7 +5,6 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
 gem 'rails', '~> 5.0.2'
 # gem 'mysql2'
 gem 'pg'
@@ -18,6 +17,9 @@ gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
 gem 'carrierwave-base64', git: 'https://github.com/SkyMatters/carrierwave-base64.git', branch: 'master'
 gem 'carrierwave-qiniu', '~> 1.1.0'
 gem 'rqrcode'
+gem 'kaminari'
+gem 'awesome_print'
+
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
@@ -33,20 +35,26 @@ gem 'rqrcode'
 gem 'rack-cors'
 gem 'faraday'
 gem 'redis'
+gem 'redis-namespace'
 gem 'state_machine'
 gem 'active_model_serializers'
 gem 'qiniu'
 gem 'listen', '~> 3.0.5'
 gem 'soap2r'
-gem 'elasticsearch-model'
-gem 'elasticsearch-persistence'
-gem 'elasticsearch-rails'
-gem 'elasticsearch-dsl'
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'elasticsearch-dsl', git: 'git://github.com/elasticsearch/elasticsearch-ruby.git', branch: '5.x'
+gem 'elasticsearch-model', github: 'elastic/elasticsearch-rails', branch: '5.x'
+gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', branch: '5.x'
+gem 'elasticsearch-persistence', git: 'git://github.com/elastic/elasticsearch-rails.git', branch: '5.x'
+# gem 'elasticsearch-model'
+# gem 'elasticsearch-persistence'
+# gem 'elasticsearch-rails'
+# gem 'elasticsearch-dsl'
 gem 'uuidtools'
-
 gem 'mechanize'
 gem 'nokogiri'
-
+gem 'geocoder'
+gem 'geokit-rails'
 
 group :development, :test do
   gem 'pry'
@@ -62,4 +70,3 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

@@ -57,24 +57,27 @@ class Resume < ApplicationRecord
     end
   end
 
-  def format
+  def format_for_redis
     if Rails.env.production? && (json = $redis.get(self.id))
       JSON.parse(json)
     else
-      formatted = {
-          id: self.id,
-          job_intention:  self.job_intention,
-          job_cities: self.job_cities,
-          job_kind: self.job_kind,
-          job_title: self.job_title,
-          student: student.format,
-          educations: self.educations.map(&:format),
-          experiences: self.experiences.map(&:format),
-          skills: self.skills.map(&:format),
-          honors: self.honors.map(&:format)
-      }
-      $redis.set(self.id, JSON(formatted))
-      formatted
+      $redis.set(self.id, JSON(format))
+      format
     end
+  end
+
+  def format
+        {
+        id: self.id,
+        job_intention:  self.job_intention,
+        job_cities: self.job_cities,
+        job_kind: self.job_kind,
+        job_title: self.job_title,
+        student: student.format,
+        educations: self.educations.map(&:format),
+        experiences: self.experiences.map(&:format),
+        skills: self.skills.map(&:format),
+        honors: self.honors.map(&:format)
+    }
   end
 end

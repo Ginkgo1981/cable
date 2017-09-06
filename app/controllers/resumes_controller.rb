@@ -13,10 +13,31 @@
 #
 
 class ResumesController < ApplicationController
-  before_action :find_resume!, only: [:get_resume, :save_component]
+  before_action :find_resume!, only: [:get_resume, :save_component, :show_intention,:save_intention]
+  before_action :find_user_by_token!, only: [:my_resumes, :create_resume]
+
+
+  def my_resumes
+    if @student
+      resumes = @student.resumes
+      render json: resumes,
+             each_serializer: ResumeSerializer,
+             meta: {code: 0}
+    end
+  end
+
+  def create_resume
+    if @student
+      resume = @student.resumes.create
+      render json: {code: 0, data: resume.format}
+    end
+
+  end
+
   def get_resume
     render json: {code: 0, data: @resume.format}
   end
+
 
   def save_component
     p = params[:entity].permit(:id, :university, :major, :start_date, :end_date, :degree, :title, :content,:images).to_h
@@ -38,6 +59,18 @@ class ResumesController < ApplicationController
   def show_component
     entity = params[:type].constantize.find_by id: params[:id]
     render json: {code: 0, data: entity.format}
+  end
+
+
+  def show_intention
+    #todo just show intent, NOT relationship present
+    render json: {code: 0, data: @resume.format}
+  end
+
+  def save_intention
+    binding.pry
+    resume = @resume.update! params[:resume].permit(:id,:job_title, :job_intention, :job_cities, :job_kind,).to_h
+    render json: {code: 0, data: @resume.format}
   end
 
   private

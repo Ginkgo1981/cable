@@ -30,8 +30,6 @@ class Company < ApplicationRecord
   after_touch() { __elasticsearch__.index_document }
 
 
-
-
   settings number_of_shards: 3 do
     mappings do
       indexes :company_name, type: :string, analyzer: 'ik_smart'
@@ -41,7 +39,37 @@ class Company < ApplicationRecord
 
   has_many :jobs, dependent: :destroy
 
+  def format
+    {
+        company_name: company_name,
+        company_city: company_city,
+        company_category: company_category,
+        company_kind:company_kind,
+        company_scale:  company_scale,
+        company_address: company_address,
+        company_zip: company_zip,
+        company_website: company_website,
+        company_hr: company_hr,
+        company_mobile: company_mobile,
+        company_description:company_description,
+        company_tel:company_tel,
+        company_email: company_email,
+        company_origin_url:company_origin_url
+    }
+  end
+
+
+
   # Company.search query: { match_phrase: { company_name: '宝徽' } }
   # res = Company.search(query: { match: { company_name: '宝马' } }, highlight: {fields: {company_name: {}}}).results.first.highlight
 
+
+  # res_job = Job.search \
+  #           query: {
+  #     bool: {
+  #         must: [
+  #             {match_phrase: {'company.company_name' => company.company_name}}
+  #         ]
+  #     }
+  # }
 end
