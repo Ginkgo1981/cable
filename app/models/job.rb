@@ -24,7 +24,12 @@
 
 class Job < ApplicationRecord
   include Searchable
+  include Bookmarkable
   belongs_to :company
+
+  has_many :user_jobs
+  has_many :resumes, through: :user_jobs
+  has_many :users,  through: :user_jobs
 
   settings number_of_shards: 3 do
     mappings do

@@ -17,10 +17,8 @@
 class NotificationMessage < Message
 
   def send_to_redis
-    if self.direction == 'student'
+    # if self.receiver.is_a? Student
       $redis.rpush 'notification_student', JSON(self.format_for_redis)
-    else
-      $redis.rpush 'notification_teacher', JSON(self.format_for_redis)
-    end
+    # end
   end
 end

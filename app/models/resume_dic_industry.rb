@@ -10,4 +10,12 @@
 #
 
 class ResumeDicIndustry < ApplicationRecord
+  has_many :resume_dic_experiences, foreign_key: :industry_id
+
+  def format
+    {
+        name: self.name,
+        list: self.resume_dic_experiences.map(&:format)
+    }
+  end
 end

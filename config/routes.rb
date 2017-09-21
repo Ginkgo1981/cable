@@ -1,10 +1,36 @@
 Rails.application.routes.draw do
 
+  #messages
+  post 'messages/notification_message_list', to: 'messages#notification_message_list'
+  post 'messages/send_notification_message', to: 'messages#send_notification_message'
+
+
+  #photos
+  get '/photos/uptoken', to: 'photos#get_upload_token'
+  get '/photos/get_photos', to: 'photos#get_photos'
+  post 'photos/save_photo', to: 'photos#save_photo'
+
+  #users
+  get '/users/students', to: 'users#get_student_list'
+  get '/users/students/:id', to: 'users#get_student'
+
+  #stories
+  get 'stories/get_story/:id', to: 'stories#get_story'
+  get 'stories/list/', to: 'stories#list'
+  post 'stories/update_story/:id', to: 'stories#update_story'
+  post 'stories/create_story', to: 'stories#create_story'
+  post 'stories/delete_story/:id', to: 'stories#delete_story'
+
   #resources
+  get 'filtered_university_list', to: 'resources#filtered_university_list'
   get 'university_list', to: 'resources#university_list'
-  # get 'university_list_by_geo/:lan/:lat', to: 'resources#university_list_by_geo'
   get 'city_list', to: 'resources#city_list'
   get 'major_list', to: 'resources#major_list'
+  get 'job_list', to: 'resources#job_list'
+  get 'industry_list', to: 'resources#industry_list'
+  get 'honor_list', to: 'resources#honor_list'
+  get 'skill_list', to: 'resources#skill_list'
+  get 'experience_title_list', to: 'resources#experience_title_list'
 
   #jobs
   get 'jobs/:id', to: 'jobs#get_job'
@@ -24,9 +50,6 @@ Rails.application.routes.draw do
 
 
   #dsin photo
-  get 'dsin/uptoken', to: 'dsins#get_upload_token'
-  get 'dsin/:dsin/photos', to: 'dsins#get_photos'
-  post 'dsin/:dsin/save_photo', to: 'dsins#save_photo'
 
   #dsin
   # get 'dsin/:dsin', to: 'dsins#show'
@@ -41,7 +64,6 @@ Rails.application.routes.draw do
   # post 'dsin/:dsin/tag', to: 'dsins#tag'
   get 'tags/tag_list'
   get 'tags/libs/:category', to: 'tags#libs'
-
   #members
   post 'members/wechat_open_authorization', to: 'members#wechat_open_authorization'
   post 'members/mini_app_authorization', to: 'members#mini_app_authorization'
@@ -52,10 +74,22 @@ Rails.application.routes.draw do
 
 
 
-  post 'members/update_teacher', to: 'members#update_teacher'
+  post 'members/applying_job', to: 'members#applying_job'
+  get 'members/applied_jobs', to: 'members#applied_jobs'
+  get 'members/:job_id/is_applied', to: 'members#is_applied'
+
+
   post 'members/send_sms_code', to: 'members#send_sms_code'
   post 'members/bind_cell', to: 'members#bind_cell'
   post 'members/bind_sat', to: 'members#bind_sat'
+
+
+  #bookmark
+  post 'members/:job_id/bookmarking_job', to: 'members#bookmarking_job'
+  get 'members/:job_id/is_bookmarked', to: 'members#is_bookmarked'
+  get  'members/bookmarked_jobs', to: 'members#bookmarked_jobs'
+
+
 
   ##follow
   post 'members/follow/:dsin', to: 'members#follow'
@@ -79,17 +113,16 @@ Rails.application.routes.draw do
   post 'like_comment/:dsin', to: 'members#like_comment'
 
 
-  #messages
-  post 'messages/list', to: 'messages#message_list'
+
   post 'messages/batch_send_messages', to: 'messages#batch_send_messages'
   post 'messages/send_point_message', to: 'messages#send_point_message'
-  post 'messages/send_notification_message', to: 'messages#send_notification_message'
+  # post 'messages/send_notification_message', to: 'messages#send_notification_message'
   post 'messages/send_subscription_message', to: 'messages#send_subscription_message'
   get 'messages/show'
 
   #stories
   get 'stories/show'
-  get 'stories/list/:dsin', to: 'stories#list'
+  get 'stories/list/', to: 'stories#list'
   post 'stories/create_story', to: 'stories#create_story'
 
   #universities

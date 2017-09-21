@@ -3,13 +3,15 @@
 # Table name: resumes
 #
 #  id            :uuid             not null, primary key
-#  student_id    :uuid
 #  job_intention :string
 #  job_cities    :string
 #  job_kind      :string
 #  job_title     :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  university    :string
+#  major         :string
+#  user_id       :uuid
 #
 
 class ResumesController < ApplicationController
@@ -28,7 +30,7 @@ class ResumesController < ApplicationController
 
   def create_resume
     if @student
-      resume = @student.resumes.create
+      resume = @student.resumes.create! params.permit(:university)
       render json: {code: 0, data: resume.format}
     end
 
@@ -68,7 +70,6 @@ class ResumesController < ApplicationController
   end
 
   def save_intention
-    binding.pry
     resume = @resume.update! params[:resume].permit(:id,:job_title, :job_intention, :job_cities, :job_kind,).to_h
     render json: {code: 0, data: @resume.format}
   end

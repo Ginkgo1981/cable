@@ -15,10 +15,10 @@
 #
 
 class MessageSerializer < ApplicationSerializer
-  attributes :id, :dsin, :content, :created_at, :type, :student_id, :teacher_id, :university_id
-  belongs_to :student
-  belongs_to :university
-  belongs_to :teacher
+  attributes :id, :content, :created_at, :type
+  # belongs_to :student
+  # belongs_to :university
+  # belongs_to :teacher
 
   # attribute :student
   # def student

@@ -1,15 +1,13 @@
 class MembersController < ApplicationController
 
-  before_action :find_user_by_token!, only: [:update_teacher, :bind_cell, :bind_sat, :follow,
-                                             :following_teachers, :following_universities, :following_students, :following_skycodes,
-                                             :wechat_group,:wechat_phone,
-                                             :like_comment,:update_profile,
-                                             :my_resumes]
+  before_action :find_user_by_token!, only: [:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
+                                             :applying_job, :applied_jobs, :is_applied,
+                                             :bookmarking_job, :is_bookmarked, :bookmarked_jobs]
 
   # before_action :find_entity_by_dsin!, only: [:like_comment, :forward_wishcard]
 
 
-  #teacher
+  #HR or staff
   def wechat_open_authorization
     wechat_client = WechatOpenClient.new
     if params[:openid].present? && params[:access_token].present?
@@ -23,24 +21,21 @@ class MembersController < ApplicationController
     (render json: {code: 0, openid: openid, access_token: access_token} and return) unless params[:cell].present?
     cell = Cell.find_by cell: params[:cell], code: params[:sms_code]
     raise CableException::CellCodeError unless cell
-    teacher = Teacher.find_by cell: params[:cell]
-    raise CableException::TeacherNotFound unless teacher
     info = wechat_client.get_user_info(access_token, openid).symbolize_keys!
-    user = User.create! openweb_openid: info[:openid],
-                        nickname: info[:nickname],
-                        sex: info[:sex],
-                        language: info[:language],
-                        city: info[:city],
-                        province: info[:province],
-                        headimgurl: info[:headimgurl],
-                        union_id: info[:unionid],
-                        cell: params[:cell]
-    teacher.user = user
-    render json: {code: 0, member: user.membership}
+    staff = Staff.create! openweb_openid: info[:openid],
+                          nickname: info[:nickname],
+                          sex: info[:sex],
+                          language: info[:language],
+                          city: info[:city],
+                          province: info[:province],
+                          headimgurl: info[:headimgurl],
+                          union_id: info[:unionid],
+                          cell: params[:cell]
+    render json: {code: 0, member: staff.membership}
   end
 
   def update_profile
-    @user.update params[:requestParams].permit(:latitude,:longitude).to_h
+    @user.update params.permit(:university, :major, :latitude, :longitude, industry_tags: [], skill_tags: [])
     render json: {code: 0, msg: 'succ'}
   end
 
@@ -60,21 +55,18 @@ class MembersController < ApplicationController
     iv = params[:iv]
     info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
 
-    user = User.find_by miniapp_openid: info[:openId]
-    unless user
-      student = Student.create!
-      user = student.create_user miniapp_openid: info[:openId],
-                                 nickname: info[:nickName],
-                                 sex: info[:gender],
-                                 language: info[:language],
-                                 city: info[:city],
-                                 province: info[:province],
-                                 headimgurl: info[:avatarUrl],
-                                 union_id: info[:unionId]
-
-      student.resumes.create!
+    student = Student.find_by miniapp_openid: info[:openId]
+    unless student
+      student = Student.create! miniapp_openid: info[:openId],
+                                nickname: info[:nickName],
+                                sex: info[:gender],
+                                language: info[:language],
+                                city: info[:city],
+                                province: info[:province],
+                                headimgurl: info[:avatarUrl],
+                                union_id: info[:unionId]
     end
-    render json: {code: 0, member: user.membership, session_key: session_key}
+    render json: {code: 0, member: student.membership, session_key: session_key}
   end
 
   def wechat_group
@@ -113,18 +105,6 @@ class MembersController < ApplicationController
     render json: {code: 0, msg: 'succ'}
   end
 
-  def follow
-    bean = Bean.find_by_dsin params[:dsin]
-    if @student
-      @student.following_universities << bean if bean.is_a? University
-      @student.following_teachers << bean if bean.is_a? Teacher
-    end
-
-    if @teacher
-      @teacher.following_students << bean if bean.is_a? Student
-    end
-    render json: {code: 0, msg: '关注成功'}
-  end
 
   def bind_cell
     Cell.verify_code! params[:cell], params[:sms_code]
@@ -139,50 +119,57 @@ class MembersController < ApplicationController
     render json: {code: 0, message: 'succ'}
   end
 
-  # def create_wishcard
-  #   cities = (params[:cities] || []).map{|c| c['name']}
-  #   universities = (params[:universities] || []).map{|c| c['name']}
-  #   majors = (params[:majors] || []).map{|c| c['name']}
-  #   wishcard = @user.create_wishcard cities: cities,
-  #                                    universities: universities,
-  #                                    majors: majors,
-  #                                    introdution: params[:introdution]
-  #   render json: {code: 0, dsin: wishcard.dsin}
-  # end
+  def bookmarking_job
+    job = Job.find_by id: params[:job_id]
+    unless @user.bookmarking_jobs.exists?(job.id)
+      @user.bookmarking_jobs << job
+    end
+    render json: {code: 0, msg: 'succ'}
+  end
 
-  # def forward_wishcard
-  #   binding.pry
-  #   wishcard = @entity
-  #   group  = Group.find_or_create_by! group_id: params[:group_id]
-  #   wishcard.following_groups << group unless wishcard.following_groups.exists? group
-  #   render json: {code: 0, msg: 'succ'}
-  # end
+  def is_bookmarked
+    job = Job.find_by id: params[:job_id]
+    bookmarked = @user.bookmarking_jobs.exists?(job) ? 1 :0
+    render json: {code: 0, data: {bookmarked: bookmarked}}
+  end
 
 
-  # #我在追
-  # def following_teachers
-  #   teachers = @student.following_teachers
-  #   render json: teachers,
-  #          each_serializer: TeacherSerializer,
-  #          meta: {code: 0}
-  # end
-  #
-  # def following_students
-  #   students = @teacher.following_students
-  #   render json: students,
-  #          each_serializer: StudentSerializer,
-  #          meta: {code: 0}
-  # end
+  def applying_job
+    user_job = UserJob.create! user_id: @user.id,
+                    resume_id: @user.resumes[0].id,
+                    job_id: params[:job_id],
+                    company_id: params[:company_id]
+    render json: {code: 0, msg: 'succ'}
+  end
+
+  def applied_jobs
+    user_jobs = @user.user_jobs
+    render json: user_jobs,
+           each_serializer: UserJobSerializer,
+           meta: {code: 0}
+  end
+
+  def is_applied
+    job = Job.find_by id: params[:job_id]
+    applied = @user.jobs.exists?(job) ? 1 : 0
+    render json: {code: 0, data: {applied: applied}}
+  end
 
 
-  # def like_comment
-  #   @entity.like_comment(@user, params[:comment])
-  #   likings = @entity.reload.likings.preload({user: [identity: :bean]})
-  #   render json: likings,
-  #          each_serializer: LikingSerializer,
-  #          meta: {code: 0}
-  # end
+  def bookmarked_jobs
+    jobs = @user.bookmarking_jobs
+    render json: jobs,
+           each_serializer: JobSerializer,
+           meta: {code: 0}
+  end
 
+  def forward_job
+    job = Job.find_by id: params[:id]
+
+    group  = Group.find_or_create_by! group_id: params[:group_id]
+    wishcard.following_groups << group unless wishcard.following_groups.exists? group
+    render json: {code: 0, msg: 'succ'}
+  end
 
   private
   def decrypt(session_key, app_id, encrypted_data, iv)

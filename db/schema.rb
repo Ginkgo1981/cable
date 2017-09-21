@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170906153438) do
+ActiveRecord::Schema.define(version: 20170921152549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,27 @@ ActiveRecord::Schema.define(version: 20170906153438) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "job_activities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_job_id"
+    t.string   "note"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "job_interviews", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_job_id"
+    t.string   "note"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "job_offers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_job_id"
+    t.string   "note"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "jobs", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "job_name"
     t.string   "job_salary_range"
@@ -244,8 +265,12 @@ ActiveRecord::Schema.define(version: 20170906153438) do
   end
 
   create_table "resume_dic_experiences", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.uuid     "industry_id"
+    t.string   "industry_name"
+    t.string   "name"
+    t.string   "content"
   end
 
   create_table "resume_dic_honor_tips", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -276,13 +301,15 @@ ActiveRecord::Schema.define(version: 20170906153438) do
   end
 
   create_table "resumes", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid     "student_id"
     t.string   "job_intention"
     t.string   "job_cities"
     t.string   "job_kind"
     t.string   "job_title"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "university"
+    t.string   "major"
+    t.uuid     "user_id"
   end
 
   create_table "skills", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -360,14 +387,21 @@ ActiveRecord::Schema.define(version: 20170906153438) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_jobs", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.uuid     "resume_id"
+    t.uuid     "job_id"
+    t.uuid     "company_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string   "cell",            limit: 50
+    t.string   "cell",                         limit: 50
     t.integer  "sex"
-    t.string   "token",           limit: 50
-    t.uuid     "identity_id"
-    t.string   "identity_type"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.string   "token",                        limit: 50
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.string   "union_id"
     t.datetime "subscribe_at"
     t.datetime "unsubscribe_at"
@@ -387,6 +421,12 @@ ActiveRecord::Schema.define(version: 20170906153438) do
     t.string   "name"
     t.float    "latitude"
     t.float    "longitude"
+    t.string   "type"
+    t.string   "university"
+    t.string   "major"
+    t.string   "industry_tags",                                                    array: true
+    t.string   "skill_tags",                                                       array: true
+    t.integer  "notification_message_version",            default: 0
   end
 
 end

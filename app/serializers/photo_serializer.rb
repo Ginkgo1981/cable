@@ -13,5 +13,11 @@
 #
 
 class PhotoSerializer < ApplicationSerializer
-  attributes :id, :dsin, :key, :img_url
+  attributes :id, :key, :img_url, :type
+
+  def type
+    'Photo'
+  end
+
+
 end

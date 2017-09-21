@@ -2,47 +2,55 @@
 #
 # Table name: users
 #
-#  id              :uuid             not null, primary key
-#  cell            :string(50)
-#  sex             :integer
-#  token           :string(50)
-#  identity_id     :uuid
-#  identity_type   :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  union_id        :string
-#  subscribe_at    :datetime
-#  unsubscribe_at  :datetime
-#  device_info     :string
-#  register_status :boolean
-#  register_at     :datetime
-#  online_status   :boolean
-#  openweb_openid  :string
-#  mp_openid       :string
-#  miniapp_openid  :string
-#  nickname        :string
-#  country         :string
-#  province        :string
-#  city            :string
-#  headimgurl      :string
-#  language        :string
-#  name            :string
-#  latitude        :float
-#  longitude       :float
+#  id                           :uuid             not null, primary key
+#  cell                         :string(50)
+#  sex                          :integer
+#  token                        :string(50)
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  union_id                     :string
+#  subscribe_at                 :datetime
+#  unsubscribe_at               :datetime
+#  device_info                  :string
+#  register_status              :boolean
+#  register_at                  :datetime
+#  online_status                :boolean
+#  openweb_openid               :string
+#  mp_openid                    :string
+#  miniapp_openid               :string
+#  nickname                     :string
+#  country                      :string
+#  province                     :string
+#  city                         :string
+#  headimgurl                   :string
+#  language                     :string
+#  name                         :string
+#  latitude                     :float
+#  longitude                    :float
+#  type                         :string
+#  university                   :string
+#  major                        :string
+#  industry_tags                :string           is an Array
+#  skill_tags                   :string           is an Array
+#  notification_message_version :integer          default(0)
 #
 
 class User < ApplicationRecord
 
-  # include BeanFamily
-  scope :with_identity, ->(identity_type) { where(identity_type: identity_type) }
-  belongs_to :identity, polymorphic: true, optional: true
+  include Bookmarkable
+  # include Likable
+
   has_many :forms
   has_many :received_messages, class_name: Message, foreign_key: :user_id
   has_many :sended_messages, class_name: Message, foreign_key: :sender_id
-  #group
   has_many :user_groups
   has_many :groups, through: :user_groups
   has_one :qr_code, as: :codeable
+
+  has_many :user_jobs
+  has_many :jobs, through: :user_jobs
+  has_many :companies, through: :user_jobs
+
 
   # delegate :dsin, to: :identity
   before_create :generate_token
@@ -54,8 +62,7 @@ class User < ApplicationRecord
         province: self.province,
         city: self.city,
         headimgurl: self.headimgurl,
-        identity: identity.format,
-        identity_type: identity_type
+        type: self.type
     }
   end
 
@@ -65,7 +72,7 @@ class User < ApplicationRecord
         id: self.id,
         cell: self.cell,
         token: self.token,
-        identity_type: self.identity_type,
+        type: self.type,
         union_id: self.union_id,
         name: self.name,
         nickname: self.nickname,
@@ -73,10 +80,7 @@ class User < ApplicationRecord
         province: self.province,
         city: self.city,
         headimgurl: self.headimgurl,
-        identity: self.identity.format,
-        resumes: self.identity.is_a?(Student) ? self.identity.resumes.map(&:format) : []
-        # wishcard: {dsin: self.wishcard.try(:dsin)},
-        # following_universities: self.identity.is_a?(Student) ? self.identity.following_universities.map { |u| u.format } : [] #todo refactor
+        resumes: self.type == 'Student' ? self.resumes.map(&:format) : []
     }
   end
 
@@ -101,13 +105,13 @@ class User < ApplicationRecord
 
   def next_notification_message
     message =
-        if self.identity_type == 'Student'
-          $redis.lindex 'notification_student', self.last_message_id
-        else
-          $redis.lindex 'notification_teacher', self.last_message_id
+        if self.type == 'Student'
+          $redis.lindex 'notification_student', self.notification_message_version
+        # else
+        #   $redis.lindex 'notification_teacher', self.notification_message_version
         end
     return nil unless message
-    self.increment!(:last_message_id)
+    self.increment!(:notification_message_version)
     JSON.parse(message)
   end
 

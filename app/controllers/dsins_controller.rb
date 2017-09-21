@@ -83,31 +83,5 @@ class DsinsController < ApplicationController
   # end
 
 
-  def save_photo
-    key = params[:key]
-    @entity.attached_photos.create key: params[:key]
-    photos = @entity.attached_photos.preload(:bean)
-    render json: photos,
-           each_serializer: PhotoSerializer,
-           meta: {code: 0}
-  end
-
-  def get_photos
-    photos = @entity.attached_photos.preload(:bean)
-    render json: photos,
-           each_serializer: PhotoSerializer,
-           meta: {code: 0}
-  end
-
-
-  def get_upload_token
-    bucket = 'gaokao'
-    put_policy = Qiniu::Auth::PutPolicy.new(bucket)
-    uptoken = Qiniu::Auth.generate_uptoken(put_policy)
-    render json: {
-        code: 0,
-        uptoken: uptoken
-    }
-  end
 
 end

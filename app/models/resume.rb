@@ -3,29 +3,35 @@
 # Table name: resumes
 #
 #  id            :uuid             not null, primary key
-#  student_id    :uuid
 #  job_intention :string
 #  job_cities    :string
 #  job_kind      :string
 #  job_title     :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  university    :string
+#  major         :string
+#  user_id       :uuid
 #
 
 class Resume < ApplicationRecord
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
-  belongs_to :student
+  belongs_to :student, foreign_key: :user_id
   has_many :educations
   has_many :experiences
   has_many :skills
   has_many :honors
 
+  has_many :user_jobs
+  has_many :jobs, through: :user_jobs
+  has_many :companies, through: :companies
+
   def as_indexed_json(options={})
     self.format.as_json
   end
 
-  settings index: { number_of_shards: 3, number_of_replicas: 1 } do
+  settings index: {number_of_shards: 3, number_of_replicas: 1} do
     mappings do
       indexes :job_intention, type: :string, analyzer: 'ik_smart'
       indexes :job_cities, type: :string, analyzer: 'ik_smart'
@@ -67,13 +73,12 @@ class Resume < ApplicationRecord
   end
 
   def format
-        {
+    {
         id: self.id,
-        job_intention:  self.job_intention,
+        job_intention: self.job_intention,
         job_cities: self.job_cities,
         job_kind: self.job_kind,
         job_title: self.job_title,
-        student: student.format,
         educations: self.educations.map(&:format),
         experiences: self.experiences.map(&:format),
         skills: self.skills.map(&:format),

@@ -13,5 +13,9 @@
 #
 
 class StorySerializer < ApplicationSerializer
-  attributes :id, :dsin, :title, :description, :content, :coverage_img_url
+  attributes :id, :title, :type, :description, :content, :coverage_img_url
+
+  def type
+    'Story'
+  end
 end

@@ -16,15 +16,9 @@
 
 class Message < ApplicationRecord
   include Bookmarkable
-  # include BeanFamily
   include Attachable
-
-  belongs_to :student, optional: true
-  # belongs_to :university, optional: true
-  # belongs_to :teacher, optional: true
-
-  # scope :filter_by_type, -> (type) {where(type: type)}
-  # scope :filter_by_entity, -> (entity){ where("#{entity.class.name.downcase.to_s}": entity)}
+  belongs_to :sender, foreign_key: :sender_id ,class_name:  User, optional: true
+  belongs_to :receiver, foreign_key: :receiver_id, class_name: User, optional: true
 
   def format_for_redis
     if json = $redis.get("#{self.class.name.downcase}::#{self.id}")

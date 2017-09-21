@@ -18,8 +18,6 @@ class PointMessage < Message
 
   # after_create_commit :send_to_redis
 
-  belongs_to :sender, foreign_key: :sender_id ,class_name:  User, optional: true
-  belongs_to :receiver, foreign_key: :receiver_id, class_name: User, optional: true
 
   def self.set_one
     msg = PointMessage.create! receiver_id: 'eb97ff5e-552d-4c35-8304-62e50c8845d2',

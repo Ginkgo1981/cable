@@ -70,14 +70,15 @@ class RoomChannel < ApplicationCable::Channel
     json = $redis.zrange("user::#{current_user.id}", 0, 0).first
     message =
         if json
-          pp "[roo-channel] ping json #{json}"
+          pp "[room-channel] ping json #{json}"
           $redis.zrem("user::#{current_user.id}", json)
           JSON.parse(json)
         else
-          # current_user.next_notification_message
+          current_user.next_notification_message
         end
 
     if message
+      puts "[room-channal] ping #{message}"
       RoomChannel.broadcast_to(current_user,
                                message: {msg: message,
                                          time_stamp: Time.now.to_i,

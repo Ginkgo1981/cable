@@ -13,15 +13,16 @@
 #
 
 class Story < ApplicationRecord
-  include BeanFamily
-  belongs_to :university, optional: true
-  belongs_to :teacher,  optional: true
-  belongs_to :staff,  optional: true
+  # include BeanFamily
+  # belongs_to :university, optional: true
+  # belongs_to :teacher,  optional: true
+  # belongs_to :staff,  optional: true
+
 
   def format
     {
-        resource_type: 'Story',
-        dsin: self.dsin,
+        type: 'Story',
+        id: self.id,
         coverage_img_url: self.coverage_img_url,
         title: self.title,
         description: self.description,

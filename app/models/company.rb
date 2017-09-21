@@ -27,6 +27,10 @@ class Company < ApplicationRecord
   include Elasticsearch::Model::Callbacks
 
 
+  has_many :user_jobs
+  has_many :resumes, through: :user_jobs
+  has_many :users,  through: :user_jobs
+
   after_touch() { __elasticsearch__.index_document }
 
 

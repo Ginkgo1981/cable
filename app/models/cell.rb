@@ -20,7 +20,7 @@ class Cell < ApplicationRecord
         mobile: self.cell,
         text: "【霖跃科技】您的验证码是#{self.code}"
     }
-    resp = Faraday.post url, data
+    # resp = Faraday.post url, data
     true
   end
 

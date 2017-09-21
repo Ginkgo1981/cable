@@ -13,15 +13,16 @@
 #
 
 class Photo < ApplicationRecord
-  include BeanFamily
+  # include BeanFamily
 
   has_one :Attaching,  as: :attachment, dependent: :destroy
 
 
   def format
     {
-        dsin:self.dsin,
+        # dsin:self.dsin,
         id: self.id,
+        type: 'Photo',
         name: self.name,
         key: self.key,
         resource_type: 'Photo'
