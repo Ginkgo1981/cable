@@ -38,7 +38,6 @@ class ResourcesController < ApplicationController
   end
 
 
-
   def city_list
     res =
         if json = $redis.get('city_list')
@@ -69,7 +68,7 @@ class ResourcesController < ApplicationController
         if json = $redis.get('job_list')
           JSON.parse(json)
         else
-          jobs=File.open('features/jobs.txt').read.split /\n/
+          jobs=File.open('features/positions.txt').read.split /\n/
           $redis.set('major_list', JSON(jobs))
           jobs
         end
@@ -82,8 +81,8 @@ class ResourcesController < ApplicationController
   end
 
   def honor_list
-    tips = ResumeDicHonorTip.all.map(&:tips).flatten.map{|r| {content: r}}
-    res =  [{name: '全部', list: tips}]
+    tips = ResumeDicHonorTip.all.map(&:tips).flatten.map { |r| {content: r} }
+    res = [{name: '全部', list: tips}]
     render json: {code: 0, data: res}
   end
 
@@ -95,12 +94,9 @@ class ResourcesController < ApplicationController
 
 
   def experience_title_list
-    res = ResumeDicExperience.all.select{|r| r.name =~ /xx/}.map(&:name)
-    render json: {code: 0, data:res}
+    res = ResumeDicExperience.all.select { |r| r.name =~ /xx/ }.map(&:name)
+    render json: {code: 0, data: res}
   end
 
 
-
-
-
-  end
+end
