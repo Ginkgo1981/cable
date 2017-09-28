@@ -63,13 +63,23 @@ class Resume < ApplicationRecord
     end
   end
 
+  def score
+    educations_score = self.educations.size == 0 ? 0 : (2 + self.educations.size * 0.5)
+    experiences_score = self.experiences.size == 0 ? 0 : (2 + self.experiences.size * 0.5)
+    skills_score = self.skills.size == 0 ? 0 : (1 + self.skills.size * 0.5)
+    honors_score = self.honors.size == 0 ? 0 : (1 + self.honors.size * 0.5)
+    score = ((educations_score + experiences_score + skills_score + honors_score) / 10.0) * 100
+    score >= 100 ? 100 : score.to_i
+  end
+
   def format_for_redis
-    if Rails.env.production? && (json = $redis.get(self.id))
-      JSON.parse(json)
-    else
-      $redis.set(self.id, JSON(format))
-      format
-    end
+    # if Rails.env.production? && (json = $redis.get(self.id))
+    #   JSON.parse(json)
+    # else
+    #   $redis.set(self.id, JSON(format))
+    #   format
+    # end
+    format
   end
 
   def format
@@ -82,7 +92,9 @@ class Resume < ApplicationRecord
         educations: self.educations.map(&:format),
         experiences: self.experiences.map(&:format),
         skills: self.skills.map(&:format),
-        honors: self.honors.map(&:format)
+        honors: self.honors.map(&:format),
+        student: self.student.format,
+        score: self.score
     }
   end
 end

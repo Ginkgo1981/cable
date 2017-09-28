@@ -42,7 +42,7 @@ class MembersController < ApplicationController
   #student
   def mini_app_authorization
     code = params[:code]
-    if params[:app_name] == '天马志愿'
+    if params[:app_name] == '天马简历'
       app_id = 'wxdfbc374fc090fd7c'
       app_secret = '6f851272e083c60764ccf17ca956379d'
     else
@@ -70,7 +70,7 @@ class MembersController < ApplicationController
   end
 
   def wechat_group
-    if params[:app_name] == '天马志愿'
+    if params[:app_name] == '天马简历'
       app_id = 'wxdfbc374fc090fd7c'
       app_secret = '6f851272e083c60764ccf17ca956379d'
     else
@@ -88,7 +88,7 @@ class MembersController < ApplicationController
   end
 
   def wechat_phone
-    if params[:app_name] == '天马志愿'
+    if params[:app_name] == '天马简历'
       app_id = 'wxdfbc374fc090fd7c'
       app_secret = '6f851272e083c60764ccf17ca956379d'
     else

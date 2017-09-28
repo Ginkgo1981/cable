@@ -29,7 +29,11 @@ class Job < ApplicationRecord
 
   has_many :user_jobs
   has_many :resumes, through: :user_jobs
-  has_many :users,  through: :user_jobs
+  has_many :users, through: :user_jobs
+
+  EMAIL_REG = /[0-9a-zA-Z]+@[0-9a-zA-Z\.]+/
+  MOBILE_REG = /[0-9]{11}/
+  TEL_REG = /[0-9]{3,4}[\-\s\)]*[0-9]{8}/
 
   settings number_of_shards: 3 do
     mappings do
@@ -54,14 +58,14 @@ class Job < ApplicationRecord
       query do
         function_score do
           query do
-                multi_match do
-                  query    'fixed fixie'
-                  operator 'or'
-                  fields   %w[ title^10 body ]
-                end
+            multi_match do
+              query 'fixed fixie'
+              operator 'or'
+              fields %w[ title^10 body ]
+            end
           end
 
-          functions << { script_score: { script: '_score * doc["rating"].value' } }
+          functions << {script_score: {script: '_score * doc["rating"].value'}}
         end
       end
 
@@ -75,9 +79,9 @@ class Job < ApplicationRecord
       end
       aggregation :frequency do
         date_histogram do
-          field    'creation_date'
+          field 'creation_date'
           interval 'month'
-          format   'yyyy-MM'
+          format 'yyyy-MM'
           aggregation :comments do
             stats field: 'comment_count'
           end
@@ -87,8 +91,8 @@ class Job < ApplicationRecord
         stats field: 'comment_count'
       end
       highlight fields: {
-          title: { fragment_size: 50 },
-          body:  { fragment_size: 50 }
+          title: {fragment_size: 50},
+          body: {fragment_size: 50}
       }
     }
   end
@@ -99,22 +103,35 @@ class Job < ApplicationRecord
     res_company = Company.search query: {match_phrase: {company_name: company_json['company_name']}}
     company =res_company.records.first
     if company.nil?
+
+      if company_json['company_email'].blank?
+        company_json['company_email'] = (company_job_json['company_description'] || '').scan(EMAIL_REG).try(:first) || (company_job_json['job_description'] || '').scan(EMAIL_REG).try(:first)
+      end
+
+      if company_json['company_hr_mobile'].blank?
+        company_json['company_hr_mobile'] = (company_job_json['company_description'] || '').scan(MOBILE_REG).try(:first) || (company_job_json['job_description'] || '').scan(MOBILE_REG).try(:first)
+      end
+
+      if company_json['company_tel'].blank?
+        company_json['company_tel'] = (company_job_json['company_description'] || '').scan(TEL_REG).try(:first) || (company_job_json['job_description'] || '').scan(TEL_REG).try(:first)
+      end
+
       company = Company.create! company_json
       puts "[cable] create_company new 0 '#{company.company_name}' '#{company.company_origin_url}'"
     else
       puts "[cable] create_company dup 0 '#{company.company_name}' '#{company.company_origin_url}'"
     end
     #job
-    job_json = company_job_json.select{|k,v| k =~ /job/}
+    job_json = company_job_json.select { |k, v| k =~ /job/ }
     res_job = Job.search \
             query: {
-                bool: {
-                    must: [
-                        { match_phrase: { 'job_name' => job_json['job_name'] } },
-                        { match_phrase: { 'company.company_name' => company.company_name} }
-                    ]
-                }
-            }
+        bool: {
+            must: [
+                {match_phrase: {'job_name' => job_json['job_name']}},
+                {match_phrase: {'company.company_name' => company.company_name}}
+            ]
+        }
+    }
     job = res_job.results.first
     if job.nil?
       job = Job.create! job_json.merge({company: company})
@@ -127,7 +144,7 @@ class Job < ApplicationRecord
   def as_indexed_json(options={})
     self.as_json(
         include: {company: {only: [:id, :company_name, :company_city, :company_category, :company_kind, :company_scale,
-                                   :company_address, :company_zip, :company_website, :company_hr, :company_mobile, :company_description,
+                                   :company_address, :company_zip, :company_website, :company_hr_name, :company_hr_mobile, :company_description,
                                    :company_tel, :company_email, :company_origin_url
 
         ]

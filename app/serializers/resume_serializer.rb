@@ -15,7 +15,7 @@
 #
 
 class ResumeSerializer < ApplicationSerializer
-  attributes :id, :user_id, :job_intention, :job_cities, :job_kind, :job_title
+  attributes :id, :user_id, :job_intention, :job_cities, :job_kind, :job_title, :score
 
   has_many :educations
   has_many :experiences
@@ -25,6 +25,9 @@ class ResumeSerializer < ApplicationSerializer
 
   def job_cities
     object.job_cities
+  end
+  def score
+    object.score
   end
 
 end

@@ -34,10 +34,6 @@ class TagsController < ApplicationController
   end
 
 
-  def libs
-    tags = File.open("features/#{params[:category]}.txt").read.split(/\n/)
-    render json: {code: 0, data: { tags: tags }}
-  end
 
 
 end

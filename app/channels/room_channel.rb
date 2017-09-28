@@ -16,7 +16,7 @@ class RoomChannel < ApplicationCable::Channel
     RoomChannel.broadcast_to(current_user,
                              message: {msg: message,
                                        time_stamp: Time.now.to_i,
-                                       marked: false})
+                                       marked: true})
 
 
 

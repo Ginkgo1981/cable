@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170922133617) do
+ActiveRecord::Schema.define(version: 20170924082600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,15 +67,14 @@ ActiveRecord::Schema.define(version: 20170922133617) do
     t.string   "company_address"
     t.string   "company_zip"
     t.string   "company_website"
-    t.string   "company_hr"
-    t.string   "company_mobile"
     t.text     "company_description"
     t.string   "company_tel"
     t.string   "company_email"
     t.string   "company_origin_url"
-    t.string   "company_origin_website"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.string   "company_hr_name"
+    t.string   "company_hr_mobile"
   end
 
   create_table "educations", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

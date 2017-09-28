@@ -30,7 +30,12 @@ class ResumesController < ApplicationController
 
   def create_resume
     if @student
-      resume = @student.resumes.create! params.permit(:university)
+      resume = @student.resumes.create! university: params[:university],
+                                        job_cities: params[:city],
+                                        job_kind: '全职',
+                                        job_intention: '找工作中',
+                                        job_title: params[:job_title],
+                                        major: params[:major]
       render json: {code: 0, data: resume.format}
     end
 
@@ -80,3 +85,5 @@ class ResumesController < ApplicationController
   end
 
 end
+
+

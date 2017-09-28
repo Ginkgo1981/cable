@@ -80,6 +80,8 @@ class User < ApplicationRecord
         province: self.province,
         city: self.city,
         headimgurl: self.headimgurl,
+        latitude: self.latitude,
+        longitude: self.longitude,
         resumes: self.type == 'Student' ? self.resumes.map(&:format) : []
     }
   end

@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   post 'stories/delete_story/:id', to: 'stories#delete_story'
 
   #resources
+  get 'tags_list/:category', to: 'resources#tags_list'
   get 'filtered_university_list', to: 'resources#filtered_university_list'
   get 'university_list', to: 'resources#university_list'
   get 'city_list', to: 'resources#city_list'
@@ -63,7 +64,6 @@ Rails.application.routes.draw do
   # get 'dsin/:dsin/tags', to: 'dsins#tags'
   # post 'dsin/:dsin/tag', to: 'dsins#tag'
   get 'tags/tag_list'
-  get 'tags/libs/:category', to: 'tags#libs'
   #members
   post 'members/wechat_open_authorization', to: 'members#wechat_open_authorization'
   post 'members/mini_app_authorization', to: 'members#mini_app_authorization'
