@@ -51,6 +51,10 @@ class User < ApplicationRecord
   has_many :jobs, through: :user_jobs
   has_many :companies, through: :user_jobs
 
+  has_many :invitings, foreign_key: :inviter_id
+  has_many :invitees, through: :invitings, class_name: User
+
+
 
   # delegate :dsin, to: :identity
   before_create :generate_token

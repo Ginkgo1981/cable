@@ -72,7 +72,7 @@ Rails.application.routes.draw do
   post 'members/wechat_phone', to: 'members#wechat_phone'
   post 'members/update_profile', to: 'members#update_profile'
 
-
+  get 'members/invitees', to: 'members#invitees'
 
   post 'members/applying_job', to: 'members#applying_job'
   get 'members/applied_jobs', to: 'members#applied_jobs'

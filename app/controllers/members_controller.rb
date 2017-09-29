@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
 
-  before_action :find_user_by_token!, only: [:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
+  before_action :find_user_by_token!, only: [:invitees,:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
                                              :applying_job, :applied_jobs, :is_applied,
                                              :bookmarking_job, :is_bookmarked, :bookmarked_jobs]
 
@@ -39,6 +39,13 @@ class MembersController < ApplicationController
     render json: {code: 0, msg: 'succ'}
   end
 
+  def invitees
+    invitees = @user.invitees
+    render json: invitees,
+           meta: {code: 0},
+           each_serializer: StudentSerializer
+  end
+
   #student
   def mini_app_authorization
     code = params[:code]
@@ -65,6 +72,11 @@ class MembersController < ApplicationController
                                 province: info[:province],
                                 headimgurl: info[:avatarUrl],
                                 union_id: info[:unionId]
+    end
+    #inviter
+    if params[:inviter_id] && student.id != params[:inviter_id]
+      inviter = User.find_by id: params[:inviter_id]
+      inviter.invitees << student if inviter
     end
     render json: {code: 0, member: student.membership, session_key: session_key}
   end

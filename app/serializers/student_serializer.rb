@@ -36,7 +36,18 @@
 #
 
 class StudentSerializer < ApplicationSerializer
-  attributes :id,  :headimgurl, :nickname, :province, :city
+  attributes :id,  :headimgurl, :nickname, :province, :city, :created_at, :resume_score
+
+  def created_at
+    object.created_at.strftime('%m月%d日 %H:%M')
+  end
+
+  def resume_score
+    object.resumes[0].score
+
+
+  end
+
   # has_one :user , if: -> {instance_options[:include_user]}
   # has_many :tags, if: -> {instance_options[:include_tags]}
   # attribute :user,  if: -> {instance_options[:include_user]}
