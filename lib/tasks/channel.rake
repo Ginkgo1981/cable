@@ -16,7 +16,7 @@ namespace :channel do
     }
     while flag
       begin
-        json_raw = $redis.lpop 'enqueued_links_list'
+        json_raw = $redis.lpop 'crawler:enqueued_links_list'
         if json_raw
           entry = EntryCompletion.new(host_dics, soap_client,json_raw).call
           puts "[cable] index_to_elasticsearch succ 0 '' ''"
