@@ -39,11 +39,12 @@ end
 conf_file = File.join('config', 'redis.yml')
 conf = YAML.load(File.read(conf_file))
 redis = Redis.new(conf[Rails.env.to_s])
-$redis = Redis::Namespace.new(:cable, :redis => redis)
+$redis_cable = Redis::Namespace.new(:cable, :redis => redis)
+$redis_crawler = Redis::Namespace.new(:crawler, :redis => redis)
 
 
 # To clear out the db before each test
-$redis.flushdb if Rails.env == "test"
+# $redis.flushdb if Rails.env == "test"
 
 rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
 rails_env = ENV['RAILS_ENV'] || 'development'

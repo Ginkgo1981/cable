@@ -76,11 +76,11 @@ class RoomChannel < ApplicationCable::Channel
 
   private
   def ping
-    json = $redis.zrange("user::#{current_user.id}", 0, 0).first
+    json = $redis_cable.zrange("user::#{current_user.id}", 0, 0).first
     message =
         if json
           pp "[room-channel] ping json #{json}"
-          $redis.zrem("user::#{current_user.id}", json)
+          $redis_cable.zrem("user::#{current_user.id}", json)
           JSON.parse(json)
         else
           current_user.next_notification_message

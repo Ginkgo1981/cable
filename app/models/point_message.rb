@@ -55,7 +55,7 @@ class PointMessage < Message
     #   end
     # else
     # end
-    $redis.zadd("user::#{self.receiver_id}", 100, JSON(self.format_for_redis))
+    $redis_cable.zadd("user::#{self.receiver_id}", 100, JSON(self.format_for_redis))
   end
 
 end

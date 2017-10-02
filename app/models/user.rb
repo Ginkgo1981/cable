@@ -112,7 +112,7 @@ class User < ApplicationRecord
   def next_notification_message
     message =
         if self.type == 'Student'
-          $redis.lindex 'notification_student', self.notification_message_version
+          $redis_cable.lindex 'notification_student', self.notification_message_version
         # else
         #   $redis.lindex 'notification_teacher', self.notification_message_version
         end

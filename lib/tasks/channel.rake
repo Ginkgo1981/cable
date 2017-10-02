@@ -16,7 +16,7 @@ namespace :channel do
     }
     while flag
       begin
-        json_raw = $redis.lpop 'crawler:enqueued_links_list'
+        json_raw = $redis_crawler.lpop 'company_job_json_list'
         if json_raw
           entry = EntryCompletion.new(host_dics, soap_client,json_raw).call
           puts "[cable] index_to_elasticsearch succ 0 '' ''"
@@ -43,7 +43,7 @@ namespace :channel do
 
     feature_ws_url = 'http://localhost:8082/AxisWS/asia.wildfire.Featurer?wsdl'
     soap_client = SOAP::WSDLDriverFactory.new(feature_ws_url).create_rpc_driver
-    json_raw = $redis.get_from_queues [args.queue]
+    json_raw = $redis_crawler.get_from_queues [args.queue]
     entry = EntryCompletion.new(host_dics, soap_client,json_raw).call
   end
 
