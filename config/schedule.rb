@@ -9,6 +9,6 @@
 #
 set :output, '/mnt/logs/cron.log'
 
-every :day, at: %w(8:45pm) do
+every :day, at: %w(9:10pm) do
   rake 'channel:index_to_elasticsearch'
 end

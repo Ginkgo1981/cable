@@ -4,6 +4,7 @@ namespace :channel do
   task index_to_elasticsearch: :environment do
     # logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
     # logger.tagged('BCX') { logger.info 'Stuff' }
+    Rails.logger = nil
     feature_ws_url = 'http://localhost:8082/AxisWS/asia.wildfire.Featurer?wsdl'
     soap_client = SOAP::WSDLDriverFactory.new(feature_ws_url).create_rpc_driver
     # queues = ['crawler:91job_normal_json_queue','crawler:js_market_json_queue', 'crawler:91job_campus_json_queue', 'crawler:wutongguo_json_queue']
