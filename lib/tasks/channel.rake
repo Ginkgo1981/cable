@@ -19,6 +19,7 @@ namespace :channel do
         json_raw = $redis.lpop 'enqueued_links_list'
         if json_raw
           entry = EntryCompletion.new(host_dics, soap_client,json_raw).call
+          puts "[cable] index_to_elasticsearch succ 0 '' ''"
         else
           flag = false
           puts "[cable] index_to_elasticsearch empty 0 '#{Time.now.to_s}' ''"
