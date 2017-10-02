@@ -10,6 +10,6 @@
 # set :output, '/mnt/logs/cron_index.log'
 # set :job_template, nil
 
-every :day, at: %w(10:25pm) do
-  rake 'channel:index_to_elasticsearch > /mnt/logs/index_to_elasticsearch.log 2>&1'
+every 2.hours do
+  command '/home/deploy/apps/sh/index_to_elasticsearch.sh'
 end

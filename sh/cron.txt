@@ -1,0 +1,4 @@
+0 0 * * * /bin/bash -l -c '/home/deploy/apps/sh/enqueue_channels.sh'
+5 0 * * * /bin/bash -l -c '/home/deploy/apps/sh/enqueue_links.sh'
+30 0 * * * /bin/bash -l -c '/home/deploy/apps/sh/fetch_and_enqueue_company_job_json.sh'
+0 2,4,6 * * * /bin/bash -l -c '/home/deploy/apps/sh/index_to_elasticsearch.sh'
