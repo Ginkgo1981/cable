@@ -15,17 +15,19 @@ namespace :channel do
       {name: name, host:host}
     }
     while flag
+      json_raw = nil
       begin
         json_raw = $redis_crawler.lpop 'company_job_json_list'
         if json_raw
           entry = EntryCompletion.new(host_dics, soap_client,json_raw).call
+          sleep 1
           puts "[cable] index_to_elasticsearch succ 0 '' ''"
         else
           flag = false
           puts "[cable] index_to_elasticsearch empty 0 '#{Time.now.to_s}' ''"
         end
       rescue Exception => e
-        puts "[cable] index_to_elasticsearch error 0 '#{e.to_s}' ''"
+        puts "[cable] index_to_elasticsearch error 0 '#{e.to_s}' '#{json_raw}'"
       end
     end
   end
