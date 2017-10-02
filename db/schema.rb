@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170930160339) do
+ActiveRecord::Schema.define(version: 20171002135021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -172,7 +172,6 @@ ActiveRecord::Schema.define(version: 20170930160339) do
     t.string   "job_name"
     t.string   "job_salary_range"
     t.string   "job_recruitment_num"
-    t.string   "job_published_at"
     t.string   "job_type"
     t.string   "job_category"
     t.string   "job_city"
@@ -187,6 +186,7 @@ ActiveRecord::Schema.define(version: 20170930160339) do
     t.datetime "updated_at",               null: false
     t.string   "job_origin_url"
     t.string   "job_origin_web_site_name"
+    t.date     "job_published_at"
   end
 
   create_table "likings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

@@ -6,7 +6,6 @@
 #  job_name                 :string
 #  job_salary_range         :string
 #  job_recruitment_num      :string
-#  job_published_at         :string
 #  job_type                 :string
 #  job_category             :string
 #  job_city                 :string
@@ -21,6 +20,7 @@
 #  updated_at               :datetime         not null
 #  job_origin_url           :string
 #  job_origin_web_site_name :string
+#  job_published_at         :date
 #
 
 class JobSerializer < ApplicationSerializer

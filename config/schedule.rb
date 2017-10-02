@@ -8,8 +8,8 @@
 # set :output, "/path/to/my/cron_log.log"
 #
 set :output, '/mnt/logs/cron.log'
-set :job_template, nil
+# set :job_template, nil
 
-every :day, at: %w(9:25pm) do
+every :day, at: %w(9:27pm) do
   rake 'channel:index_to_elasticsearch'
 end
