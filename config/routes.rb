@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   get 'resumes/:resume_id/show_intention', to: 'resumes#show_intention'
   post 'resumes/:resume_id/save_intention', to: 'resumes#save_intention'
 
-  post 'resumes/create_resume', to: 'resumes#create_resume'
+  # post 'resumes/create_resume', to: 'resumes#create_resume'
   get 'resumes/my_resumes', to: 'resumes#my_resumes'
   get 'resumes/show_component/:type/:id', to: 'resumes#show_component'
   post 'resumes/delete_component/:type/:id', to: 'resumes#delete_component'

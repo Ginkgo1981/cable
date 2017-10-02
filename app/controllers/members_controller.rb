@@ -72,6 +72,8 @@ class MembersController < ApplicationController
                                 province: info[:province],
                                 headimgurl: info[:avatarUrl],
                                 union_id: info[:unionId]
+
+       student.resumes.create!
     end
     #inviter
     if params[:inviter_id] && student.id != params[:inviter_id]

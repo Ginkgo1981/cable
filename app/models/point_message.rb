@@ -36,6 +36,15 @@ class PointMessage < Message
     msg.format_for_redis
   end
 
+  def self.university(university_name, receiver_id) #直接返回,不放入redis
+    msg = PointMessage.create! receiver_id: receiver_id,
+                               content: "#{university_name} - 招聘信息"
+    jobs = Job.where(job_origin_web_site_name: university_name)
+    msg.set_job_attachments jobs
+    msg.format_for_redis
+  end
+
+
   def send_to_redis
 
     # if self.direction == 'teacher'

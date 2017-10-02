@@ -11,6 +11,15 @@ class RoomChannel < ApplicationCable::Channel
     current_user.online
   end
 
+
+  def university_action(data)
+    message = PointMessage.university data['message'],current_user.id
+    RoomChannel.broadcast_to(current_user,
+                             message: {msg: message,
+                                       time_stamp: Time.now.to_i,
+                                       marked: true})
+  end
+
   def speak(data)
     message = PointMessage.reply data['message'],current_user.id
     RoomChannel.broadcast_to(current_user,

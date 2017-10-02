@@ -28,18 +28,18 @@ class ResumesController < ApplicationController
     end
   end
 
-  def create_resume
-    if @student
-      resume = @student.resumes.create! university: params[:university],
-                                        job_cities: params[:city],
-                                        job_kind: '全职',
-                                        job_intention: '找工作中',
-                                        job_title: params[:job_title],
-                                        major: params[:major]
-      render json: {code: 0, data: resume.format}
-    end
-
-  end
+  # def create_resume
+  #   if @student
+  #     resume = @student.resumes.create! university: params[:university],
+  #                                       job_cities: params[:city],
+  #                                       job_kind: '全职',
+  #                                       job_intention: '找工作中',
+  #                                       job_title: params[:job_title],
+  #                                       major: params[:major]
+  #     render json: {code: 0, data: resume.format}
+  #   end
+  #
+  # end
 
   def get_resume
     render json: {code: 0, data: @resume.format}
@@ -75,7 +75,7 @@ class ResumesController < ApplicationController
   end
 
   def save_intention
-    resume = @resume.update! params[:resume].permit(:id,:job_title, :job_intention, :job_cities, :job_kind,).to_h
+    resume = @resume.update! params[:resume].permit(:id,:university,:major, :job_title, :job_intention, :job_cities, :job_kind,).to_h
     render json: {code: 0, data: @resume.format}
   end
 
