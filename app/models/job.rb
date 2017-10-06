@@ -31,6 +31,7 @@ class Job < ApplicationRecord
   has_many :user_jobs
   has_many :resumes, through: :user_jobs
   has_many :users, through: :user_jobs
+  default_scope ->{order(created_at: :desc)}
 
   EMAIL_REG = /[0-9a-zA-Z]+@[0-9a-zA-Z\.]+/
   MOBILE_REG = /[0-9]{11}/

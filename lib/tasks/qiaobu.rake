@@ -207,7 +207,7 @@ namespace :qiaobu do
 
   desc 'export_skills_to_file'
   task export_skills_to_file: :environment do
-    File.open('features/skills.txt', 'w') do |file|
+    File.open('features/skills_tag_list.txt', 'w') do |file|
       Skill.all.each do |b|
         b.name.split(/[\、\，]/).each { |w| file.puts(w) if w } if b.name
       end

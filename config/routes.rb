@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   post 'stories/delete_story/:id', to: 'stories#delete_story'
 
   #resources
-  get 'tags_list/:category', to: 'resources#tags_list'
+  get 'tags_list', to: 'resources#tags_list'
   get 'filtered_university_list', to: 'resources#filtered_university_list'
   get 'university_list', to: 'resources#university_list'
   get 'city_list', to: 'resources#city_list'
@@ -34,6 +34,9 @@ Rails.application.routes.draw do
   get 'experience_title_list', to: 'resources#experience_title_list'
 
   #jobs
+
+  get 'jobs/list/:page', to: 'jobs#list'
+  post 'jobs/update/:id', to: 'jobs#update_job'
   get 'jobs/:id', to: 'jobs#get_job'
   get 'companies/:id', to: 'jobs#get_company'
 

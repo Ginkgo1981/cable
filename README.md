@@ -15,3 +15,17 @@ bundle exec rake channel:index_to_elasticsearch > /mnt/logs/index_to_elasticsear
 
 
 redis-cli KEYS crawler* | xargs redis-cli DEL
+
+
+User.all.map{|u| [u.id, u.nickname, u.miniapp_openid]}
+
+
+user = User.find_by miniapp_openid: "oPMr70AgRUYghDVmLjma09r_6ZRw"
+user.delete
+
+user = User.find_by miniapp_openid: "oPMr70L0uE_Uco7CxflksMl9Atw8"
+
+
+
+
+staff = User.find_by union_id: "oX-css7dRwNFTHWrTCVTj1d0agFk"

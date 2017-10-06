@@ -22,7 +22,7 @@
 #
 
 class CompanySerializer < ApplicationSerializer
-  attributes :id, :company_name, :company_city, :company_category, :company_kind, :company_scale, :company_address, :company_zip, :company_website, :company_hr_name, :company_hr_mobile, :company_description, :company_tel, :company_email, :company_origin_url, :company_origin_website
+  attributes :id, :company_name, :company_city, :company_category, :company_kind, :company_scale, :company_address, :company_zip, :company_website, :company_hr_name, :company_hr_mobile, :company_description, :company_tel, :company_email, :company_origin_url
 
 
 end

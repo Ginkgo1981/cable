@@ -45,7 +45,7 @@ class User < ApplicationRecord
   has_many :sended_messages, class_name: Message, foreign_key: :sender_id
   has_many :user_groups
   has_many :groups, through: :user_groups
-  has_one :qr_code, as: :codeable
+  has_one  :qr_code, as: :codeable
 
   has_many :user_jobs
   has_many :jobs, through: :user_jobs

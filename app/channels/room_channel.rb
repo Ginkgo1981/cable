@@ -22,28 +22,22 @@ class RoomChannel < ApplicationCable::Channel
 
   def speak(data)
     message = PointMessage.reply data['message'],current_user.id
+    jobs = Job.search(data['message']).records.preload(:company).map{|a| a.format.symbolize_keys.merge({type: a.class.name.downcase})}
+    message[:attachments] = jobs
+
+    #cache to redis
+
+
     RoomChannel.broadcast_to(current_user,
                              message: {msg: message,
                                        time_stamp: Time.now.to_i,
                                        marked: true})
-
-
-
-
-
     # @index = @index + 1
     # ActionCable.server.broadcast("student:#{current_user.id}",
     #                              message: {msg: "hello, #{data['message']}  #{current_user.name}",
     #                                        id: @index,
     #                                        time_stamp: Time.now.to_i,
     #                                        marked: false})
-
-
-
-
-
-
-
     # if data['message'] == 'start-pull'
 
       # message = NotificationMessage.last

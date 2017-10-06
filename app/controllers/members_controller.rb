@@ -8,6 +8,34 @@ class MembersController < ApplicationController
 
 
   #HR or staff
+  # def wechat_open_authorization
+  #   wechat_client = WechatOpenClient.new
+  #   if params[:openid].present? && params[:access_token].present?
+  #     openid = params[:openid]
+  #     access_token = params[:access_token]
+  #   else
+  #     access_token, openid = wechat_client.get_access_token params[:code]
+  #   end
+  #   user = User.find_by openweb_openid: openid
+  #   (render json: {code: 0, member: user.membership} and return) if user
+  #   (render json: {code: 0, openid: openid, access_token: access_token} and return) unless params[:cell].present?
+  #   cell = Cell.find_by cell: params[:cell], code: params[:sms_code]
+  #   raise CableException::CellCodeError unless cell
+  #   info = wechat_client.get_user_info(access_token, openid).symbolize_keys!
+  #   staff = Staff.create! openweb_openid: info[:openid],
+  #                         nickname: info[:nickname],
+  #                         sex: info[:sex],
+  #                         language: info[:language],
+  #                         city: info[:city],
+  #                         province: info[:province],
+  #                         headimgurl: info[:headimgurl],
+  #                         union_id: info[:unionid],
+  #                         cell: params[:cell]
+  #   render json: {code: 0, member: staff.membership}
+  # end
+
+
+
   def wechat_open_authorization
     wechat_client = WechatOpenClient.new
     if params[:openid].present? && params[:access_token].present?
@@ -16,23 +44,18 @@ class MembersController < ApplicationController
     else
       access_token, openid = wechat_client.get_access_token params[:code]
     end
-    user = User.find_by openweb_openid: openid
-    (render json: {code: 0, member: user.membership} and return) if user
-    (render json: {code: 0, openid: openid, access_token: access_token} and return) unless params[:cell].present?
-    cell = Cell.find_by cell: params[:cell], code: params[:sms_code]
-    raise CableException::CellCodeError unless cell
+    # user = User.find_by openweb_openid: openid
+    # (render json: {code: 0, member: user.membership} and return) if user
+    # (render json: {code: 0, openid: openid, access_token: access_token} and return) unless params[:cell].present?
+    # cell = Cell.find_by cell: params[:cell], code: params[:sms_code]
+    # raise CableException::CellCodeError unless cell
     info = wechat_client.get_user_info(access_token, openid).symbolize_keys!
-    staff = Staff.create! openweb_openid: info[:openid],
-                          nickname: info[:nickname],
-                          sex: info[:sex],
-                          language: info[:language],
-                          city: info[:city],
-                          province: info[:province],
-                          headimgurl: info[:headimgurl],
-                          union_id: info[:unionid],
-                          cell: params[:cell]
+    staff = User.find_by union_id: info[:unionid]
     render json: {code: 0, member: staff.membership}
   end
+
+
+
 
   def update_profile
     @user.update params.permit(:university, :major, :latitude, :longitude, industry_tags: [], skill_tags: [])

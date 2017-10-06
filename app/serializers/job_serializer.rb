@@ -24,7 +24,7 @@
 #
 
 class JobSerializer < ApplicationSerializer
-  attributes :id, :job_name, :job_salary_range, :job_recruitment_num, :job_published_at, :job_type,:job_category, :job_city, :job_mini_education, :job_mini_experience, :job_language,:job_origin_url
+  attributes :id, :job_name, :job_salary_range, :job_description, :job_recruitment_num, :job_published_at, :job_type,:job_category, :job_city, :job_mini_education, :job_mini_experience, :job_language,:job_origin_url, :job_origin_web_site_name
   belongs_to :company
 
 end

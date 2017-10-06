@@ -31,6 +31,7 @@ module Cable
     config.autoload_paths += Dir[Rails.root.join('app', 'serializers', '{**/}')]
     config.autoload_paths += Dir[Rails.root.join('lib', '{**/}')]
 
+    ActionCable.server.config.logger = Logger.new(nil)
 
 
     config.api_only = true

@@ -17,13 +17,13 @@ class Group < ApplicationRecord
   has_many :users, through: :user_groups
 
 
-  def wishcard_trend
-    {
-        group_id: self.group_id,
-        followed_by_wishcards: self.followed_by_wishcards.preload(:user, :bean).order('wishcards.count_of_like desc').map(&:format)
-
-    }
-  end
+  # def wishcard_trend
+  #   {
+  #       group_id: self.group_id,
+  #       followed_by_wishcards: self.followed_by_wishcards.preload(:user, :bean).order('wishcards.count_of_like desc').map(&:format)
+  #
+  #   }
+  # end
 
 
 

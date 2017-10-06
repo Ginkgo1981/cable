@@ -30,9 +30,9 @@ class PointMessage < Message
     msg = PointMessage.create! receiver_id: receiver_id,
                                content: "#{title} - 招聘信息"
     #todo, need to refine
-    jobs = Job.search(title).records
+    # jobs = Job.search(title).records
     # msg.add_attachments jobs
-    msg.set_job_attachments jobs
+    # msg.set_job_attachments jobs
     msg.format_for_redis
   end
 
