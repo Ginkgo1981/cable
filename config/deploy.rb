@@ -2,6 +2,8 @@ require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
 require 'mina/rbenv'
+require 'mina/rvm'
+
 require 'mina/whenever'
 require 'mina_sidekiq/tasks'
 # require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
@@ -34,8 +36,13 @@ set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'log']
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
+
+set :rvm_path, '/usr/share/rvm/bin/rvm'
+
+
 task :environment do
-  invoke :'rbenv:load'
+  invoke :'rvm:use[ruby-2.3.1@default]'
+
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.

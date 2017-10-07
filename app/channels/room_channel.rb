@@ -26,8 +26,7 @@ class RoomChannel < ApplicationCable::Channel
     message[:attachments] = jobs
 
     #cache to redis
-
-
+    $redis_message.set message.id, JSON(message)
     RoomChannel.broadcast_to(current_user,
                              message: {msg: message,
                                        time_stamp: Time.now.to_i,
