@@ -13,21 +13,45 @@ class RoomChannel < ApplicationCable::Channel
 
 
   def university_action(data)
-    message = PointMessage.university data['message'],current_user.id
+
+    key = "#{Time.now.strftime('%Y%m%d')}-#{data['message']}"
+    unless $redis_jobs.exists key
+
+
+      res_job = Job.search \
+            query: {
+          bool: {
+              must: [
+                  {match_phrase: {'job_origin_web_site_name' => data['message']}}
+
+              ]
+          }
+      }
+      jobs = res_job.records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
+      $redis_jobs.set key, JSON(jobs)
+    end
+
+    message = PointMessage.reply data['message'], current_user.id
+    message[:jobs_redis_key] = key
     RoomChannel.broadcast_to(current_user,
                              message: {msg: message,
                                        time_stamp: Time.now.to_i,
                                        marked: true})
+    # message = PointMessage.university data['message'], current_user.id
+    # RoomChannel.broadcast_to(current_user,
+    #                          message: {msg: message,
+    #                                    time_stamp: Time.now.to_i,
+    #                                    marked: true})
   end
 
   def speak(data)
 
     key = "#{Time.now.strftime('%Y%m%d')}-#{data['message']}"
     unless $redis_jobs.exists key
-      jobs = Job.search(data['message']).records.preload(:company).map{|a| a.format.symbolize_keys.merge({type: a.class.name.downcase})}
+      jobs = Job.search(data['message']).records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
       $redis_jobs.set key, JSON(jobs)
     end
-    message = PointMessage.reply data['message'],current_user.id
+    message = PointMessage.reply data['message'], current_user.id
     message[:jobs_redis_key] = key
     RoomChannel.broadcast_to(current_user,
                              message: {msg: message,
@@ -41,11 +65,11 @@ class RoomChannel < ApplicationCable::Channel
     #                                        marked: false})
     # if data['message'] == 'start-pull'
 
-      # message = NotificationMessage.last
-      # RoomChannel.broadcast_to(current_user,
-      #                          message: {msg: message.format_for_redis,
-      #                                    time_stamp: Time.now.to_i,
-      #                                    marked: true})
+    # message = NotificationMessage.last
+    # RoomChannel.broadcast_to(current_user,
+    #                          message: {msg: message.format_for_redis,
+    #                                    time_stamp: Time.now.to_i,
+    #                                    marked: true})
 
 
     # end

@@ -39,7 +39,7 @@ class PointMessage < Message
   def self.university(university_name, receiver_id) #直接返回,不放入redis
     msg = PointMessage.create! receiver_id: receiver_id,
                                content: "#{university_name} - 招聘信息"
-    jobs = Job.where(job_origin_web_site_name: university_name)
+    jobs = Job.where(job_origin_web_site_name: university_name).limit(10)
     msg.set_job_attachments jobs
     msg.format_for_redis
   end
