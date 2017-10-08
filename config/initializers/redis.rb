@@ -41,7 +41,7 @@ conf = YAML.load(File.read(conf_file))
 redis = Redis.new(conf[Rails.env.to_s])
 $redis_cable = Redis::Namespace.new(:cable, :redis => redis)
 $redis_crawler = Redis::Namespace.new(:crawler, :redis => redis)
-$redis_message = Redis::Namespace.new(:message, :redis => redis)
+$redis_jobs = Redis::Namespace.new(:jobs, :redis => redis)
 
 
 # To clear out the db before each test

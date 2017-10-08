@@ -51,4 +51,11 @@ class JobsController < ApplicationController
 
   end
 
+  def get_by_redis_key
+    jobs = nil
+    raw = $redis_jobs.get params[:key]
+    jobs = JSON.parse raw if raw
+    render json: {code: 0, jobs: jobs}
+  end
+
 end

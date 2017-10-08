@@ -35,6 +35,7 @@ Rails.application.routes.draw do
 
   #jobs
 
+  get 'jobs/redis/:key', to: 'jobs#get_by_redis_key'
   get 'jobs/list/:page', to: 'jobs#list'
   post 'jobs/update/:id', to: 'jobs#update_job'
   get 'jobs/:id', to: 'jobs#get_job'

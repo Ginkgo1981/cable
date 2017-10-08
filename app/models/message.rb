@@ -21,9 +21,9 @@ class Message < ApplicationRecord
   belongs_to :receiver, foreign_key: :receiver_id, class_name: User, optional: true
 
   def format_for_redis
-    if json = $redis_cable.get("#{self.class.name.downcase}::#{self.id}")
-      JSON.parse(json)
-    else
+    # if json = $redis_cable.get("#{self.class.name.downcase}::#{self.id}")
+    #   JSON.parse(json)
+    # else
       fommatted = {
           id: self.id,
           type: self.type,
@@ -34,8 +34,23 @@ class Message < ApplicationRecord
           created_at: self.created_at,
           attachments: self.attachments.map{|a| a.format.symbolize_keys.merge({type: a.class.name.downcase})}
       }
-      $redis_cable.set("#{self.class.name.downcase}::#{self.id}", JSON(fommatted))
+      # $redis_cable.set("#{self.class.name.downcase}::#{self.id}", JSON(fommatted))
       fommatted
-    end
   end
+
+
+  def format
+    {
+        id: self.id,
+        type: self.type,
+        img_url: self.img_url,
+        content: self.content,
+        receiver: self.receiver.try(:format),
+        sender: self.sender.try(:format) || {id: 0, name: '天马招聘团队'},
+        created_at: self.created_at,
+        attachments: self.attachments.map{|a| a.format.symbolize_keys.merge({type: a.class.name.downcase})}
+    }
+  end
+
+
 end

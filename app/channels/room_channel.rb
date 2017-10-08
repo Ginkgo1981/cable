@@ -21,12 +21,14 @@ class RoomChannel < ApplicationCable::Channel
   end
 
   def speak(data)
-    message = PointMessage.reply data['message'],current_user.id
-    jobs = Job.search(data['message']).records.preload(:company).map{|a| a.format.symbolize_keys.merge({type: a.class.name.downcase})}
-    message[:attachments] = jobs
 
-    #cache to redis
-    $redis_message.set message.id, JSON(message)
+    key = "#{Time.now.strftime('%Y%m%d')}-#{data['message']}"
+    unless $redis_jobs.exists key
+      jobs = Job.search(data['message']).records.preload(:company).map{|a| a.format.symbolize_keys.merge({type: a.class.name.downcase})}
+      $redis_jobs.set key, JSON(jobs)
+    end
+    message = PointMessage.reply data['message'],current_user.id
+    message[:jobs_redis_key] = key
     RoomChannel.broadcast_to(current_user,
                              message: {msg: message,
                                        time_stamp: Time.now.to_i,

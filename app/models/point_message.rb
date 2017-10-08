@@ -28,7 +28,7 @@ class PointMessage < Message
 
   def self.reply(title, receiver_id) #直接返回,不放入redis
     msg = PointMessage.create! receiver_id: receiver_id,
-                               content: "#{title} - 招聘信息"
+                               content: "小主,我们为你找到了10条招聘信息匹配你的 #{title},请查收"
     #todo, need to refine
     # jobs = Job.search(title).records
     # msg.add_attachments jobs
