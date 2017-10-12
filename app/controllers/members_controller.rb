@@ -72,13 +72,22 @@ class MembersController < ApplicationController
   #student
   def mini_app_authorization
     code = params[:code]
-    if params[:app_name] == '天马简历'
-      app_id = 'wxdfbc374fc090fd7c'
-      app_secret = '6f851272e083c60764ccf17ca956379d'
+    if params[:app_name] == '求职小冰'
+      app_id = 'wx0f381a5501cad4a6'
+      app_secret = 'c03ee61337e4273ae5c89c186e95517c'
     else
       app_id = 'wx8887d1994c33935c'
       app_secret = '209161ceb742e880116fdf6f6414f997'
     end
+
+
+    # if params[:app_name] == '天马简历'
+    #   app_id = 'wxdfbc374fc090fd7c'
+    #   app_secret = '6f851272e083c60764ccf17ca956379d'
+    # else
+    #   app_id = 'wx8887d1994c33935c'
+    #   app_secret = '209161ceb742e880116fdf6f6414f997'
+    # end
     session = wx_get_session_key(code, app_id, app_secret)
     session_key = session['session_key']
     encrypted_data = params[:encrypted_data]
@@ -107,9 +116,9 @@ class MembersController < ApplicationController
   end
 
   def wechat_group
-    if params[:app_name] == '天马简历'
-      app_id = 'wxdfbc374fc090fd7c'
-      app_secret = '6f851272e083c60764ccf17ca956379d'
+    if params[:app_name] == '求职小冰'
+      app_id = 'wx0f381a5501cad4a6'
+      app_secret = 'c03ee61337e4273ae5c89c186e95517c'
     else
       app_id = 'wx8887d1994c33935c'
       app_secret = '209161ceb742e880116fdf6f6414f997'
@@ -125,9 +134,9 @@ class MembersController < ApplicationController
   end
 
   def wechat_phone
-    if params[:app_name] == '天马简历'
-      app_id = 'wxdfbc374fc090fd7c'
-      app_secret = '6f851272e083c60764ccf17ca956379d'
+    if params[:app_name] == '求职小冰'
+      app_id = 'wx0f381a5501cad4a6'
+      app_secret = 'c03ee61337e4273ae5c89c186e95517c'
     else
       app_id = 'wx8887d1994c33935c'
       app_secret = '209161ceb742e880116fdf6f6414f997'
