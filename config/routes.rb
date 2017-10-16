@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
-  get 'wechat/echo', to: 'wechats#echo'
-  post 'wechat/echo', to: 'wechats#echo'
+  get 'wechats/echo', to: 'wechats#echo'
+  post 'wechats/echo', to: 'wechats#echo'
 
 
   #messages

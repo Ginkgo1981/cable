@@ -14,6 +14,7 @@ class WechatsController < ApplicationController
     # end
     puts "++++++++++++"
     puts params
-    render text: ''
+    render text: params[:echostr]
   end
+
 end
