@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'wechat/echo', to: 'wechats#echo'
+  post 'wechat/echo', to: 'wechats#echo'
+
+
   #messages
   post 'messages/notification_message_list', to: 'messages#notification_message_list'
   post 'messages/send_notification_message', to: 'messages#send_notification_message'
@@ -53,22 +57,20 @@ Rails.application.routes.draw do
   get 'resumes/:resume_id', to: 'resumes#get_resume'
 
 
-
   #dsin photo
-
   #dsin
   # get 'dsin/:dsin', to: 'dsins#show'
   # get 'format_show/:dsin', to: 'dsins#format_show'
   # get 'get_resume_by_dsin/:dsin', to: 'dsins#get_resume_by_dsin'
   # post 'dsin/:dsin', to: 'dsins#update'
   # delete 'dsin/:dsin', to: 'dsins#delete'
-
-
   #dsin tags
   # get 'dsin/:dsin/tags', to: 'dsins#tags'
   # post 'dsin/:dsin/tag', to: 'dsins#tag'
   get 'tags/tag_list'
   #members
+  post 'members/bind_hr_info', to: 'members#bind_hr_info'
+  post 'members/read_business_card', to: 'members#read_business_card'
   post 'members/wechat_open_authorization', to: 'members#wechat_open_authorization'
   post 'members/mini_app_authorization', to: 'members#mini_app_authorization'
   post 'members/mini_app_authorization_teacher', to: 'members#mini_app_authorization_teacher'

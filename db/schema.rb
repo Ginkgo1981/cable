@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171002135021) do
+ActiveRecord::Schema.define(version: 20171015154820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
   enable_extension "pgcrypto"
+  enable_extension "hstore"
   enable_extension "uuid-ossp"
 
   create_table "attachings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -135,6 +135,21 @@ ActiveRecord::Schema.define(version: 20171002135021) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "images",                  array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "human_resource_infos", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.string   "addr"
+    t.string   "company"
+    t.string   "department"
+    t.string   "email"
+    t.string   "name"
+    t.string   "tel_cell"
+    t.string   "tel_work"
+    t.string   "title"
+    t.string   "source"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

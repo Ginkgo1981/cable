@@ -37,6 +37,6 @@
 
 class HumanResource < User
   has_many :companies
-
+  has_one :human_resource_info, foreign_key: :user_id
 
 end

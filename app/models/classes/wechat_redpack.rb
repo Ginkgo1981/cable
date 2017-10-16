@@ -41,7 +41,6 @@ class WechatRedpack
                        }) do |f|
       f.adapter :httpclient
     end
-    binding.pry
     xml = Nokogiri::XML::Builder.new do |xml|
       xml.xml do
         data.each do |k, v|
@@ -58,5 +57,7 @@ class WechatRedpack
     return_code = doc.xpath("/xml/return_code").text
     return return_code.to_s == "SUCCESS", doc.to_s #unless return_code.to_s == "SUCCESS"
   end
+
+
 
 end

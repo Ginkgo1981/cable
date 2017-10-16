@@ -61,7 +61,7 @@ class CableException < RuntimeError
 
 
 
-  class NotAllowedSendNotificationMessage < CableException
+  class BussinessCardReadError < CableException
     def initialize(msg = nil)
       msg ||= '您不能群发通知类信息'
       super
