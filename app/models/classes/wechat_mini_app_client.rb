@@ -18,9 +18,38 @@ class WechatMiniAppClient
     token
   end
 
-  def send_customer_message(openid, content)
-    json_data = { touser: openid, msgtype: 'text', text: {content: content}}
+  def send_customer_message(openid, msgtype, payload)
+
+    # msgtype [text,link,miniprogrampage, image]
+    # "text":
+    #     {
+    #         "content":"Hello World"
+    #     }
+
+    # "image":
+    #     {
+    #         "media_id":"MEDIA_ID"
+    #     }
+
+    # "link": {
+    #     "title": "Happy Day",
+    #     "description": "Is Really A Happy Day",
+    #     "url": "URL",
+    #     "thumb_url": "THUMB_URL"
+    # }
+
+
+    # "miniprogrampage":{
+    #     "title":"title",
+    #     "pagepath":"pagepath",
+    #     "thumb_media_id":"thumb_media_id"
+    # }
+
+    json_data = { touser: openid, msgtype: msgtype}.merge(payload)
     url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=#{access_token}"
     Faraday.post url, JSON.generate(json_data)
   end
+
+
+
 end
