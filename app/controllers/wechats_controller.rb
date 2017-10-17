@@ -17,4 +17,10 @@ class WechatsController < ApplicationController
     render text: params[:echostr]
   end
 
+  def mini_app_customer_service
+    puts "++++++++++++"
+    puts params
+    render text: params[:echostr]
+  end
+
 end

@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get 'wechats/echo', to: 'wechats#echo'
   post 'wechats/echo', to: 'wechats#echo'
 
+  get 'wechats/mini_app_customer_service', to: 'wechats#mini_app_customer_service'
+  post 'wechats/mini_app_customer_service', to: 'wechats#mini_app_customer_service'
 
   #messages
   post 'messages/notification_message_list', to: 'messages#notification_message_list'

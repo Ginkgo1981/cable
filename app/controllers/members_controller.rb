@@ -71,7 +71,6 @@ class MembersController < ApplicationController
 
   #student
   def mini_app_authorization
-    binding.pry
     code = params[:code]
     if params[:app_name] == '求职小冰'
       app_id = 'wx0f381a5501cad4a6'
