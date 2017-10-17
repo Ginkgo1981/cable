@@ -57,6 +57,7 @@ class MembersController < ApplicationController
 
 
 
+
   def update_profile
     @user.update params.permit(:university, :major, :latitude, :longitude, industry_tags: [], skill_tags: [])
     render json: {code: 0, msg: 'succ'}

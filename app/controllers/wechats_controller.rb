@@ -18,9 +18,9 @@ class WechatsController < ApplicationController
   end
 
   def mini_app_customer_service
-    puts "++++++++++++"
-    puts params
-    render text: params[:echostr]
+    json = JSON(request.body.read)
+    puts json
+    render plain: 'success'
   end
 
 end
