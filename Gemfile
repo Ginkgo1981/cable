@@ -55,10 +55,10 @@ gem 'nokogiri'
 gem 'geocoder'
 gem 'geokit-rails'
 
+gem 'pry'
+gem 'pry-nav'
+gem 'pry-rails'
 group :development, :test do
-  gem 'pry'
-  gem 'pry-nav'
-  gem 'pry-rails'
   gem 'annotate', git: 'https://github.com/ctran/annotate_models.git'
 end
 
