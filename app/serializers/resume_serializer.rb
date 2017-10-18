@@ -21,6 +21,7 @@ class ResumeSerializer < ApplicationSerializer
   has_many :experiences
   has_many :skills
   has_many :honors
+  belongs_to :student
 
 
   def job_cities

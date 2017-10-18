@@ -18,7 +18,7 @@ class WechatMiniAppClient
     token
   end
 
-  def send_customer_message(openid, msgtype, payload)
+  def send_customer_message(openid, msgtype, payload = nil)
 
     # msgtype [text,link,miniprogrampage, image]
     # "text":
@@ -26,10 +26,14 @@ class WechatMiniAppClient
     #         "content":"Hello World"
     #     }
 
-    # "image":
-    #     {
-    #         "media_id":"MEDIA_ID"
-    #     }
+    # payload = {
+    #
+    #     image:
+    #         {
+    #             media_id:"59MulwFREhz7xPZxNSzmAuGxgX9RKKAdVmaJibYIIroKx5OMeGXz57XMg-7H7huu"
+    #         }
+    # }
+    # binding.pry
 
     # "link": {
     #     "title": "Happy Day",

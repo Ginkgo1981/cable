@@ -241,7 +241,6 @@ class MembersController < ApplicationController
     if resp.is_a?(Net::HTTPSuccess) && !resp.body['errcode']
       return JSON(resp.body)
     else
-      binding.pry
       raise("get_session_key fail")
     end
   end
