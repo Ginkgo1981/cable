@@ -62,7 +62,6 @@ gem 'pry'
 gem 'pry-nav'
 gem 'pry-rails'
 
-gem 'actionpack-xml_parser'
 
 group :development, :test do
   gem 'annotate', git: 'https://github.com/ctran/annotate_models.git'
