@@ -22,6 +22,7 @@ log
 log/**
 tmp/**
 config/wechat_redpack.yml
+story-*
 
 # Ignore Byebug command history file.
 .byebug_history

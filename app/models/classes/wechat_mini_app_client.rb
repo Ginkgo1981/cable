@@ -20,6 +20,7 @@ class WechatMiniAppClient
 
   def send_customer_message(openid, msgtype, payload = nil)
 
+    # curl -F media=@098.jpg "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=uPo6SZniYyUJ2cq-RZqkzMqiHL982fQtwoZsgDWBeEZa9L784VR6zr_L20GZeNexPMUg6rh-vHFjRRi9JfrvlP-SpjpP28QiQ6p3TIEMs7gQKFcAHAJDY&type=image"
     # msgtype [text,link,miniprogrampage, image]
     # "text":
     #     {

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get '/photos/uptoken', to: 'photos#get_upload_token'
   get '/photos/get_photos', to: 'photos#get_photos'
   post 'photos/save_photo', to: 'photos#save_photo'
+  post 'photos/save_photo_by_url', to: 'photos#save_photo_by_url'
 
   #users
   get '/users/students', to: 'users#get_student_list'

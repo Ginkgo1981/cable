@@ -55,6 +55,9 @@ gem 'nokogiri'
 gem 'geocoder'
 gem 'geokit-rails'
 
+gem 'selenium'
+gem 'selenium-webdriver'
+
 gem 'pry'
 gem 'pry-nav'
 gem 'pry-rails'

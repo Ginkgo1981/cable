@@ -14,6 +14,7 @@ class RoomChannel < ApplicationCable::Channel
 
   def university_action(data)
 
+
     key = "#{Time.now.strftime('%Y%m%d')}-#{data['message']}"
     unless $redis_jobs.exists key
 
@@ -45,7 +46,6 @@ class RoomChannel < ApplicationCable::Channel
   end
 
   def speak(data)
-
     key = "#{Time.now.strftime('%Y%m%d')}-#{data['message']}"
     unless $redis_jobs.exists key
       jobs = Job.search(data['message']).records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
