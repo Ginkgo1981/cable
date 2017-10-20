@@ -19,6 +19,7 @@ class WechatsController < ApplicationController
 
   def mini_app_customer_service
     json = JSON(request.body.read).symbolize_keys
+    puts json
     openid = json[:FromUserName]
     payload = {
         image:
@@ -27,7 +28,7 @@ class WechatsController < ApplicationController
             }
     }
     wechat_mini_app_client = WechatMiniAppClient.new
-    wechat_mini_app_client.send_customer_message openid, payload
+    wechat_mini_app_client.send_customer_message openid, 'image',payload
     render plain: 'success'
   end
 
