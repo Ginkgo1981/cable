@@ -5,7 +5,13 @@ class WechatsController < ApplicationController
     doc = Nokogiri::XML request.body.read
     openid = doc.css('FromUserName').text
     event = doc.css('Event').text
+
+    wechat_client = WechatOaClient.new(appid,appsecret)
+
+    access_token = wechat_client.get_access_token
+
     if event == 'subscribe'
+      #todo
       WechatRedpack.send_redpack 101, openid
     end
     render plain: 'success' #params[:echostr]
