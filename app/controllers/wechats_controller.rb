@@ -9,6 +9,8 @@ class WechatsController < ApplicationController
     wechat_client = WechatOaClient.new(appid,appsecret)
 
     access_token = wechat_client.get_access_token
+    user_info = wechat_client.get_user_info(access_token, openid)
+    puts user_info
 
     if event == 'subscribe'
       #todo
