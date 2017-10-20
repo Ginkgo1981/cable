@@ -2,22 +2,23 @@ class WechatsController < ApplicationController
 
   #receive WeChat notification
   def echo
-    # welcome_article =  Rails.application.config_for('wechat_free_duty_article')['articles'][0]
-    # case params[:xml][:MsgType]
-    #   when 'text'
-    #     # render 'echo', formats: :xml and return
-    #   when 'event'
-    #     case params[:xml][:Event].downcase
-    #       when 'subscribe'
-    #         # WechatMessageJob.perform_now({openid: params[:xml][:FromUserName],article: welcome_article })
-    #     end
-    # end
-    puts "++++++++++++"
-    puts params
-    render text: params[:echostr]
+    case params[:xml][:MsgType]
+      when 'text'
+      when 'event'
+        case params[:xml][:Event].downcase
+          when 'subscribe'
+            puts "======= "
+            puts params[:xml]
+        end
+    end
+    render plain: 'success' #params[:echostr]
   end
 
   def mini_app_customer_service
+
+    # {:ToUserName=>"gh_d3c70c9c17bf", :FromUserName=>"opvsg0VHguzEeOtL2hGtznCjmg0g",
+    # :CreateTime=>1508514634, :MsgType=>"event", :Event=>"user_enter_tempsession",
+    # :SessionFrom=>"weapp"}
     json = JSON(request.body.read).symbolize_keys
     puts json
     openid = json[:FromUserName]

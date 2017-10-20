@@ -33,6 +33,7 @@ module Cable
 
     ActionCable.server.config.logger = Logger.new(nil)
 
+    config.middleware.insert_after ActionDispatch::ParamsParser, ActionDispatch::XmlParamsParser
 
     config.api_only = true
   end
