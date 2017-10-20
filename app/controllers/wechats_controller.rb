@@ -2,14 +2,11 @@ class WechatsController < ApplicationController
 
   #receive WeChat notification
   def echo
-    case params[:xml][:MsgType]
-      when 'text'
-      when 'event'
-        case params[:xml][:Event].downcase
-          when 'subscribe'
-            puts "======= "
-            puts params[:xml]
-        end
+    doc = Nokogiri::XML request.body.read
+    openid = doc.css('FromUserName').text
+    event = doc.css('Event').text
+    if event == 'subscribe'
+      WechatRedpack.send_redpack 101, openid
     end
     render plain: 'success' #params[:echostr]
   end
