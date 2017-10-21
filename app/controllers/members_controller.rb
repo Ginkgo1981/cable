@@ -201,6 +201,13 @@ class MembersController < ApplicationController
            meta: {code: 0}
   end
 
+  def deliver_resume_to_email
+
+    binding.pry
+    render json:{code: 0}
+
+  end
+
   def is_applied
     job = Job.find_by id: params[:job_id]
     applied = @user.jobs.exists?(job) ? 1 : 0

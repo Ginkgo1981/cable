@@ -87,7 +87,7 @@ Rails.application.routes.draw do
   post 'members/update_profile', to: 'members#update_profile'
 
   get 'members/invitees', to: 'members#invitees'
-
+  post 'members/deliver_resume_to_email', to: 'members#deliver_resume_to_email'
   post 'members/applying_job', to: 'members#applying_job'
   get 'members/applied_jobs', to: 'members#applied_jobs'
   get 'members/:job_id/is_applied', to: 'members#is_applied'

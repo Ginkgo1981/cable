@@ -92,16 +92,16 @@ class ResourcesController < ApplicationController
   #   }}
   # end
 
-  # def job_list
-  #   # positions = File.open('features/positions.txt').read.split /\n/
-  #   # hot_positions = File.open('features/hot_positions.txt').read.split /\n/
-  #   positions = JSON.parse($redis_cable.get('libs:positions'))
-  #   hot_positions = JSON.parse($redis_cable.get('libs:hot_positions'))
-  #   render json: {code: 0, data: {
-  #       list: positions,
-  #       hot_list: hot_positions
-  #   }}
-  # end
+  def job_list
+    # positions = File.open('features/positions.txt').read.split /\n/
+    # hot_positions = File.open('features/hot_positions.txt').read.split /\n/
+    positions = JSON.parse($redis_cable.get('libs:positions'))
+    hot_positions = JSON.parse($redis_cable.get('libs:hot_positions'))
+    render json: {code: 0, data: {
+        list: positions,
+        hot_list: hot_positions
+    }}
+  end
 
   # def industry_list
   #   # industries = ResumeDicIndustry.all.map(&:format)
