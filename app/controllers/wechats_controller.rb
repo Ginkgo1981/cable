@@ -6,11 +6,13 @@ class WechatsController < ApplicationController
     openid = doc.css('FromUserName').text
     event = doc.css('Event').text
 
-    wechat_client = WechatOaClient.new(appid,appsecret)
+    wechat_client = WechatOaClient.new()
 
     access_token = wechat_client.get_access_token
     user_info = wechat_client.get_user_info(access_token, openid)
     puts user_info
+
+    #红包发放的逻辑
 
     if event == 'subscribe'
       #todo

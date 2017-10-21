@@ -29,6 +29,11 @@ Rails.application.routes.draw do
   post 'stories/delete_story/:id', to: 'stories#delete_story'
 
   #resources
+
+  get 'list_1', to: 'resources#list_1'
+  get 'list_2', to: 'resources#list_2'
+
+
   get 'tags_list', to: 'resources#tags_list'
   get 'filtered_university_list', to: 'resources#filtered_university_list'
   get 'university_list', to: 'resources#university_list'
