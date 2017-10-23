@@ -22,7 +22,16 @@ class UserJob < ApplicationRecord
   has_many :job_interviews
   has_one :job_offer
 
+  after_create :deliver_by_email!
 
+  def deliver_by_email!
+    if self.company.company_email
+      # HrMailer.new.welcome_email(self.company.company_email, self.resume.format_for_email).deliver!
+    end
+  end
 
+  def deliver_by_phone!
+    #todo
+  end
 
 end

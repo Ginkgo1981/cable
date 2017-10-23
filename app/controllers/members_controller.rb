@@ -2,7 +2,7 @@ class MembersController < ApplicationController
 
   before_action :find_user_by_token!, only: [:invitees,:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
                                              :applying_job, :applied_jobs, :is_applied,:bind_hr_info, :read_business_card,
-                                             :bookmarking_job, :is_bookmarked, :bookmarked_jobs]
+                                             :bookmarking_job, :is_bookmarked, :bookmarked_jobs, :deliver_resume_to_email]
 
   # before_action :find_entity_by_dsin!, only: [:like_comment, :forward_wishcard]
 
@@ -191,6 +191,8 @@ class MembersController < ApplicationController
                     resume_id: @user.resumes[0].id,
                     job_id: params[:job_id],
                     company_id: params[:company_id]
+
+
     render json: {code: 0, msg: 'succ'}
   end
 
@@ -202,10 +204,10 @@ class MembersController < ApplicationController
   end
 
   def deliver_resume_to_email
-
-    binding.pry
+    to = params[:to]
+    resume = @user.resumes.first
+    HrMailer.new.welcome_email(to, resume.format_for_email).deliver!
     render json:{code: 0}
-
   end
 
   def is_applied

@@ -26,6 +26,9 @@ class Resume < ApplicationRecord
   has_many :user_jobs
   has_many :jobs, through: :user_jobs
   has_many :companies, through: :companies
+  has_one  :qr_code, as: :codeable
+
+  after_create :generate_qrcode
 
   def as_indexed_json(options={})
     self.format.as_json
@@ -94,7 +97,22 @@ class Resume < ApplicationRecord
         skills: self.skills.map(&:format),
         honors: self.honors.map(&:format),
         student: self.student.format,
-        score: self.score
+        score: self.score,
+        qr_code: self.qr_code.image.path
     }
+  end
+
+  def format_for_email
+    {
+        university: self.university,
+        major: self.major,
+        name: self.student.name || self.student.nickname,
+        qr_code: "https://images.gaokao2017.cn/#{self.qr_code.image.path}"
+    }
+
+  end
+
+  def generate_qrcode
+    QrCode.create_from self
   end
 end
