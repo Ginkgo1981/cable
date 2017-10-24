@@ -32,7 +32,7 @@ class WechatsController < ApplicationController
     payload = {
         image:
             {
-                media_id:"59MulwFREhz7xPZxNSzmAuGxgX9RKKAdVmaJibYIIroKx5OMeGXz57XMg-7H7huu"
+                media_id:"Z3a7BFjDsWUZmt-Ww7OETu7sPMUOMgJjuj8IWF8HTVI0DeuZJwpVf1c23H3oEVah"
             }
     }
     wechat_mini_app_client = WechatMiniAppClient.new

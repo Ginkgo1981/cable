@@ -91,22 +91,18 @@ class User < ApplicationRecord
   end
 
   def allow_send_notification_message?
-
     #todo
     true
-
   end
 
 
   def allow_send_point_message?
     true
-
   end
 
 
   def allow_send_subscription_message?
     true
-
   end
 
   def next_notification_message
