@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171015154820) do
+ActiveRecord::Schema.define(version: 20171024044341) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -279,6 +279,14 @@ ActiveRecord::Schema.define(version: 20171015154820) do
     t.string   "codeable_type"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+  end
+
+  create_table "red_packs", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.integer  "amount"
+    t.string   "event"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "resume_dic_benefits", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

@@ -191,8 +191,13 @@ class MembersController < ApplicationController
                     resume_id: @user.resumes[0].id,
                     job_id: params[:job_id],
                     company_id: params[:company_id]
-
-
+    if @user.red_packs.where(event: 'deliver').size == 0
+      amount = (100..200).to_a.sample
+      @user.red_packs.create! amount: amount, event: 'deliver'
+      if @user.mp_openid
+        WechatRedpack.send_redpack amount, @user.mp_openid
+      end
+    end
     render json: {code: 0, msg: 'succ'}
   end
 
@@ -206,6 +211,15 @@ class MembersController < ApplicationController
   def deliver_resume_to_email
     to = params[:to]
     resume = @user.resumes.first
+    binding.pry
+    if @user.red_packs.where(event: 'deliver').size == 0
+      amount = (100..200).to_a.sample
+      @user.red_packs.create! amount: amount, event: 'deliver'
+      if @user.mp_openid
+        WechatRedpack.send_redpack amount, @user.mp_openid
+      end
+    end
+
     HrMailer.new.welcome_email(to, resume.format_for_email).deliver!
     render json:{code: 0}
   end
