@@ -211,7 +211,6 @@ class MembersController < ApplicationController
   def deliver_resume_to_email
     to = params[:to]
     resume = @user.resumes.first
-    binding.pry
     if @user.red_packs.where(event: 'deliver').size == 0
       amount = (100..200).to_a.sample
       @user.red_packs.create! amount: amount, event: 'deliver'
