@@ -7,7 +7,7 @@ class WechatsController < ApplicationController
     event = doc.css('Event').text
     wechat_client = WechatOaClient.new()
     access_token = wechat_client.access_token
-    user_info = wechat_client.get_user_info(access_token, openid)
+    user_info = wechat_client.get_user_info(access_token, openid).symbolize_keys
     puts user_info
     #红包发放的逻辑
     user = User.find_by union_id: user_info[:unionid]
