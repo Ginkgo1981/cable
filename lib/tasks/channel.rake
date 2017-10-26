@@ -21,7 +21,7 @@ namespace :channel do
       while flag
         json_raw = nil
         begin
-          count += 0
+          count += 1
           SlackService.alert "[cable] index_to_elasticsearch processing #{count}"  if count % 100 == 0
           json_raw = $redis_crawler.lpop 'company_job_json_list'
           if json_raw
