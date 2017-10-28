@@ -25,9 +25,9 @@ namespace :channel do
           if count % 1000 == 0
             fetched_at_today = Job.fetched_at_today.count
             published_at_today = Job.published_at_today.count
-            distribution_by_date = Job.distribution_by_date.as_json
-            distribution_by_job_origin_web_site_name = Job.distribution_by_job_origin_web_site_name
-            SlackService.alert "[cable] index_to_elasticsearch processing #{count} \n fetched_at_today: #{fetched_at_today} \n published_at_today: #{published_at_today} \n distribution_by_date: #{distribution_by_date} \n distribution_by_job_origin_web_site_name:#{distribution_by_job_origin_web_site_name}"
+            # distribution_by_date = Job.distribution_by_date.as_json
+            # distribution_by_job_origin_web_site_name = Job.distribution_by_job_origin_web_site_name
+            SlackService.alert "[cable] index_to_elasticsearch processing #{count} \n fetched_at_today: #{fetched_at_today} \n published_at_today: #{published_at_today} \n"
           end
           json_raw = $redis_crawler.lpop 'company_job_json_list'
           if json_raw
@@ -48,9 +48,7 @@ namespace :channel do
     end
     fetched_at_today = Job.fetched_at_today.count
     published_at_today = Job.published_at_today.count
-    distribution_by_date = Job.distribution_by_date.as_json
-    distribution_by_job_origin_web_site_name = Job.distribution_by_job_origin_web_site_name
-    SlackService.alert "[cable] index_to_elasticsearch finished #{count} \n fetched_at_today: #{fetched_at_today} \n published_at_today: #{published_at_today} \n distribution_by_date: #{distribution_by_date} \n distribution_by_job_origin_web_site_name:#{distribution_by_job_origin_web_site_name}"
+    SlackService.alert "[cable] index_to_elasticsearch finished #{count} \n fetched_at_today: #{fetched_at_today} \n published_at_today: #{published_at_today} \n"
   end
 
 
