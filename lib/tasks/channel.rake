@@ -5,6 +5,7 @@ namespace :channel do
     # logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
     # logger.tagged('BCX') { logger.info 'Stuff' }
     begin
+      count = 0
       SlackService.alert "[cable] index_to_elasticsearch started"
       Rails.logger = nil
       Elasticsearch::Model.client.transport.logger = nil
@@ -12,7 +13,6 @@ namespace :channel do
       soap_client = SOAP::WSDLDriverFactory.new(feature_ws_url).create_rpc_driver
       # queues = ['crawler:91job_normal_json_queue','crawler:js_market_json_queue', 'crawler:91job_campus_json_queue', 'crawler:wutongguo_json_queue']
       flag = true
-      count = 0
       text=File.open('features/host_json.txt').read
       host_dics = text.split(/\n/).map{|s|
         name,host  = s.split(',')
@@ -22,7 +22,13 @@ namespace :channel do
         json_raw = nil
         begin
           count += 1
-          SlackService.alert "[cable] index_to_elasticsearch processing #{count}"  if count % 100 == 0
+          if count % 1000 == 0
+            fetched_at_today = Job.fetched_at_today.count
+            published_at_today = Job.published_at_today.count
+            distribution_by_date = Job.distribution_by_date.as_json
+            distribution_by_job_origin_web_site_name = Job.distribution_by_job_origin_web_site_name
+            SlackService.alert "[cable] index_to_elasticsearch processing #{count} \n fetched_at_today: #{fetched_at_today} \n published_at_today: #{published_at_today} \n distribution_by_date: #{distribution_by_date} \n distribution_by_job_origin_web_site_name:#{distribution_by_job_origin_web_site_name}"
+          end
           json_raw = $redis_crawler.lpop 'company_job_json_list'
           if json_raw
             entry = EntryCompletion.new(host_dics, soap_client,json_raw).call
@@ -38,10 +44,13 @@ namespace :channel do
         end
       end
     rescue => e
-      SlackService.alert "[cable] index_to_elasticsearch error #{count} #{e}"
+      SlackService.alert "[cable] index_to_elasticsearch error #{count} #{e}" if count % 3 == 0
     end
-    SlackService.alert "[cable] index_to_elasticsearch end #{count}"
-
+    fetched_at_today = Job.fetched_at_today.count
+    published_at_today = Job.published_at_today.count
+    distribution_by_date = Job.distribution_by_date.as_json
+    distribution_by_job_origin_web_site_name = Job.distribution_by_job_origin_web_site_name
+    SlackService.alert "[cable] index_to_elasticsearch finished #{count} \n fetched_at_today: #{fetched_at_today} \n published_at_today: #{published_at_today} \n distribution_by_date: #{distribution_by_date} \n distribution_by_job_origin_web_site_name:#{distribution_by_job_origin_web_site_name}"
   end
 
 
