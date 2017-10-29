@@ -42,21 +42,8 @@ class Job < ApplicationRecord
 
 
   def self.distribution_by_job_origin_web_site_name
-    Job.fetched_at_today.order('job_origin_web_site_name').group('job_origin_web_site_name').count.map{ |name, count| {site: name.to_s, count: count}}
+    Job.fetched_at_today.order('job_origin_web_site_name').group('job_origin_web_site_name').count.map{ |name, count| {site: name.to_s, count: count}}.sort_by{ |k| -k[:count] }
   end
-
-  # def self.report
-  #   Job.count( :group => "DATE(job_published_at)",
-  #                              :conditions => ["created_at >= ? ", DateTime.current.beginning_of_day],
-  #                              :order => "DATE(created_at) ASC"
-  #   ).collect do |date, count|
-  #     JobCountByDate.new(date, count)
-  #   end
-  # end
-
-
-  # Job.fetched_at_today.order("DATE(job_published_at)").group("DATE(job_published_at)").count
-
 
   EMAIL_REG = /[0-9a-zA-Z]+@[0-9a-zA-Z\.]+/
   MOBILE_REG = /[0-9]{11}/

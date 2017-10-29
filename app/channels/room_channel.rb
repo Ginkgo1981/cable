@@ -13,42 +13,23 @@ class RoomChannel < ApplicationCable::Channel
 
 
   def university_action(data)
-
-
     key = "#{Time.now.strftime('%Y%m%d')}-#{data['message']}"
     unless $redis_jobs.exists key
-
-
-      res_job = Job.search \
-            query: {
-          bool: {
-              must: [
-                  {match_phrase: {'job_origin_web_site_name' => data['message']}}
-
-              ]
-          }
-      }
-      jobs = res_job.records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
+      jobs = Job.search_by_site_name(data['message']).records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
       $redis_jobs.set key, JSON(jobs)
     end
-
     message = PointMessage.reply data['message'], current_user.id
     message[:jobs_redis_key] = key
     RoomChannel.broadcast_to(current_user,
                              message: {msg: message,
                                        time_stamp: Time.now.to_i,
                                        marked: true})
-    # message = PointMessage.university data['message'], current_user.id
-    # RoomChannel.broadcast_to(current_user,
-    #                          message: {msg: message,
-    #                                    time_stamp: Time.now.to_i,
-    #                                    marked: true})
   end
 
   def speak(data)
     key = "#{Time.now.strftime('%Y%m%d')}-#{data['message']}"
     unless $redis_jobs.exists key
-      jobs = Job.search(data['message']).records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
+      jobs = Job.search_by_query(data['message']).records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
       $redis_jobs.set key, JSON(jobs)
     end
     message = PointMessage.reply data['message'], current_user.id
@@ -63,29 +44,6 @@ class RoomChannel < ApplicationCable::Channel
     #                                        id: @index,
     #                                        time_stamp: Time.now.to_i,
     #                                        marked: false})
-    # if data['message'] == 'start-pull'
-
-    # message = NotificationMessage.last
-    # RoomChannel.broadcast_to(current_user,
-    #                          message: {msg: message.format_for_redis,
-    #                                    time_stamp: Time.now.to_i,
-    #                                    marked: true})
-
-
-    # end
-    # json = $redis.zrange("user::#{current_user.id}", 0, 0).first
-    # if json
-    #   pp "[room-channel] speak json: #{json}"
-    #   $redis.zrem("student::#{current_user.id}", json)
-    #   message = JSON.parse(json)
-    #   RoomChannel.broadcast_to(current_user,
-    #                            message: {msg: message,
-    #                                      display: 'message',
-    #                                      time_stamp: Time.now.to_i,
-    #                                      marked: false})
-    # else
-    #   pp "[room-channel] speak json"
-    # end
   end
 
 
@@ -98,7 +56,7 @@ class RoomChannel < ApplicationCable::Channel
     json = $redis_cable.zrange("user::#{current_user.id}", 0, 0).first
     message =
         if json
-          pp "[room-channel] ping json #{json}"
+          # pp "[room-channel] ping json #{json}"
           $redis_cable.zrem("user::#{current_user.id}", json)
           JSON.parse(json)
         else

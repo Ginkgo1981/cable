@@ -32,7 +32,7 @@ namespace :channel do
           json_raw = $redis_crawler.lpop 'company_job_json_list'
           if json_raw
             entry = EntryCompletion.new(host_dics, soap_client,json_raw).call
-            sleep 1
+            sleep 0.2
             puts "[cable] index_to_elasticsearch succ 0 '' ''"
           else
             flag = false
