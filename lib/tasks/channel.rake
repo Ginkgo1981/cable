@@ -30,7 +30,7 @@ namespace :channel do
             SlackService.alert "[cable] index_to_elasticsearch processing #{count} \n fetched_at_today: #{fetched_at_today} \n published_at_today: #{published_at_today} \n"
           end
           json_raw = $redis_crawler.lpop 'company_job_json_list'
-          if json_raw || json_raw == 'null'
+          if json_raw || json_raw != 'null'
             entry = EntryCompletion.new(host_dics, soap_client,json_raw).call
             sleep 0.2
             puts "[cable] index_to_elasticsearch succ 0 '' ''"
