@@ -33,7 +33,7 @@ class Job < ApplicationRecord
   has_many :users, through: :user_jobs
   # default_scope ->{order(created_at: :desc)}
 
-  scope :fetched_at_today, -> {where('created_at >= ? and created_at <= ?', Time.now.beginning_of_day, Time.end_of_day)}
+  scope :fetched_at_today, -> {where('created_at >= ? and created_at <= ?', Time.now.beginning_of_day, Time.now.end_of_day)}
   scope :published_at_today, -> {where('job_published_at >= ?', Time.now)}
 
   def self.distribution_by_date
