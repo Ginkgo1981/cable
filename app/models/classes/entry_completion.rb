@@ -9,6 +9,8 @@ class EntryCompletion < Struct.new(:host_dics,:soap_client,:json_raw)
     company_job_json['job_origin_web_site_name'] = host_dic[:name] if host_dic
     company_job_json.merge! job_tags: job_tags
     # puts "[entry] call company_job_json #{company_job_json}"
-    Job.create_after_check(company_job_json)
+    if company_job_json['company_name'].present? && company_job_json['job_name'].present?
+      Job.create_after_check(company_job_json)
+    end
   end
 end
