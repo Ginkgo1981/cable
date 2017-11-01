@@ -21,22 +21,36 @@
 #  job_origin_url           :string
 #  job_origin_web_site_name :string
 #  job_published_at         :date
+#  approved                 :integer
+#  approved_by              :uuid
+#  approved_at              :datetime
+#  rating                   :integer          default(0)
 #
 
 class JobsController < ApplicationController
-
+  before_action :find_user_by_token!, only: [:update_job]
   def list
-    jobs = Job.includes(:company).page(params[:page].to_i + 1).per(20)
+    site = params[:site]
+    jobs = Job.where(job_origin_web_site_name: site).includes(:company).page(params[:page].to_i + 1).per(20)
+    count = Job.where(job_origin_web_site_name: site).size
     render json: jobs,
            each_serializer: JobSerializer,
-           meta: {code: 0, count: Job.count}
+           meta: {code: 0, count: count}
   end
+
+  def distributions
+    distributions = Job.distribution_by_approved
+    # distributions = Job.distribution_by_job_origin_web_site_name
+    render json: {code: 0, distributions: distributions}
+  end
+
 
   def update_job
     job = Job.find_by id: params[:id]
-    job.update params.permit(:job_name, :job_salary_range, :job_recruitment_num, :job_type, :job_category, :job_city, :job_mini_education, :job_mini_experience, :job_language, :job_description, :job_majors, :job_tags)
+    job.update! params.permit(:job_name, :job_salary_range, :job_recruitment_num, :job_type, :job_category, :job_city, :job_mini_education, :job_mini_experience, :job_language, :job_description, :job_majors, :job_tags)
     company = job.company
-    company.update params[:company].permit(:company_name, :company_city, :company_category, :company_kind, :company_scale, :company_address, :company_zip, :company_website, :company_description, :company_tel, :company_email, :company_hr_name, :company_hr_mobile)
+    company.update! params[:company].permit(:company_name, :company_city, :company_category, :company_kind, :company_scale, :company_address, :company_zip, :company_website, :company_description, :company_tel, :company_email, :company_hr_name, :company_hr_mobile)
+    Job.approve! job, @user
     render json: {code: 0, msg: 'succ'}
   end
 

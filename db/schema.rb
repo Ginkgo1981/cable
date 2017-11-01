@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024044341) do
+ActiveRecord::Schema.define(version: 20171031053539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,14 +194,18 @@ ActiveRecord::Schema.define(version: 20171024044341) do
     t.string   "job_mini_experience"
     t.string   "job_language"
     t.text     "job_description"
-    t.text     "job_majors",                            array: true
-    t.text     "job_tags",                              array: true
+    t.text     "job_majors",                                        array: true
+    t.text     "job_tags",                                          array: true
     t.uuid     "company_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.string   "job_origin_url"
     t.string   "job_origin_web_site_name"
     t.date     "job_published_at"
+    t.integer  "approved"
+    t.uuid     "approved_by"
+    t.datetime "approved_at"
+    t.integer  "rating",                   default: 0
   end
 
   create_table "likings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -464,6 +468,7 @@ ActiveRecord::Schema.define(version: 20171024044341) do
     t.string   "industry_tags",                                                    array: true
     t.string   "skill_tags",                                                       array: true
     t.integer  "notification_message_version",            default: 0
+    t.integer  "role",                                    default: 0
   end
 
 end

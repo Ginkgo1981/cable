@@ -21,6 +21,10 @@
 #  job_origin_url           :string
 #  job_origin_web_site_name :string
 #  job_published_at         :date
+#  approved                 :integer
+#  approved_by              :uuid
+#  approved_at              :datetime
+#  rating                   :integer          default(0)
 #
 
 class Job < ApplicationRecord
@@ -31,6 +35,9 @@ class Job < ApplicationRecord
   has_many :user_jobs
   has_many :resumes, through: :user_jobs
   has_many :users, through: :user_jobs
+
+  belongs_to :approver, class_name: User, foreign_key: :approved_by, optional: true
+
   # default_scope ->{order(created_at: :desc)}
 
   scope :fetched_at_today, -> {where('created_at >= ? and created_at <= ?', Time.now.beginning_of_day, Time.now.end_of_day)}
@@ -42,7 +49,15 @@ class Job < ApplicationRecord
 
 
   def self.distribution_by_job_origin_web_site_name
-    Job.fetched_at_today.order('job_origin_web_site_name').group('job_origin_web_site_name').count.map{ |name, count| {site: name.to_s, count: count}}.sort_by{ |k| -k[:count] }
+    # Job.fetched_at_today.order('job_origin_web_site_name').group('job_origin_web_site_name').count.map{ |name, count| {site: name.to_s, count: count}}.sort_by{ |k| -k[:count] }
+    Job.order('job_origin_web_site_name').group('job_origin_web_site_name, approved').count.map{ |name, count| {site: name.to_s, count: count}}.sort_by{ |k| -k[:count] }
+  end
+
+  def self.distribution_by_approved
+    Job.select("job_origin_web_site_name, SUM( CASE WHEN jobs.approved = 1 then 1 ELSE 0 END ) as job_approved, SUM( CASE WHEN jobs.approved = 1 then 0 ELSE 1 END ) as job_not_approved")
+        .group('jobs.job_origin_web_site_name')
+        .order('job_approved desc')
+        .map{|j| {job_origin_web_site_name: j.job_origin_web_site_name,job_approved: j.job_approved, job_not_approved: j.job_not_approved}}
   end
 
   EMAIL_REG = /[0-9a-zA-Z]+@[0-9a-zA-Z\.]+/
@@ -61,6 +76,13 @@ class Job < ApplicationRecord
       indexes 'company.company_name', type: :string, analyzer: 'ik_smart'
       indexes 'company.company_description', type: :string, analyzer: 'ik_smart'
     end
+  end
+
+  def self.approve! job, user
+    job.approved_at = Time.now
+    job.approved = 1
+    job.approver = user
+    job.save
   end
 
   def format

@@ -21,10 +21,15 @@
 #  job_origin_url           :string
 #  job_origin_web_site_name :string
 #  job_published_at         :date
+#  approved                 :integer
+#  approved_by              :uuid
+#  approved_at              :datetime
+#  rating                   :integer          default(0)
 #
 
 class JobSerializer < ApplicationSerializer
-  attributes :id, :job_name, :job_salary_range, :job_description, :job_recruitment_num, :job_published_at, :job_type,:job_category, :job_city, :job_mini_education, :job_mini_experience, :job_language,:job_origin_url, :job_origin_web_site_name
+  attributes :id, :job_name, :job_salary_range, :job_description, :job_recruitment_num, :job_published_at, :job_type,:job_category, :job_city, :job_mini_education, :job_mini_experience, :job_language,:job_origin_url, :job_origin_web_site_name, :approved, :approved_by, :approved_at
   belongs_to :company
+
 
 end

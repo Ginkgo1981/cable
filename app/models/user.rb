@@ -33,6 +33,7 @@
 #  industry_tags                :string           is an Array
 #  skill_tags                   :string           is an Array
 #  notification_message_version :integer          default(0)
+#  role                         :integer          default(0)
 #
 
 class User < ApplicationRecord
@@ -88,6 +89,7 @@ class User < ApplicationRecord
         headimgurl: self.headimgurl,
         latitude: self.latitude,
         longitude: self.longitude,
+        role: self.role,
         resumes: self.type == 'Student' ? self.resumes.map(&:format) : []
     }
   end

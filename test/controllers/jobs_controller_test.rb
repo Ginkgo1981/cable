@@ -21,6 +21,10 @@
 #  job_origin_url           :string
 #  job_origin_web_site_name :string
 #  job_published_at         :date
+#  approved                 :integer
+#  approved_by              :uuid
+#  approved_at              :datetime
+#  rating                   :integer          default(0)
 #
 
 require 'test_helper'
