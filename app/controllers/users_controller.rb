@@ -42,12 +42,19 @@ class UsersController < ApplicationController
     students = Student.all
     render json: students,
            meta: {code: 0},
-           each_serializer: UserSerializer
+           each_serializer: StudentSerializer
   end
 
   def get_student
     s = Student.last
     render json: {code: 0, data: s.format}
+  end
+
+
+  def delete_user
+    s =  Student.find_by id: params[:id]
+    s.destroy if s
+    render json: {code: 0, message: 'succ'}
   end
 
 end

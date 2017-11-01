@@ -37,7 +37,7 @@
 #
 
 class StudentSerializer < ApplicationSerializer
-  attributes :id,  :headimgurl, :nickname, :province, :city, :created_at, :resume_score
+  attributes :id, :cell, :name, :headimgurl, :nickname, :province, :city, :created_at, :resume_score, :university, :major,:industry_tags, :skill_tags
 
   def created_at
     object.created_at.strftime('%m月%d日 %H:%M')

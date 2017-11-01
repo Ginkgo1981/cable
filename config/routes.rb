@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   post 'photos/save_photo_by_url', to: 'photos#save_photo_by_url'
 
   #users
+  delete '/users/:id', to: 'users#delete_user'
   get '/users/students', to: 'users#get_student_list'
   get '/users/students/:id', to: 'users#get_student'
 
