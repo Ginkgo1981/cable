@@ -46,7 +46,7 @@ class UsersController < ApplicationController
   end
 
   def get_student
-    s = Student.last
+    s = Student.find_by id:params[:id]
     render json: {code: 0, data: s.format}
   end
 
