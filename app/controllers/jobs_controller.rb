@@ -31,7 +31,7 @@ class JobsController < ApplicationController
   before_action :find_user_by_token!, only: [:update_job]
   def list
     site = params[:site]
-    jobs = Job.where(job_origin_web_site_name: site).includes(:company).page(params[:page].to_i + 1).per(20)
+    jobs = Job.where(job_origin_web_site_name: site).order('job_published_at desc').includes(:company).page(params[:page].to_i + 1).per(20)
     count = Job.where(job_origin_web_site_name: site).size
     render json: jobs,
            each_serializer: JobSerializer,

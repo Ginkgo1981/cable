@@ -26,6 +26,4 @@ namespace :init_redis do
     $redis_cable.set('libs:skills_tag_list', JSON(skills_tag_list))
     puts 'init end'
   end
-
-
 end

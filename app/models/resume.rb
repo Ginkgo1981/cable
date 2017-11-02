@@ -98,7 +98,9 @@ class Resume < ApplicationRecord
         honors: self.honors.map(&:format),
         student: self.student.format,
         score: self.score,
-        qr_code: self.qr_code.image.path
+        qr_code: self.qr_code.image.path,
+        university: self.university,
+        major: self.major
     }
   end
 
