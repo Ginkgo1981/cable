@@ -34,10 +34,11 @@
 #  skill_tags                   :string           is an Array
 #  notification_message_version :integer          default(0)
 #  role                         :integer          default(0)
+#  avatar                       :string
 #
 
 class UserSerializer < ApplicationSerializer
-  attributes :id, :cell, :name, :nickname, :province, :city, :headimgurl
+  attributes :id, :cell, :name, :nickname, :province, :city, :headimgurl, :avatar
   # belongs_to :identity, polymorphic: true, optional: true, if: -> {instance_options[:include_identity]}
 
 end

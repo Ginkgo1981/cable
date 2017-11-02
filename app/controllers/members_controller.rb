@@ -54,12 +54,8 @@ class MembersController < ApplicationController
     render json: {code: 0, member: staff.membership}
   end
 
-
-
-
-
   def update_profile
-    @user.update params.permit(:university, :major, :latitude, :longitude, industry_tags: [], skill_tags: [])
+    @user.update params.permit(:university, :major, :latitude, :name, :avatar, :longitude, industry_tags: [], skill_tags: [])
     render json: {code: 0, msg: 'succ'}
   end
 
@@ -73,7 +69,7 @@ class MembersController < ApplicationController
   #student
   def mini_app_authorization
     code = params[:code]
-    if params[:app_name] == '求职小冰'
+    if params[:app_name] == '大四小冰'
       app_id = 'wx0f381a5501cad4a6'
       app_secret = 'c03ee61337e4273ae5c89c186e95517c'
       type = 'Student'
@@ -110,7 +106,7 @@ class MembersController < ApplicationController
   end
 
   def wechat_group
-    if params[:app_name] == '求职小冰'
+    if params[:app_name] == '大四小冰'
       app_id = 'wx0f381a5501cad4a6'
       app_secret = 'c03ee61337e4273ae5c89c186e95517c'
     else
@@ -128,7 +124,7 @@ class MembersController < ApplicationController
   end
 
   def wechat_phone
-    if params[:app_name] == '求职小冰'
+    if params[:app_name] == '大四小冰'
       app_id = 'wx0f381a5501cad4a6'
       app_secret = 'c03ee61337e4273ae5c89c186e95517c'
     else

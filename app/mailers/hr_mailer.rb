@@ -15,7 +15,7 @@ class HrMailer < ApplicationMailer
         <br/>
           <img src="#{resume[:qr_code]}"/>
         <br/>
-        本邮件由微信小程序求职小冰代发,请不要直接回复.
+        本邮件由微信小程序大四小冰代发,请不要直接回复.
         <br/>
 EOM
 

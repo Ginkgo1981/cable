@@ -30,7 +30,7 @@ class Message < ApplicationRecord
           img_url: self.img_url,
           content: self.content,
           # receiver: self.receiver.try(:format),
-          sender: self.sender.try(:format) || {id: 0, name: '求职小冰'},
+          sender: self.sender.try(:format) || {id: 0, name: '大四小冰'},
           created_at: self.created_at,
           attachments: self.attachments.map{|a| a.format.symbolize_keys.merge({type: a.class.name.downcase})}
       }
@@ -46,7 +46,7 @@ class Message < ApplicationRecord
         img_url: self.img_url,
         content: self.content,
         # receiver: self.receiver.try(:format),
-        sender: self.sender.try(:format) || {id: 0, name: '求职小冰'},
+        sender: self.sender.try(:format) || {id: 0, name: '大四小冰'},
         created_at: self.created_at,
         attachments: self.attachments.map{|a| a.format.symbolize_keys.merge({type: a.class.name.downcase})}
     }

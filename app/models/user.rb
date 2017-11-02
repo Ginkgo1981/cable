@@ -34,6 +34,7 @@
 #  skill_tags                   :string           is an Array
 #  notification_message_version :integer          default(0)
 #  role                         :integer          default(0)
+#  avatar                       :string
 #
 
 class User < ApplicationRecord
@@ -87,6 +88,7 @@ class User < ApplicationRecord
         province: self.province,
         city: self.city,
         headimgurl: self.headimgurl,
+        avatar: self.avatar,
         latitude: self.latitude,
         longitude: self.longitude,
         role: self.role,

@@ -34,10 +34,11 @@
 #  skill_tags                   :string           is an Array
 #  notification_message_version :integer          default(0)
 #  role                         :integer          default(0)
+#  avatar                       :string
 #
 
 class StudentSerializer < ApplicationSerializer
-  attributes :id, :cell, :name, :headimgurl, :nickname, :province, :city, :created_at, :resume_score, :university, :major,:industry_tags, :skill_tags
+  attributes :id, :cell, :name, :headimgurl, :avatar, :nickname, :province, :city, :created_at, :resume_score, :university, :major,:industry_tags, :skill_tags
 
   def created_at
     object.created_at.strftime('%m月%d日 %H:%M')

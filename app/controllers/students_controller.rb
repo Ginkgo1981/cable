@@ -34,6 +34,7 @@
 #  skill_tags                   :string           is an Array
 #  notification_message_version :integer          default(0)
 #  role                         :integer          default(0)
+#  avatar                       :string
 #
 
 class StudentsController < ApplicationController
