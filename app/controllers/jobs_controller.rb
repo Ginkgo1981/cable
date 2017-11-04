@@ -47,7 +47,7 @@ class JobsController < ApplicationController
 
   def update_job
     job = Job.find_by id: params[:id]
-    job.update! params.permit(:job_name, :job_salary_range, :job_recruitment_num, :job_type, :job_category, :job_city, :job_mini_education, :job_mini_experience, :job_language, :job_description, :job_majors, :job_tags)
+    job.update! params.permit(:rating, :job_name, :job_salary_range, :job_recruitment_num, :job_type, :job_category, :job_city, :job_mini_education, :job_mini_experience, :job_language, :job_description, :job_majors, :job_tags)
     company = job.company
     company.update! params[:company].permit(:company_name, :company_city, :company_category, :company_kind, :company_scale, :company_address, :company_zip, :company_website, :company_description, :company_tel, :company_email, :company_hr_name, :company_hr_mobile)
     Job.approve! job, @user

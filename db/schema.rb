@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171104020755) do
+ActiveRecord::Schema.define(version: 20171104133550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,7 +202,7 @@ ActiveRecord::Schema.define(version: 20171104020755) do
     t.string   "job_origin_url"
     t.string   "job_origin_web_site_name"
     t.date     "job_published_at"
-    t.integer  "approved"
+    t.integer  "approved",                 default: 0
     t.uuid     "approved_by"
     t.datetime "approved_at"
     t.integer  "rating",                   default: 0
