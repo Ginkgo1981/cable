@@ -73,6 +73,8 @@ class Job < ApplicationRecord
       indexes :job_language, type: :string, analyzer: 'ik_smart'
       indexes :job_majors, type: :string, analyzer: 'ik_smart'
       indexes :job_tags, type: :string, analyzer: 'ik_smart'
+      indexes :rating, type: :integer
+      indexes :approved, type: :integer
       indexes 'company.company_name', type: :string, analyzer: 'ik_smart'
       indexes 'company.company_description', type: :string, analyzer: 'ik_smart'
     end

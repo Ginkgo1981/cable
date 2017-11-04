@@ -10,14 +10,29 @@ module Searchable
     def search_by_query(query)
       __elasticsearch__.search({
                                    sort: [
+                                       {rating: {order: 'desc'}},
                                        {job_published_at: {order: 'desc'}},
                                        '_score'
                                    ],
                                    query: {
-                                       multi_match: {
-                                           query: query,
-                                           fields: %w(job_name job_tags company.company_name),
-                                           operator: 'or'
+                                       bool: {
+                                           must: [
+                                               multi_match: {
+                                                   query: query,
+                                                   fields: %w(job_name^3 company.company_name^2 job_tags),
+                                                   operator: 'or'
+                                               },
+                                           ],
+                                           filter: [
+                                               range: {
+                                                   job_published_at: {
+                                                       gte: 'now-10d/d',
+                                                       lt: 'now/d'
+                                                   }
+
+                                               }
+
+                                           ]
                                        }
                                    }
                                })
