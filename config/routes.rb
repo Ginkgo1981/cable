@@ -8,8 +8,8 @@ Rails.application.routes.draw do
 
   #messages
   post 'messages/notification_message_list', to: 'messages#notification_message_list'
-  post 'messages/send_notification_message', to: 'messages#send_notification_message'
-
+  post 'messages/save_then_redis_all', to: 'messages#save_then_redis_all'
+  post 'messages/create_notification_message', to: 'messages#create_notification_message'
 
   #photos
   get '/photos/uptoken', to: 'photos#get_upload_token'

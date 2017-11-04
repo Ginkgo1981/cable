@@ -12,6 +12,7 @@
 #  img_url     :string
 #  receiver_id :uuid
 #  sender_id   :uuid
+#  priority    :integer          default(0)
 #
 
 class Message < ApplicationRecord

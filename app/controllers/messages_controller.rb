@@ -12,6 +12,7 @@
 #  img_url     :string
 #  receiver_id :uuid
 #  sender_id   :uuid
+#  priority    :integer          default(0)
 #
 
 class MessagesController < ApplicationController
@@ -76,7 +77,16 @@ class MessagesController < ApplicationController
     }
   end
 
-  def send_notification_message
+
+  def save_then_redis_all
+    message = Message.find_by id: params[:message][:id]
+    message.update! params[:message].permit(:content,:state, :priority)
+    NotificationMessage.sink_all_to_redis if message.is_a? NotificationMessage
+    render json: {code: 0, message: 'succ'};
+    # message.reload.send_to_redis
+  end
+
+  def create_notification_message
     # raise CableException::NotAllowedSendNotificationMessage unless @user.allow_send_notification_message?
     # message =
     #     if @student && @user.allow_send_notification?
@@ -107,7 +117,6 @@ class MessagesController < ApplicationController
     attachments = params[:attachment_ids].map { |h|  h[:type].constantize.find_by id: h[:id] }
     message.add_attachments(attachments)
     #send_to_redis
-    message.reload.send_to_redis
 
 
   end

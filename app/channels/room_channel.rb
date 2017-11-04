@@ -37,7 +37,8 @@ class RoomChannel < ApplicationCable::Channel
     RoomChannel.broadcast_to(current_user,
                              message: {msg: message,
                                        time_stamp: Time.now.to_i,
-                                       marked: true})
+                                       marked: true,
+                                       readed: true})
     # @index = @index + 1
     # ActionCable.server.broadcast("student:#{current_user.id}",
     #                              message: {msg: "hello, #{data['message']}  #{current_user.name}",
