@@ -20,5 +20,20 @@
 class HumanResourceInfo < ApplicationRecord
   belongs_to :human_resource, foreign_key: :user_id
 
+  def format
+    {
+        id: self.id,
+        addr: self.addr,
+        company: self.company,
+        department: self.department,
+        email: self.email,
+        name: self.name,
+        tel_cell: self.tel_cell,
+        tel_work: self.tel_work,
+        title: self.title,
+        source: self.source
+    }
+  end
+
 
 end

@@ -45,7 +45,7 @@ class Student < User
   # has_many :messages
   # has_many :point_messages
   # has_many :notification_messages
-  has_many :resumes, foreign_key: :user_id
+  has_many :resumes, foreign_key: :user_id, dependent: :destroy
   #
   # delegate :headimgurl, to: :user
   # delegate :nickname, to: :user

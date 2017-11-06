@@ -16,7 +16,7 @@ class QrCode < ApplicationRecord
 
   def self.create_from(entity)
     record = entity.create_qr_code
-    raw_image = RQRCode::QRCode.new("https://api.gaokao2017.cn/resumes/#{entity.id}").as_png(size: 120)
+    raw_image = RQRCode::QRCode.new("https://www.gaokao2017.cn/resumes/#{entity.id}").as_png(size: 120)
     file = FilelessIO.new("#{entity.id}.png", raw_image.to_s)
     record.image = file
     record.save

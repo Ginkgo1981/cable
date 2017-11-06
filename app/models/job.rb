@@ -41,7 +41,7 @@ class Job < ApplicationRecord
   # default_scope ->{order(created_at: :desc)}
 
   scope :fetched_at_today, -> {where('created_at >= ? and created_at <= ?', Time.now.beginning_of_day, Time.now.end_of_day)}
-  scope :published_at_today, -> {where('job_published_at >= ?', Time.now)}
+  scope :published_within_5days, -> {where('job_published_at >= ?', 5.days.ago)}
 
   def self.distribution_by_date
     Job.fetched_at_today.order('DATE(job_published_at)').group('DATE(job_published_at)').count.map{ |date, count| {date: date.to_s, count: count}}
