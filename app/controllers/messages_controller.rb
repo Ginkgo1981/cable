@@ -86,6 +86,13 @@ class MessagesController < ApplicationController
     # message.reload.send_to_redis
   end
 
+  def delete_message
+    message = Message.find_by id: params[:id]
+    message.destroy
+    NotificationMessage.sink_all_to_redis if message.is_a? NotificationMessage
+    render json: {code: 0, message: 'succ'};
+  end
+
   def create_notification_message
     # raise CableException::NotAllowedSendNotificationMessage unless @user.allow_send_notification_message?
     # message =
@@ -113,12 +120,14 @@ class MessagesController < ApplicationController
     #                                  time_stamp: Time.now.to_i,
     #                                  marked: true}
     # }
-    message = NotificationMessage.create! content: params[:content]
+
+    current_priority = NotificationMessage.maximum(:priority)
+    message = NotificationMessage.create! content: params[:content],priority: current_priority.to_i + 1, state: 1
     attachments = params[:attachment_ids].map { |h|  h[:type].constantize.find_by id: h[:id] }
     message.add_attachments(attachments)
     #send_to_redis
-
-
+    NotificationMessage.sink_all_to_redis if message.is_a? NotificationMessage
+    render json: {code: 0, message: 'create_sucs'}
   end
 
   def send_subscription_message

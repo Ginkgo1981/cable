@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   post 'messages/notification_message_list', to: 'messages#notification_message_list'
   post 'messages/save_then_redis_all', to: 'messages#save_then_redis_all'
   post 'messages/create_notification_message', to: 'messages#create_notification_message'
+  delete 'messages/:id', to: 'messages#delete_message'
 
   #photos
   get '/photos/uptoken', to: 'photos#get_upload_token'
