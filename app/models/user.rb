@@ -35,6 +35,9 @@
 #  notification_message_version :integer          default(0)
 #  role                         :integer          default(0)
 #  avatar                       :string
+#  hr_approved                  :integer          default(0)
+#  hr_approved_by               :uuid
+#  hr_approved_at               :datetime
 #
 
 class User < ApplicationRecord
@@ -92,7 +95,9 @@ class User < ApplicationRecord
         longitude: self.longitude,
         role: self.role,
         resumes: self.type == 'Student' ? self.resumes.map(&:format) : [],
-        human_resource_info: self.type == 'HumanResource' ? self.try(:human_resource_info).try(:format) : nil
+        human_resource_info: self.type == 'HumanResource' ? self.try(:human_resource_info).try(:format) : nil,
+        hr_approved: self.hr_approved
+
     }
   end
 

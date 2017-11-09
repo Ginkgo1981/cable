@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  get 'hr/resumes', to: 'hr#resumes'
+  post 'hr/receive_resume', to: 'hr#receive_resume'
+
   get 'wechats/echo', to: 'wechats#echo'
   post 'wechats/echo', to: 'wechats#echo'
 

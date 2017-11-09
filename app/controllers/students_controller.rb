@@ -35,6 +35,9 @@
 #  notification_message_version :integer          default(0)
 #  role                         :integer          default(0)
 #  avatar                       :string
+#  hr_approved                  :integer          default(0)
+#  hr_approved_by               :uuid
+#  hr_approved_at               :datetime
 #
 
 class StudentsController < ApplicationController

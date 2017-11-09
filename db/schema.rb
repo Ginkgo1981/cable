@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171104133550) do
+ActiveRecord::Schema.define(version: 20171109064539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,6 +135,14 @@ ActiveRecord::Schema.define(version: 20171104133550) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "images",                  array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "hr_resumes", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "hr_id"
+    t.uuid     "resume_id"
+    t.integer  "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -471,6 +479,9 @@ ActiveRecord::Schema.define(version: 20171104133550) do
     t.integer  "notification_message_version",            default: 0
     t.integer  "role",                                    default: 0
     t.string   "avatar"
+    t.integer  "hr_approved",                             default: 0
+    t.uuid     "hr_approved_by"
+    t.datetime "hr_approved_at"
   end
 
 end

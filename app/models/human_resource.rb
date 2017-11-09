@@ -35,10 +35,15 @@
 #  notification_message_version :integer          default(0)
 #  role                         :integer          default(0)
 #  avatar                       :string
+#  hr_approved                  :integer          default(0)
+#  hr_approved_by               :uuid
+#  hr_approved_at               :datetime
 #
 
 class HumanResource < User
   has_many :companies
   has_one :human_resource_info, foreign_key: :user_id
+  has_many :hr_resumes, foreign_key: :hr_id
+  has_many :resumes, through: :hr_resumes
 
 end
