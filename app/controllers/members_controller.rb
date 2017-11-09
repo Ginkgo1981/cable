@@ -144,7 +144,7 @@ class MembersController < ApplicationController
   def bind_hr_info
     hr_info_params = params[:hr_info].permit(:addr, :company, :department, :email, :name, :tel_cell, :tel_work, :title)
     @user.create_human_resource_info hr_info_params
-    render json: {code: 0}
+    render json: {code: 0, member:@user.membership}
   end
 
 
