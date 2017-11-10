@@ -39,7 +39,7 @@ class WechatsController < ApplicationController
                   media_id:"Z3a7BFjDsWUZmt-Ww7OETu7sPMUOMgJjuj8IWF8HTVI0DeuZJwpVf1c23H3oEVah"
               }
       }
-      wechat_mini_app_client = WechatMiniAppClient.new
+      wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6','c03ee61337e4273ae5c89c186e95517c')
       wechat_mini_app_client.send_customer_message openid, 'image',payload
 
     end
@@ -48,6 +48,7 @@ class WechatsController < ApplicationController
 
 
   def mini_app_customer_service_zhaopin
+    wechat_mini_app_client = WechatMiniAppClient.new('wx8887d1994c33935c','209161ceb742e880116fdf6f6414f997')
     json = JSON(request.body.read).symbolize_keys
     puts json
     render plain: params[:echostr]

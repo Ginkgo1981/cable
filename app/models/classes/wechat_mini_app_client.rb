@@ -2,9 +2,11 @@ require 'singleton'
 class WechatMiniAppClient
   attr_reader :appid, :appsecret
 
-  def initialize()
-    @appid = 'wx0f381a5501cad4a6'
-    @appsecret = 'c03ee61337e4273ae5c89c186e95517c'
+  def initialize(appid, appsecret)
+    # @appid = 'wx0f381a5501cad4a6'
+    # @appsecret = 'c03ee61337e4273ae5c89c186e95517c'
+    @appid = appid
+    @appsecret = appsecret
   end
 
   def access_token
