@@ -48,10 +48,19 @@ class WechatsController < ApplicationController
 
 
   def mini_app_customer_service_zhaopin
-    wechat_mini_app_client = WechatMiniAppClient.new('wx8887d1994c33935c','209161ceb742e880116fdf6f6414f997')
     json = JSON(request.body.read).symbolize_keys
     puts json
-    render plain: params[:echostr]
+    openid = json[:FromUserName]
+    user = User.find_by miniapp_openid: openid
+    payload = {
+        image:
+            {
+                media_id:'Lyh-e3WZv3HYtZXCppW1UH0dUck51Ne2CBTmBisnrW4Em_49ljgsWyeC0NutynsV'
+            }
+    }
+    wechat_mini_app_client = WechatMiniAppClient.new('wx8887d1994c33935c','209161ceb742e880116fdf6f6414f997')
+    wechat_mini_app_client.send_customer_message openid, 'image',payload
+    render plain: 'success'
   end
 
 end
