@@ -59,6 +59,7 @@ class Student < User
   def format
     {
         id: self.id,
+        cell: self.cell,
         name: self.name,
         nickname: self.nickname,
         headimgurl:  self.headimgurl,
