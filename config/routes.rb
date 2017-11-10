@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   get 'wechats/mini_app_customer_service', to: 'wechats#mini_app_customer_service'
   post 'wechats/mini_app_customer_service', to: 'wechats#mini_app_customer_service'
 
+  get 'wechats/mini_app_customer_service_zhaopin', to: 'wechats#mini_app_customer_service_zhaopin'
+  post 'wechats/mini_app_customer_service_zhaopin', to: 'wechats#mini_app_customer_service_zhaopin'
+
+
   #messages
   post 'messages/notification_message_list', to: 'messages#notification_message_list'
   post 'messages/save_then_redis_all', to: 'messages#save_then_redis_all'

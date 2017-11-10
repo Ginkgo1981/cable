@@ -46,4 +46,11 @@ class WechatsController < ApplicationController
     render plain: 'success'
   end
 
+
+  def mini_app_customer_service_zhaopin
+    json = JSON(request.body.read).symbolize_keys
+    puts json
+    render plain: params[:echostr]
+  end
+
 end
