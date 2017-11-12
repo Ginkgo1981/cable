@@ -54,6 +54,8 @@ class ResumesController < ApplicationController
     else
       params[:type].constantize.create! p.merge({resume: @resume})
     end
+    SlackSendJob.perform_later("[cable] 修改简历 #{params[:type]} #{@resume.student.nickname}")
+
     render json: {code: 0, msg: 'succ'}
   end
 
@@ -76,6 +78,7 @@ class ResumesController < ApplicationController
 
   def save_intention
     resume = @resume.update! params[:resume].permit(:id,:university,:major, :job_title, :job_intention, :job_cities, :job_kind,).to_h
+    SlackSendJob.perform_later("[cable] 修改简历 #{resume.student.nickname}")
     render json: {code: 0, data: @resume.format}
   end
 

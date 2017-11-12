@@ -29,3 +29,7 @@ user = User.find_by miniapp_openid: "oPMr70L0uE_Uco7CxflksMl9Atw8"
 
 
 staff = User.find_by union_id: "oX-css7dRwNFTHWrTCVTj1d0agFk"
+
+
+bundle exec sidekiq -C config/sidekiq.yml
+

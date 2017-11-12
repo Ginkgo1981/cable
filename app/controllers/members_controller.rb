@@ -95,13 +95,16 @@ class MembersController < ApplicationController
                                 headimgurl: info[:avatarUrl],
                                 union_id: info[:unionId],
                                 type: type
-       user.resumes.create! if user.is_a? Student
+      SlackSendJob.perform_later("[cable] register #{user.type} #{user.nickname}")
+      user.resumes.create! if user.is_a? Student
+    else
+      SlackSendJob.perform_later("[cable] login #{user.type} #{user.nickname}")
     end
     #inviter
-    if params[:inviter_id] && student.id != params[:inviter_id]
-      inviter = User.find_by id: params[:inviter_id]
-      inviter.invitees << student if inviter
-    end
+    # if params[:inviter_id] && student.id != params[:inviter_id]
+    #   inviter = User.find_by id: params[:inviter_id]
+    #   inviter.invitees << student if inviter
+    # end
     render json: {code: 0, member: user.membership, session_key: session_key}
   end
 
@@ -187,13 +190,13 @@ class MembersController < ApplicationController
                     resume_id: @user.resumes[0].id,
                     job_id: params[:job_id],
                     company_id: params[:company_id]
-    if @user.red_packs.where(event: 'deliver').size == 0
-      amount = (100..200).to_a.sample
-      @user.red_packs.create! amount: amount, event: 'deliver'
-      if @user.mp_openid
-        WechatRedpack.send_redpack amount, @user.mp_openid
-      end
-    end
+    # if @user.red_packs.where(event: 'deliver').size == 0
+    #   amount = (100..200).to_a.sample
+    #   @user.red_packs.create! amount: amount, event: 'deliver'
+    #   if @user.mp_openid
+    #     WechatRedpack.send_redpack amount, @user.mp_openid
+    #   end
+    # end
     render json: {code: 0, msg: 'succ'}
   end
 
@@ -207,14 +210,14 @@ class MembersController < ApplicationController
   def deliver_resume_to_email
     to = params[:to]
     resume = @user.resumes.first
-    if @user.red_packs.where(event: 'deliver').size == 0
-      amount = (100..200).to_a.sample
-      @user.red_packs.create! amount: amount, event: 'deliver'
-      if @user.mp_openid
-        WechatRedpack.send_redpack amount, @user.mp_openid
-      end
-    end
-
+    # if @user.red_packs.where(event: 'deliver').size == 0
+    #   amount = (100..200).to_a.sample
+    #   @user.red_packs.create! amount: amount, event: 'deliver'
+    #   if @user.mp_openid
+    #     # WechatRedpack.send_redpack amount, @user.mp_openid
+    #   end
+    # end
+    SlackSendJob.perform_later("[cable] deliver_resume_to_email #{@user.nickname} #{to}")
     HrMailer.new.welcome_email(to, resume.format_for_email).deliver!
     render json:{code: 0}
   end

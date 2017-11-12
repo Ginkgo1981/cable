@@ -13,8 +13,8 @@ class HrController < ApplicationController
     resume = Resume.find_by id: params[:resume_id]
     if @user.is_a? HumanResource
       @user.resumes << resume unless @user.resumes.include? resume
+      SlackSendJob.perform_later("[HR] #{@user.human_resource_info.company} received resume #{resume.student.nickname}")
     end
     render json: {code: 0, message: 'succ'}
   end
-
 end

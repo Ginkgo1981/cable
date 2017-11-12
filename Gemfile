@@ -19,6 +19,8 @@ gem 'rqrcode'
 gem 'kaminari'
 gem 'awesome_print'
 
+gem 'sidekiq'
+
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'

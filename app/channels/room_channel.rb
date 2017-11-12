@@ -28,6 +28,7 @@ class RoomChannel < ApplicationCable::Channel
 
   def speak(data)
     key = "#{Time.now.strftime('%Y%m%d')}-#{data['message']}"
+    SlackSendJob.perform_later("[cable] search #{current_user.nickname} #{key}")
     unless $redis_jobs.exists key
       jobs = Job.search_by_query(data['message']).records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
       $redis_jobs.set key, JSON(jobs)

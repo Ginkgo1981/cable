@@ -17,6 +17,7 @@ class WechatsController < ApplicationController
       if user.red_packs.size == 0
         amount = (100..200).to_a.sample
         user.red_packs.create! amount: amount, event: 'subscribe'
+        SlackSendJob.perform_later("[cable] send_redpack #{user.nickname} #{amount}")
         WechatRedpack.send_redpack amount, openid
       end
     end
@@ -41,7 +42,7 @@ class WechatsController < ApplicationController
       }
       wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6','c03ee61337e4273ae5c89c186e95517c')
       wechat_mini_app_client.send_customer_message openid, 'image',payload
-
+      SlackSendJob.perform_later("[cable] 大四小冰客服 #{user.nickname}")
     end
     render plain: 'success'
   end
@@ -60,6 +61,7 @@ class WechatsController < ApplicationController
     }
     wechat_mini_app_client = WechatMiniAppClient.new('wx8887d1994c33935c','209161ceb742e880116fdf6f6414f997')
     wechat_mini_app_client.send_customer_message openid, 'image',payload
+    SlackSendJob.perform_later("[cable] 大四小冰招聘版 #{user.human_resource_info.company} - #{user.nickname}")
     render plain: 'success'
   end
 

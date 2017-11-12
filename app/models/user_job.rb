@@ -26,7 +26,8 @@ class UserJob < ApplicationRecord
 
   def deliver_by_email!
     if self.company.company_email
-      # HrMailer.new.welcome_email(self.company.company_email, self.resume.format_for_email).deliver!
+      SlackSendJob.perform_later("[cable] deliver_by_email! #{user.nickname} #{self.company.company_email}")
+      HrMailer.new.welcome_email(self.company.company_email, self.resume.format_for_email).deliver!
     end
   end
 

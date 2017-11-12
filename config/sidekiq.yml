@@ -1,0 +1,9 @@
+---
+:concurrency: 2
+:pidfile: /mnt/pids/sidekiq.pid
+:logfile: /mnt/logs/sidekiq.log
+:timeout: 30
+:verbose: true
+:queues:
+  - slack
+:daemon: true
