@@ -68,11 +68,6 @@ class UsersController < ApplicationController
            each_serializer: HumanResourceSerializer
   end
 
-  def get_hr
-    binding.pry
-    s = Student.find_by id:params[:id]
-    render json: {code: 0, data: s.format}
-  end
 
   def get_student
     s = Student.find_by id:params[:id]
