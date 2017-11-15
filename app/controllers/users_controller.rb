@@ -43,10 +43,35 @@
 class UsersController < ApplicationController
 
   def get_student_list
-    students = Student.all
+    count = Student.count
+    students = Student.all.includes(resumes: [:educations,:experiences,:skills,:honors]).page(params[:page].to_i + 1).per(20)
     render json: students,
-           meta: {code: 0},
+           meta: {code: 0, count: count},
            each_serializer: StudentSerializer
+  end
+
+
+
+  def update_hr
+    #todo update info
+    hr = HumanResource.find params[:id]
+    hr.hr_approved = params[:hr_approved].to_i
+    hr.save!
+    render json: { code: 0, message: 'approved' }
+  end
+
+  def get_hr_list
+    count = HumanResource.count
+    hrs = HumanResource.all.includes(:human_resource_info).page(params[:page].to_i + 1).per(20)
+    render json: hrs,
+           meta: {code: 0, count: count},
+           each_serializer: HumanResourceSerializer
+  end
+
+  def get_hr
+    binding.pry
+    s = Student.find_by id:params[:id]
+    render json: {code: 0, data: s.format}
   end
 
   def get_student

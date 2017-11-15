@@ -49,8 +49,6 @@ class StudentSerializer < ApplicationSerializer
 
   def resume_score
     object.resumes[0].score
-
-
   end
 
   # has_one :user , if: -> {instance_options[:include_user]}

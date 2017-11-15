@@ -1,7 +1,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: cable
+  database: cable_20171114
   pool: 5
   username: chenjian
   password:

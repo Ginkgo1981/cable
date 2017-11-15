@@ -27,8 +27,12 @@ Rails.application.routes.draw do
 
   #users
   delete '/users/:id', to: 'users#delete_user'
-  get '/users/students', to: 'users#get_student_list'
-  get '/users/students/:id', to: 'users#get_student'
+  get '/users/hrs/:page', to: 'users#get_hr_list'
+  get '/users/hrs/:id', to: 'users#get_hr'
+  get '/users/students/:page', to: 'users#get_student_list'
+  get '/users/student/:id', to: 'users#get_student'
+
+  post '/users/hrs/:id',to: 'users#update_hr'
 
   #stories
   get 'stories/get_story/:id', to: 'stories#get_story'

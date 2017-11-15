@@ -31,15 +31,15 @@ class JobsController < ApplicationController
   before_action :find_user_by_token!, only: [:update_job]
   def list
     site = params[:site]
-    jobs = Job.published_within_5days.where(job_origin_web_site_name: site).order('job_published_at desc').includes(:company).page(params[:page].to_i + 1).per(20)
-    count = Job.published_within_5days.where(job_origin_web_site_name: site).size
+    jobs = Job.published_within_15days.where(job_origin_web_site_name: site).order('job_published_at desc').includes(:company).page(params[:page].to_i + 1).per(20)
+    count = Job.published_within_15days.where(job_origin_web_site_name: site).size
     render json: jobs,
            each_serializer: JobSerializer,
            meta: {code: 0, count: count}
   end
 
   def distributions
-    distributions = Job.published_within_5days.distribution_by_approved
+    distributions = Job.published_within_15days.distribution_by_approved
     # distributions = Job.distribution_by_job_origin_web_site_name
     render json: {code: 0, distributions: distributions}
   end
