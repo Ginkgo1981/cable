@@ -59,4 +59,11 @@ class PointMessage < Message
     $redis_cable.zadd("user::#{self.receiver_id}", 100, JSON(self.format_for_redis))
   end
 
+  def send_to_all_online_users
+    json = JSON(self.format_for_redis)
+    User.online.each do  |user|
+      $redis_cable.zadd("user::#{user.id}", 100, json)
+    end
+  end
+
 end

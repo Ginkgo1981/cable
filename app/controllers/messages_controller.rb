@@ -78,6 +78,15 @@ class MessagesController < ApplicationController
   end
 
 
+  def create_point_message_send_to_all_online_users
+    message = PointMessage.create! content: params[:content]
+    attachments = params[:attachment_ids].map { |h|  h[:type].constantize.find_by id: h[:id] }
+    message.add_attachments(attachments)
+    message.send_to_all_online_users
+    render json: {code: 0, message: 'create_sucs'}
+
+  end
+
   def save_then_redis_all
     message = Message.find_by id: params[:message][:id]
     message.update! params[:message].permit(:content,:state, :priority)

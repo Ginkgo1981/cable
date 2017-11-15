@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171109064539) do
+ActiveRecord::Schema.define(version: 20171115141312) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -458,7 +458,6 @@ ActiveRecord::Schema.define(version: 20171109064539) do
     t.string   "device_info"
     t.boolean  "register_status"
     t.datetime "register_at"
-    t.boolean  "online_status"
     t.string   "openweb_openid"
     t.string   "mp_openid"
     t.string   "miniapp_openid"
@@ -482,6 +481,7 @@ ActiveRecord::Schema.define(version: 20171109064539) do
     t.integer  "hr_approved",                             default: 0
     t.uuid     "hr_approved_by"
     t.datetime "hr_approved_at"
+    t.integer  "online_status",                           default: 0
   end
 
 end

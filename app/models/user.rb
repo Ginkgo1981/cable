@@ -14,7 +14,6 @@
 #  device_info                  :string
 #  register_status              :boolean
 #  register_at                  :datetime
-#  online_status                :boolean
 #  openweb_openid               :string
 #  mp_openid                    :string
 #  miniapp_openid               :string
@@ -38,6 +37,7 @@
 #  hr_approved                  :integer          default(0)
 #  hr_approved_by               :uuid
 #  hr_approved_at               :datetime
+#  online_status                :integer          default(0)
 #
 
 class User < ApplicationRecord
@@ -61,6 +61,9 @@ class User < ApplicationRecord
 
   has_many :red_packs
 
+
+  scope :online, -> {where('online_status = ?', 1)}
+  scope :offline, -> {where('online_status = ?', 0)}
 
 
   # delegate :dsin, to: :identity
@@ -129,11 +132,16 @@ class User < ApplicationRecord
   end
 
   def offline
+    self.online_status = 0
+    self.save!
     pp "[user-model] offine user_id: #{self.id}"
+
   end
 
   def online
-    pp "[user-model] offine online: #{self.id}"
+    self.online_status = 1
+    self.save!
+    pp "[user-model] online: user_id: #{self.id}"
   end
 
   def generate_token

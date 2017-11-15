@@ -14,7 +14,6 @@
 #  device_info                  :string
 #  register_status              :boolean
 #  register_at                  :datetime
-#  online_status                :boolean
 #  openweb_openid               :string
 #  mp_openid                    :string
 #  miniapp_openid               :string
@@ -38,6 +37,7 @@
 #  hr_approved                  :integer          default(0)
 #  hr_approved_by               :uuid
 #  hr_approved_at               :datetime
+#  online_status                :integer          default(0)
 #
 
 class UsersController < ApplicationController
@@ -77,6 +77,12 @@ class UsersController < ApplicationController
 
   def delete_user
     s =  Student.find_by id: params[:id]
+    s.destroy if s
+    render json: {code: 0, message: 'succ'}
+  end
+
+  def delete_hr
+    s =  HumanResource.find_by id: params[:id]
     s.destroy if s
     render json: {code: 0, message: 'succ'}
   end

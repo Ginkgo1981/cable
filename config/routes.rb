@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
 
   #messages
+  post 'messages/create_point_message_send_to_all_online_users', to: 'messages#create_point_message_send_to_all_online_users'
   post 'messages/notification_message_list', to: 'messages#notification_message_list'
   post 'messages/save_then_redis_all', to: 'messages#save_then_redis_all'
   post 'messages/create_notification_message', to: 'messages#create_notification_message'
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
 
   #users
   delete '/users/:id', to: 'users#delete_user'
+  delete '/hrs/:id', to: 'users#delete_hr'
   get '/users/hrs/:page', to: 'users#get_hr_list'
   get '/users/hrs/:id', to: 'users#get_hr'
   get '/users/students/:page', to: 'users#get_student_list'
