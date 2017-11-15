@@ -5,11 +5,13 @@ module ApplicationCable
 
     def connect
       self.current_user = find_verified_user
+      self.current_user.online
       pp "[cable] connect current_user #{self.current_user.id}"
       logger.add_tags current_user.name
     end
 
     def disconnect
+      self.current_user.offline
       # Any cleanup work needed when the cable connection is cut.
     end
 

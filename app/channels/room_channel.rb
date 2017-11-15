@@ -8,7 +8,7 @@ class RoomChannel < ApplicationCable::Channel
     # stream_from "student::#{current_user.id}"
     stream_for current_user
     @index = 0
-    current_user.online
+    # current_user.online
   end
 
 
@@ -50,7 +50,7 @@ class RoomChannel < ApplicationCable::Channel
 
 
   def unsubscribed
-    current_user.offline
+    # current_user.offline
   end
 
   private
