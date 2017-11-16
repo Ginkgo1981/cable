@@ -20,7 +20,16 @@ class WechatMiniAppClient
     token
   end
 
-  def send_customer_message(openid, msgtype, payload = nil)
+  def send_customer_message(json_str)
+    # {
+    #     "touser":"OPENID",
+    #     "msgtype":"image",
+    #     "image":
+    #         {
+    #             "media_id":"MEDIA_ID"
+    #         }
+    # }
+
 
     # curl -F media=@098.jpg "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=uPo6SZniYyUJ2cq-RZqkzMqiHL982fQtwoZsgDWBeEZa9L784VR6zr_L20GZeNexPMUg6rh-vHFjRRi9JfrvlP-SpjpP28QiQ6p3TIEMs7gQKFcAHAJDY&type=image"
     # msgtype [text,link,miniprogrampage, image]
@@ -52,7 +61,12 @@ class WechatMiniAppClient
     #     "thumb_media_id":"thumb_media_id"
     # }
 
-    json_data = { touser: openid, msgtype: msgtype}.merge(payload)
+
+    json = JSON(json_str.to_json).symbolize_keys
+    openid = json[:openid]
+    msgtype = json[:msgtype]
+    json_data = { touser: openid, msgtype: msgtype }
+    json_data.merge(json[:payload])
     url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=#{access_token}"
     Faraday.post url, JSON.generate(json_data)
   end

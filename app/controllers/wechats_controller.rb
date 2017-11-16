@@ -33,17 +33,34 @@ class WechatsController < ApplicationController
     puts json
     openid = json[:FromUserName]
     user = User.find_by miniapp_openid: openid
-    unless user.mp_openid
-      payload = {
-          image:
-              {
-                  media_id:"Z3a7BFjDsWUZmt-Ww7OETu7sPMUOMgJjuj8IWF8HTVI0DeuZJwpVf1c23H3oEVah"
-              }
+    puts "======= mp_openid: #{user.mp_openid}"
+    if user.mp_openid.nil?
+      json = {
+          openid: openid,
+          msgtype: 'image',
+          payload: {
+              image:
+                  {
+                      media_id:'Z3a7BFjDsWUZmt-Ww7OETu7sPMUOMgJjuj8IWF8HTVI0DeuZJwpVf1c23H3oEVah'
+                  }
+          }
       }
-      wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6','c03ee61337e4273ae5c89c186e95517c')
-      wechat_mini_app_client.send_customer_message openid, 'image',payload
-      SlackSendJob.perform_later("[cable] 大四小冰客服 #{user.nickname}")
+    else
+      json = {
+          openid: openid,
+          msgtype: 'miniprogrampage',
+          payload: {
+              miniprogrampage:{
+                  title:'招聘信息 - 南京 助教',
+                  pagepath:'pages/job-list-page/job-list-page?jobs_key=南京 助教',
+                  thumb_media_id:'Z3a7BFjDsWUZmt-Ww7OETu7sPMUOMgJjuj8IWF8HTVI0DeuZJwpVf1c23H3oEVah'
+              }
+          }
+      }
     end
+    wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6','c03ee61337e4273ae5c89c186e95517c')
+    wechat_mini_app_client.send_customer_message json.to_json
+    SlackSendJob.perform_later("[cable] 大四小冰客服 #{user.nickname}")
     render plain: 'success'
   end
 
