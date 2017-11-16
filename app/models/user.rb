@@ -97,7 +97,7 @@ class User < ApplicationRecord
         latitude: self.latitude,
         longitude: self.longitude,
         role: self.role,
-        # resumes: self.type == 'Student' ? self.resumes.map(&:format) : [],
+        resumes: self.type == 'Student' ? self.resumes.map(&:format) : [],
         human_resource_info: self.type == 'HumanResource' ? self.try(:human_resource_info).try(:format) : nil,
         hr_approved: self.hr_approved
 
