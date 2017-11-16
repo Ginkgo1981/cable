@@ -15,9 +15,9 @@ class WechatsController < ApplicationController
     user.save
     if event == 'subscribe'
       if user.red_packs.size == 0
-        amount = (100..200).to_a.sample
+        amount = (100..110).to_a.sample
         user.red_packs.create! amount: amount, event: 'subscribe'
-        SlackSendJob.perform_later("[cable] send_redpack #{user.nickname} #{amount}")
+        SlackSendJob.perform_later("[cable] send-redpack #{user.nickname} #{amount}")
         WechatRedpack.send_redpack amount, openid
       end
     end

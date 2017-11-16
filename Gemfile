@@ -64,6 +64,9 @@ gem 'pry'
 gem 'pry-nav'
 gem 'pry-rails'
 
+# gem 'imgkit'
+# gem 'wkhtmltoimage-binary'
+
 
 group :development, :test do
   gem 'annotate', git: 'https://github.com/ctran/annotate_models.git'

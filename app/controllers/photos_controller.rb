@@ -45,7 +45,7 @@ class PhotosController < ApplicationController
     url = params[:url] #|| 'http://r.xiumi.us/board/v5/3oTAV/61488759'
     web_driver = Selenium::WebDriver.for :remote, desired_capabilities: :phantomjs
     web_driver.navigate.to url
-    sleep 3
+    sleep 6
     name = "story-#{Time.current.to_i}.jpg"
     file = web_driver.save_screenshot name
     bucket = 'gaokao'
