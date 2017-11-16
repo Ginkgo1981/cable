@@ -17,11 +17,11 @@
 class ResumeSerializer < ApplicationSerializer
   attributes :id, :user_id, :job_intention, :job_cities, :job_kind, :job_title, :score, :university,:major
 
-  has_many :educations
-  has_many :experiences
-  has_many :skills
-  has_many :honors
-  belongs_to :student
+  # has_many :educations
+  # has_many :experiences
+  # has_many :skills
+  # has_many :honors
+  # belongs_to :student
 
 
   def job_cities

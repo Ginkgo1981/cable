@@ -19,14 +19,12 @@ class ResumesController < ApplicationController
   before_action :find_user_by_token!, only: [:my_resumes, :create_resume]
 
 
-  def my_resumes #only 1 now
+  def my_resumes
     if @student
-      resume = @student.resumes[0]
-
-      render json: {code: 0, resume: resume.format_for_basic}
-      # render json: resumes,
-      #        each_serializer: ResumeSerializer,
-      #        meta: {code: 0}
+      resumes = @student.resumes
+      render json: resumes,
+             each_serializer: ResumeSerializer,
+             meta: {code: 0}
     end
   end
 
