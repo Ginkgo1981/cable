@@ -29,7 +29,7 @@ class WechatMiniAppClient
     #             "media_id":"MEDIA_ID"
     #         }
     # }
-    {"touser":"opvsg0VHguzEeOtL2hGtznCjmg0g","msgtype":"image","image":{"media_id":"Z3a7BFjDsWUZmt-Ww7OETu7sPMUOMgJjuj8IWF8HTVI0DeuZJwpVf1c23H3oEVah"}}
+
 
     # curl -F media=@098.jpg "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=uPo6SZniYyUJ2cq-RZqkzMqiHL982fQtwoZsgDWBeEZa9L784VR6zr_L20GZeNexPMUg6rh-vHFjRRi9JfrvlP-SpjpP28QiQ6p3TIEMs7gQKFcAHAJDY&type=image"
     # msgtype [text,link,miniprogrampage, image]
@@ -67,8 +67,16 @@ class WechatMiniAppClient
     msgtype = json[:msgtype]
     json_data = { touser: openid, msgtype: msgtype }
     json_data.merge!(json[:payload])
+    
+    
     url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=#{access_token}"
-    Faraday.post url, JSON.generate(json_data)
+    puts '====== url ===='
+    puts url
+    puts ' ======= json-data ====='
+    puts json_data
+    res = Faraday.post url, JSON.generate(json_data)
+    puts '====== res ========='
+    puts res.body
   end
 
 

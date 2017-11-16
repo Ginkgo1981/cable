@@ -33,7 +33,7 @@ class WechatsController < ApplicationController
     puts json
     openid = json[:FromUserName]
     user = User.find_by miniapp_openid: openid
-    puts "======= mp_openid: #{user.mp_openid}"
+    puts "======= mp_openid: #{user.mp_openid} ========="
     if user.mp_openid.nil?
       json = {
           openid: openid,
