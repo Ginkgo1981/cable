@@ -50,7 +50,7 @@ class MembersController < ApplicationController
     # cell = Cell.find_by cell: params[:cell], code: params[:sms_code]
     # raise CableException::CellCodeError unless cell
     info = wechat_client.get_user_info(access_token, openid).symbolize_keys!
-    staff = User.find_by union_id: info[:unionid]
+    staff = Student.find_by union_id: info[:unionid]
     render json: {code: 0, member: staff.membership}
   end
 

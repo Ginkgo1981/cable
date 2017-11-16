@@ -72,6 +72,25 @@ class Student < User
 
     }
   end
+
+  def format_for_sender
+    {
+        id: self.id,
+        cell: self.cell,
+        name: self.name,
+        nickname: self.nickname,
+        headimgurl:  self.headimgurl,
+        province: self.province,
+        city:  self.city,
+        university: self.university,
+        major: self.major,
+        industry_tags: self.industry_tags,
+        skill_tags: self.skill_tags
+
+    }
+  end
+
+
   #
   #
   #

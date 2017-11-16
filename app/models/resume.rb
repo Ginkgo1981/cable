@@ -104,6 +104,20 @@ class Resume < ApplicationRecord
     }
   end
 
+
+  def format_for_basic
+    {
+        id: self.id,
+        job_intention: self.job_intention,
+        job_cities: self.job_cities,
+        job_kind: self.job_kind,
+        job_title: self.job_title,
+        score: self.score
+
+    }
+  end
+
+
   def format_for_email
     {
         university: self.university,
