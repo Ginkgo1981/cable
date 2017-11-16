@@ -74,7 +74,6 @@ class JobsController < ApplicationController
       jobs = Job.search_by_query(params[:key]).records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
       key = "#{Time.now.strftime('%Y%m%d')}-#{params[:key]}"
       $redis_jobs.set key, JSON(jobs)
-      render json: {code: -1, jobs: jobs}
     end
     render json: {code: 0, jobs: jobs}
   end
