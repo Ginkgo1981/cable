@@ -33,3 +33,9 @@ staff = User.find_by union_id: "oX-css7dRwNFTHWrTCVTj1d0agFk"
 
 bundle exec sidekiq -C config/sidekiq.yml
 
+
+
+watch -n 1 'netstat -na | grep 3000'
+
+sudo  tcpdump -i lo 'port 3000'
+
