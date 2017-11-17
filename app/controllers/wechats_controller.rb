@@ -33,6 +33,11 @@ class WechatsController < ApplicationController
     puts json
     openid = json[:FromUserName]
     user = User.find_by miniapp_openid: openid
+    user.activities.create! openid: params[:ToUserName],
+                            msg_type: params[:MsgType],
+                            event: params[:Event],
+                            content: params[:content]
+
     puts "======= mp_openid: #{user.mp_openid} ========="
     if user.mp_openid.nil?
       # json = {
