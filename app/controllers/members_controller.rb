@@ -97,7 +97,6 @@ class MembersController < ApplicationController
                                 type: type
       SlackSendJob.perform_later("[cable] register #{user.type} #{user.nickname}")
       user.resumes.create! if user.is_a? Student
-      user.create_human_resource_info if user.is_a? HumanResource
     else
       SlackSendJob.perform_later("[cable] login #{user.type} #{user.nickname}")
     end
@@ -147,10 +146,10 @@ class MembersController < ApplicationController
 
   def bind_hr_info
     hr_info_params = params[:hr_info].permit(:addr, :company, :department, :email, :name, :tel_cell, :tel_work, :title)
-    human_resource_info = @user.human_resource_info
-    human_resource_info.update! hr_info_params
+    @user.create_human_resource_info hr_info_params
     render json: {code: 0, member:@user.membership}
   end
+
 
   def read_business_card
     hr_info = AliyunServices.get_business_card params[:qiniu_key]

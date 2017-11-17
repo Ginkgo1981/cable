@@ -46,4 +46,5 @@ class HumanResource < User
   has_many :hr_resumes, foreign_key: :hr_id
   has_many :resumes, through: :hr_resumes
 
+  scope :with_info, ->{ joins(:human_resource_info)}
 end
