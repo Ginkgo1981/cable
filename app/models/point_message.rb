@@ -45,6 +45,20 @@ class PointMessage < Message
     msg.format_for_redis
   end
 
+  def self.find_jobs(receiver_id, terms)
+    key = "#{Time.now.strftime('%Y%m%d')}-#{terms}"
+    unless $redis_jobs.exists key
+      jobs = Job.search_by_query(terms).records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
+      $redis_jobs.set key, JSON(jobs)
+
+    end
+    msg = PointMessage.create! receiver_id: receiver_id,
+                               content: "小主,我们为你找到了10条招聘信息匹配你的 #{terms},请查收"
+    json = msg.format_for_redis
+    json[:jobs_redis_key] = key
+    $redis_cable.zadd("user::#{receiver_id}", 100, JSON(json))
+  end
+
 
   def send_to_redis
 

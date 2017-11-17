@@ -38,7 +38,7 @@ class WechatsController < ApplicationController
 
     feedback = {}
 
-    if json[:content] == '就业津贴'
+    if json[:Content] && json[:Content].include?('就业津贴')
       feedback = {
           openid: openid,
           msgtype: 'image',
@@ -49,18 +49,22 @@ class WechatsController < ApplicationController
                   }
           }
       }
-    elsif json[:content].include? '找工作'
-      feedback = {
-          openid: openid,
-          msgtype: 'miniprogrampage',
-          payload: {
-              miniprogrampage: {
-                  title: '招聘信息 - 南京 助教',
-                  pagepath: 'pages/job-list-page/job-list-page?jobs_key=南京 助教',
-                  thumb_media_id: 'jywzzsKkmv0uR3e6S7wk9dt2X-6-rEL4mElBlzA92zD7GArvvFRkUf1qqtXW5lAK'
-              }
-          }
-      }
+    elsif json[:Content] && json[:Content].include?('找工作')
+      term = json[:Content].split(/找工作/)[1].try(:strip)
+      if term
+        feedback = {
+            openid: openid,
+            msgtype: 'miniprogrampage',
+            payload: {
+                miniprogrampage: {
+                    title: "招聘信息 - #{term}",
+                    pagepath: "pages/job-list-page/job-list-page?jobs_key=#{term}",
+                    thumb_media_id: 'jywzzsKkmv0uR3e6S7wk9dt2X-6-rEL4mElBlzA92zD7GArvvFRkUf1qqtXW5lAK'
+                }
+            }
+        }
+        PointMessage.find_jobs(user.id, term)
+      end
 
     elsif user.mp_openid.nil? && user.activities.size == 0
       feedback = {
