@@ -61,8 +61,8 @@ class UsersController < ApplicationController
   end
 
   def get_hr_list
-    count = HumanResource.count
-    hrs = HumanResource.all.includes(:human_resource_info).page(params[:page].to_i + 1).per(20)
+    count = HumanResource.with_info.count
+    hrs = HumanResource.with_info.includes(:human_resource_info).page(params[:page].to_i + 1).per(20)
     render json: hrs,
            meta: {code: 0, count: count},
            each_serializer: HumanResourceSerializer
