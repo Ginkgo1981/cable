@@ -35,44 +35,59 @@ class WechatsController < ApplicationController
     user = User.find_by miniapp_openid: openid
 
     puts "======= mp_openid: #{user.mp_openid} ========="
-    if user.mp_openid.nil? && user.activities.size == 0
-      # json = {
-      #     openid: openid,
-      #     msgtype: 'image',
-      #     payload: {
-      #         image:
-      #             {
-      #                 media_id:'Z3a7BFjDsWUZmt-Ww7OETu7sPMUOMgJjuj8IWF8HTVI0DeuZJwpVf1c23H3oEVah'
-      #             }
-      #     }
-      # }
-      json = {
+
+    feedback = {}
+
+    if json[:content] == '就业津贴'
+      feedback = {
+          openid: openid,
+          msgtype: 'image',
+          payload: {
+              image:
+                  {
+                      media_id: 'jywzzsKkmv0uR3e6S7wk9dt2X-6-rEL4mElBlzA92zD7GArvvFRkUf1qqtXW5lAK'
+                  }
+          }
+      }
+    elsif json[:content].include? '找工作'
+      feedback = {
+          openid: openid,
+          msgtype: 'miniprogrampage',
+          payload: {
+              miniprogrampage: {
+                  title: '招聘信息 - 南京 助教',
+                  pagepath: 'pages/job-list-page/job-list-page?jobs_key=南京 助教',
+                  thumb_media_id: 'jywzzsKkmv0uR3e6S7wk9dt2X-6-rEL4mElBlzA92zD7GArvvFRkUf1qqtXW5lAK'
+              }
+          }
+      }
+
+    elsif user.mp_openid.nil? && user.activities.size == 0
+      feedback = {
           openid: openid,
           msgtype: 'text',
           payload: {
               text:
                   {
-                      content:'回复就业津贴,可得微信现金红包'
+                      content: '回复就业津贴,可得微信现金红包'
                   }
           }
       }
-
-      wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6','c03ee61337e4273ae5c89c186e95517c')
-      wechat_mini_app_client.send_customer_message json.to_json
     else
-      # json = {
-      #     openid: openid,
-      #     msgtype: 'miniprogrampage',
-      #     payload: {
-      #         miniprogrampage:{
-      #             title:'招聘信息 - 南京 助教',
-      #             pagepath:'pages/job-list-page/job-list-page?jobs_key=南京 助教',
-      #             thumb_media_id:'Z3a7BFjDsWUZmt-Ww7OETu7sPMUOMgJjuj8IWF8HTVI0DeuZJwpVf1c23H3oEVah'
-      #         }
-      #     }
-      # }
+      feedback = {
+          openid: openid,
+          msgtype: 'text',
+          payload: {
+              text:
+                  {
+                      content: '你可以这样问我 找工作 南京 化学工程'
+                  }
+          }
+      }
     end
 
+    wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6', 'c03ee61337e4273ae5c89c186e95517c')
+    wechat_mini_app_client.send_customer_message feedback.to_json if feedback.present?
 
     user.activities.create! openid: json[:ToUserName],
                             msg_type: json[:MsgType],
@@ -93,11 +108,11 @@ class WechatsController < ApplicationController
     payload = {
         image:
             {
-                media_id:'Lyh-e3WZv3HYtZXCppW1UH0dUck51Ne2CBTmBisnrW4Em_49ljgsWyeC0NutynsV'
+                media_id: 'Lyh-e3WZv3HYtZXCppW1UH0dUck51Ne2CBTmBisnrW4Em_49ljgsWyeC0NutynsV'
             }
     }
-    wechat_mini_app_client = WechatMiniAppClient.new('wx8887d1994c33935c','209161ceb742e880116fdf6f6414f997')
-    wechat_mini_app_client.send_customer_message openid, 'image',payload
+    wechat_mini_app_client = WechatMiniAppClient.new('wx8887d1994c33935c', '209161ceb742e880116fdf6f6414f997')
+    wechat_mini_app_client.send_customer_message openid, 'image', payload
     SlackSendJob.perform_later("[cable] 大四小冰招聘版 #{user.human_resource_info.company} - #{user.nickname}")
     render plain: 'success'
   end
