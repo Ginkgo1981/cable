@@ -15,7 +15,7 @@
 #
 
 class ResumeSerializer < ApplicationSerializer
-  attributes :id, :user_id, :job_intention, :job_cities, :job_kind, :job_title, :score, :university,:major
+  attributes :student, :id, :user_id, :job_intention, :job_cities, :job_kind, :job_title, :score, :university,:major
 
   # has_many :educations
   # has_many :experiences
@@ -23,6 +23,12 @@ class ResumeSerializer < ApplicationSerializer
   # has_many :honors
   # belongs_to :student
 
+  def student
+    {
+        name: object.student.name,
+        nickname: object.student.nickname
+    }
+  end
 
   def job_cities
     object.job_cities
