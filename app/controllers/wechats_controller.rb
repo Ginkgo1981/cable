@@ -33,13 +33,9 @@ class WechatsController < ApplicationController
     puts json
     openid = json[:FromUserName]
     user = User.find_by miniapp_openid: openid
-    user.activities.create! openid: params[:ToUserName],
-                            msg_type: params[:MsgType],
-                            event: params[:Event],
-                            content: params[:content]
 
     puts "======= mp_openid: #{user.mp_openid} ========="
-    if user.mp_openid.nil?
+    if user.mp_openid.nil? && user.activities.size == 0
       # json = {
       #     openid: openid,
       #     msgtype: 'image',
@@ -50,8 +46,6 @@ class WechatsController < ApplicationController
       #             }
       #     }
       # }
-
-
       json = {
           openid: openid,
           msgtype: 'text',
@@ -62,8 +56,6 @@ class WechatsController < ApplicationController
                   }
           }
       }
-
-
 
       wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6','c03ee61337e4273ae5c89c186e95517c')
       wechat_mini_app_client.send_customer_message json.to_json
@@ -82,6 +74,10 @@ class WechatsController < ApplicationController
     end
 
 
+    user.activities.create! openid: json[:ToUserName],
+                            msg_type: json[:MsgType],
+                            event: json[:Event],
+                            content: json[:content]
 
 
     SlackSendJob.perform_later("[cable] 大四小冰客服 #{user.nickname}")
