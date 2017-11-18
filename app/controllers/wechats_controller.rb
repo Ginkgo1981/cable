@@ -102,13 +102,18 @@ class WechatsController < ApplicationController
     SlackSendJob.perform_later("[cable] 大四小冰客服 #{user.nickname}")
     #if user repleid, we have chance to send customer
     if json[:Content]
-      queue24 = Aliyun::Mns::Queue["test24"]
+      queue = Aliyun::Mns::Queue["test24"]
       h = {
-          user_id: user.id
+          user_id: user.id,
+          event: 'customer-service-text',
       }
-      res = queue24.send_message JSON(h),{:DelaySeconds => 82800, :Priority => 10}
-      puts "=====  aliyun mns ====="
-      puts res.body
+      #queue24
+      res24 = queue.send_message JSON(h),{:DelaySeconds => 82800, :Priority => 10}
+      puts "=====  aliyun mns queue 24 ====="
+      puts res24.body
+      res48 = queue.send_message JSON(h),{:DelaySeconds => 169200, :Priority => 10}
+      puts "=====  aliyun mns queue 48 ====="
+      puts res48.body
     end
     render plain: 'success'
   end
