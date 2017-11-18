@@ -106,8 +106,8 @@ class WechatsController < ApplicationController
       h = {
           user_id: user.id
       }
-      res = queue24.send_message JSON(h)
-      puts res
+      res = queue24.send_message JSON(h),{:DelaySeconds => 828000, :Priority => 10}
+      puts res.inspect
     end
     render plain: 'success'
   end

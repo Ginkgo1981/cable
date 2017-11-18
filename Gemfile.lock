@@ -64,10 +64,10 @@ GIT
 
 GIT
   remote: https://github.com/ginkgo1981/aliyun-mns.git
-  revision: ab8669f352c63df0ede8bc5392e81ac3108bbeb4
+  revision: 97dfa1beb0e68059487f256e7bb9ff2f82a99a96
   branch: master
   specs:
-    aliyun-mns (3.0.0)
+    aliyun-mns (4.0.0)
       activesupport (>= 4.1)
       nokogiri (>= 1.6)
       rest-client
