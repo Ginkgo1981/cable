@@ -4,7 +4,7 @@ Aliyun::Mns.configure do |config|
   config.host = Rails.application.config_for('aliyun_mns')['endpoint']
 end
 
-# queue = Aliyun::Mns::Queue["test"]
+# queue = Aliyun::Mns::Queue["test24"]
 # h = {name: 'jian'}
 # queue.send_message JSON(h)
 # msg = queue.receive_message

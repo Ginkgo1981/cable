@@ -94,10 +94,10 @@ class WechatsController < ApplicationController
     end
     wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6', 'c03ee61337e4273ae5c89c186e95517c')
     wechat_mini_app_client.send_customer_message feedback.to_json if feedback.present?
-    user.customer_service_activities.create! openid: json[:ToUserName],
+    user.customer_service_activities.create! openid: json[:FromUserName],
                                              msg_type: json[:MsgType],
                                              event: json[:Event],
-                                             content: json[:content]
+                                             content: json[:Content]
 
     SlackSendJob.perform_later("[cable] 大四小冰客服 #{user.nickname}")
     #if user repleid, we have chance to send customer
