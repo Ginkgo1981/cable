@@ -24,6 +24,7 @@ tmp/**
 config/wechat_redpack.yml
 config/wechat_oa.yml
 config/wechat_open.yml
+config/aliyun_mns.yml
 story-*
 
 

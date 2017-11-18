@@ -57,6 +57,12 @@ class PointMessage < Message
     json = msg.format_for_redis
     json[:jobs_redis_key] = key
     $redis_cable.zadd("user::#{receiver_id}", 100, JSON(json))
+
+    #activities
+    user = User.find_by id: receiver_id
+    if user
+      user.search_activities.create! content: terms
+    end
   end
 
 

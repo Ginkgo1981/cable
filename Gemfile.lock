@@ -62,6 +62,17 @@ GIT
       hashie
     elasticsearch-rails (5.0.1)
 
+GIT
+  remote: https://github.com/ginkgo1981/aliyun-mns.git
+  revision: 34e55efa29ca2712d1950ebaf25bbe82e4c46aea
+  branch: master
+  specs:
+    aliyun-mns (2.0.0)
+      activesupport (>= 4.1)
+      nokogiri (>= 1.6)
+      rest-client
+      thor
+
 GEM
   remote: https://gems.ruby-china.org/
   specs:
@@ -316,6 +327,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  aliyun-mns!
   annotate!
   awesome_print
   carrierwave!

@@ -1,4 +1,4 @@
-
+bundle exec puma -e production
 
 redis-cli -h loop
 

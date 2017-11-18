@@ -58,7 +58,8 @@ class User < ApplicationRecord
 
   has_many :invitings, foreign_key: :inviter_id
   has_many :invitees, through: :invitings, class_name: User
-  has_many :activities
+  has_many :customer_service_activities
+  has_many :search_activities
 
   has_many :red_packs
 

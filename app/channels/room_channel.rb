@@ -24,6 +24,8 @@ class RoomChannel < ApplicationCable::Channel
                              message: {msg: message,
                                        time_stamp: Time.now.to_i,
                                        marked: true})
+
+    current_user.search_activities.create! content: data['message']
   end
 
   def speak(data)
@@ -50,6 +52,12 @@ class RoomChannel < ApplicationCable::Channel
                                        time_stamp: Time.now.to_i,
                                        marked: true,
                                        readed: true})
+
+
+    #activities
+    current_user.search_activities.create! content: terms
+
+
     # @index = @index + 1
     # ActionCable.server.broadcast("student:#{current_user.id}",
     #                              message: {msg: "hello, #{data['message']}  #{current_user.name}",
