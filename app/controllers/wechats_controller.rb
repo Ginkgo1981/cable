@@ -48,7 +48,7 @@ class WechatsController < ApplicationController
           payload: {
               image:
                   {
-                      media_id: 'jywzzsKkmv0uR3e6S7wk9dt2X-6-rEL4mElBlzA92zD7GArvvFRkUf1qqtXW5lAK'
+                      media_id: 'F4lOY2nJiW4vUGWiC0quXoaDiKdNOoEEbao_-S8Kl6vhpPLL1q4WGucXXUFirI-z'
                   }
           }
       }
@@ -62,7 +62,7 @@ class WechatsController < ApplicationController
                 miniprogrampage: {
                     title: "招聘信息 - #{term}",
                     pagepath: "pages/job-list-page/job-list-page?jobs_key=#{term}",
-                    thumb_media_id: 'jywzzsKkmv0uR3e6S7wk9dt2X-6-rEL4mElBlzA92zD7GArvvFRkUf1qqtXW5lAK'
+                    thumb_media_id: 'F4lOY2nJiW4vUGWiC0quXoaDiKdNOoEEbao_-S8Kl6vhpPLL1q4WGucXXUFirI-z'
                 }
             }
         }

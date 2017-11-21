@@ -18,7 +18,7 @@ namespace :notice do
             miniprogrampage: {
                 title: '大四小冰 - 我们一起找工作',
                 pagepath: 'pages/message-list-page/message-list-page',
-                thumb_media_id: 'jywzzsKkmv0uR3e6S7wk9dt2X-6-rEL4mElBlzA92zD7GArvvFRkUf1qqtXW5lAK'
+                thumb_media_id: 'F4lOY2nJiW4vUGWiC0quXoaDiKdNOoEEbao_-S8Kl6vhpPLL1q4WGucXXUFirI-z'
             }
         }
     }

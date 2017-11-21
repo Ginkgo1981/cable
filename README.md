@@ -25,7 +25,7 @@ user.delete
 
 user = User.find_by miniapp_openid: "oPMr70L0uE_Uco7CxflksMl9Atw8"
 
-    # curl -F media=@098.jpg "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=uPo6SZniYyUJ2cq-RZqkzMqiHL982fQtwoZsgDWBeEZa9L784VR6zr_L20GZeNexPMUg6rh-vHFjRRi9JfrvlP-SpjpP28QiQ6p3TIEMs7gQKFcAHAJDY&type=image"
+    # curl -F media=@xiaobin-redpack.png "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=f66RFXVER0ClXdgJDJ6OdGVr8qFBu-Ow8RA3D_Mp41qog3Df-ygKdOsFg6nmdN_D4F53fbhTRf2KJ62XJTr_k3WcHjFOaKB3GiNTwFBN0n8LHZjAIAYUM&type=image"
 
 
 staff = User.find_by union_id: "oX-css7dRwNFTHWrTCVTj1d0agFk"
