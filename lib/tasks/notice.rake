@@ -1,8 +1,8 @@
 namespace :notice do
 
 
-  desc 'send_as_customer_service'
-  task send_as_customer_service: :environment do
+  desc 'send_customer_service'
+  task send_customer_service: :environment do
     flag = 42
     while flag > 0
       begin
@@ -29,12 +29,19 @@ namespace :notice do
         }
         wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6', 'c03ee61337e4273ae5c89c186e95517c')
         res = wechat_mini_app_client.send_customer_message feedback.to_json
-        puts res.body
+        puts res
       rescue => e
         puts e
       end
 
     end
+  end
+
+
+  desc 'send_template_messagei'
+  task send_customer_service: :environment do
+
+
   end
 
 end

@@ -56,6 +56,7 @@ class JobsController < ApplicationController
 
   def get_job
     job = Job.find_by id: params[:id]
+    SlackSendJob.perform_later("[cable] get_job #{job.job_name}")
     render json: {code: 0, data: job.format}
   end
 
@@ -75,6 +76,7 @@ class JobsController < ApplicationController
       key = "#{Time.now.strftime('%Y%m%d')}-#{params[:key]}"
       $redis_jobs.set key, JSON(jobs)
     end
+    SlackSendJob.perform_later("[cable] get_by_redis_key #{params[:key]} jobs_count: #{jobs.count}")
     render json: {code: 0, jobs: jobs}
   end
 

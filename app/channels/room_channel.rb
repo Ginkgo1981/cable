@@ -29,8 +29,8 @@ class RoomChannel < ApplicationCable::Channel
   end
 
   def speak(data)
-
     terms, formId = data['message'].split(/\#/)
+    SlackSendJob.perform_later("[cable] search #{current_user.nickname} term:#{terms} formid:#{formId} message:#{data['message']}")
     puts "====== formId ========"
     puts formId
     puts "====== terms ======="
@@ -40,7 +40,6 @@ class RoomChannel < ApplicationCable::Channel
                                content: terms
     #add formId to users
     key = "#{Time.now.strftime('%Y%m%d')}-#{terms}"
-    SlackSendJob.perform_later("[cable] search #{current_user.nickname} #{key}")
     unless $redis_jobs.exists key
       jobs = Job.search_by_query(terms).records.preload(:company).map { |a| a.format.symbolize_keys.merge({type: a.class.name.downcase}) }
       $redis_jobs.set key, JSON(jobs)

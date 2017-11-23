@@ -26,7 +26,7 @@ module Searchable
                                            filter: [
                                                range: {
                                                    job_published_at: {
-                                                       gte: 'now-1000d/d',
+                                                       gte: 'now-60d/d',
                                                        lt: 'now/d'
                                                    }
 
