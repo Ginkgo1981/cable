@@ -9,7 +9,7 @@ namespace :channel do
       SlackService.alert "[cable] index_to_elasticsearch started"
       Rails.logger = nil
       Elasticsearch::Model.client.transport.logger = nil
-      feature_ws_url = 'http://localhost:8082/AxisWS/asia.wildfire.Featurer?wsdl'
+      feature_ws_url = 'http://139.224.65.151:8082/AxisWS/asia.wildfire.Featurer?wsdl'
       soap_client = SOAP::WSDLDriverFactory.new(feature_ws_url).create_rpc_driver
       # queues = ['crawler:91job_normal_json_queue','crawler:js_market_json_queue', 'crawler:91job_campus_json_queue', 'crawler:wutongguo_json_queue']
       flag = true
