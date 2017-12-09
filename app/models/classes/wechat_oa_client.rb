@@ -1,6 +1,11 @@
 require 'singleton'
+require 'digest/sha1'
+
 class WechatOaClient
   attr_reader :appid, :appsecret
+
+  TEMPLATE = 'jsapi_ticket=%{jsapi_ticket}&noncestr=%{nonce_str}&timestamp=%{timestamp}&url=%{url}'.freeze
+
 
   def initialize()
     @appid = Rails.application.config_for('wechat_oa')['AppID']
@@ -58,4 +63,29 @@ class WechatOaClient
     url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=#{access_token}"
     Faraday.post url, JSON.generate(json_data)
   end
+
+
+  def sign(url)
+    timestamp = Time.now.to_i
+    nonce_str = 'abcsssss'
+    str = TEMPLATE % {
+        jsapi_ticket: self.get_js_ticket,
+        nonce_str: nonce_str,
+        timestamp: timestamp,
+        url: url
+    }
+    signature = Digest::SHA1.hexdigest(str)
+    json =
+      {
+          signature: signature,
+          nonce_str: nonce_str,
+          timestamp: timestamp,
+          url: url
+      }
+    puts "====== sign ======"
+    puts json
+    json
+  end
+
+
 end
