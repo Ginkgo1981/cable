@@ -43,11 +43,10 @@ class WechatOaClient
   def get_js_ticket
     url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=#{self.access_token}&type=jsapi"
     res = Faraday.get(url)
-    binding.pry
-
+    js_ticket = JSON(res.body)['ticket']
+    puts js_ticket
+    js_ticket
   end
-
-
 
   def send_template_message(json_data)
     url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=#{access_token}"
