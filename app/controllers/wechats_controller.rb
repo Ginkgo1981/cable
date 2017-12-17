@@ -27,6 +27,14 @@ class WechatsController < ApplicationController
     render plain: 'success' #params[:echostr]
   end
 
+
+  def get_js_signature
+    url = params[:url]
+    client = WechatOaClient.new
+    signature =  client.get_js_signature("http://files.gaokao2017.cn/#{url}")
+    render json: {code: 0, signature: signature}
+  end
+
   def mini_app_customer_service
 
     # {:ToUserName=>"gh_d3c70c9c17bf", :FromUserName=>"opvsg0VHguzEeOtL2hGtznCjmg0g",

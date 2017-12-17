@@ -3,6 +3,8 @@ class MembersController < ApplicationController
   before_action :find_user_by_token!, only: [:invitees,:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
                                              :applying_job, :applied_jobs, :is_applied,:bind_hr_info, :read_business_card,
                                              :bookmarking_job, :is_bookmarked, :bookmarked_jobs, :deliver_resume_to_email]
+  
+  before_action :init_mini_app_params, only: [:mini_app_authorization, :wechat_group, :wechat_phone]
 
   # before_action :find_entity_by_dsin!, only: [:like_comment, :forward_wishcard]
 
@@ -69,21 +71,11 @@ class MembersController < ApplicationController
   #student
   def mini_app_authorization
     code = params[:code]
-    if params[:app_name] == '大四小冰'
-      app_id = 'wx0f381a5501cad4a6'
-      app_secret = 'c03ee61337e4273ae5c89c186e95517c'
-      type = 'Student'
-    else
-      app_id = 'wx8887d1994c33935c'
-      app_secret = '209161ceb742e880116fdf6f6414f997'
-      type = 'HumanResource'
-    end
-    session = wx_get_session_key(code, app_id, app_secret)
+    session = wx_get_session_key(code, @app_id, @app_secret)
     session_key = session['session_key']
     encrypted_data = params[:encrypted_data]
     iv = params[:iv]
-    info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
-
+    info = decrypt(session_key, @app_id, encrypted_data, iv).symbolize_keys
     user = User.find_by miniapp_openid: info[:openId]
     unless user
       user = User.create! miniapp_openid: info[:openId],
@@ -94,7 +86,7 @@ class MembersController < ApplicationController
                                 province: info[:province],
                                 headimgurl: info[:avatarUrl],
                                 union_id: info[:unionId],
-                                type: type
+                                type: @type
       SlackSendJob.perform_later("[cable] register #{user.type} #{user.nickname}")
       user.resumes.create! if user.is_a? Student
     else
@@ -109,17 +101,10 @@ class MembersController < ApplicationController
   end
 
   def wechat_group
-    if params[:app_name] == '大四小冰'
-      app_id = 'wx0f381a5501cad4a6'
-      app_secret = 'c03ee61337e4273ae5c89c186e95517c'
-    else
-      app_id = 'wx8887d1994c33935c'
-      app_secret = '209161ceb742e880116fdf6f6414f997'
-    end
     encrypted_data = params[:encrypted_data]
     session_key = params[:session_key]
     iv = params[:iv]
-    info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
+    info = decrypt(session_key, @app_id, encrypted_data, iv).symbolize_keys
     openGId = info[:openGId]
     group = Group.find_or_create_by! group_no: openGId
     group.users << @user
@@ -127,18 +112,10 @@ class MembersController < ApplicationController
   end
 
   def wechat_phone
-    if params[:app_name] == '大四小冰'
-      app_id = 'wx0f381a5501cad4a6'
-      app_secret = 'c03ee61337e4273ae5c89c186e95517c'
-    else
-      app_id = 'wx8887d1994c33935c'
-      app_secret = '209161ceb742e880116fdf6f6414f997'
-    end
     encrypted_data = params[:encrypted_data]
     session_key = params[:session_key]
     iv = params[:iv]
-    info = decrypt(session_key, app_id, encrypted_data, iv).symbolize_keys
-
+    info = decrypt(session_key, @app_id, encrypted_data, iv).symbolize_keys
     @user.cell = info[:phoneNumber]
     @user.save!
     render json: {code: 0, msg: 'succ'}
@@ -244,7 +221,23 @@ class MembersController < ApplicationController
     render json: {code: 0, msg: 'succ'}
   end
 
-  private
+  # private
+  def init_mini_app_params
+    if params[:app_name] == '大四小冰'
+      @app_id = 'wx0f381a5501cad4a6'
+      @app_secret = 'c03ee61337e4273ae5c89c186e95517c'
+      @type = 'Student'
+    elsif params[:app_name] == '天马阅读'
+      @app_id = 'wxdfbc374fc090fd7c'
+      @app_secret = '6f851272e083c60764ccf17ca956379d'
+      @type = 'Reader'
+    else
+      @app_id = 'wx8887d1994c33935c'
+      @app_secret = '209161ceb742e880116fdf6f6414f997'
+      @type = 'HumanResource'
+    end
+  end
+
   def decrypt(session_key, app_id, encrypted_data, iv)
     pc = WechatMiniappDecrypt.new(app_id, session_key)
     pc.decrypt(encrypted_data, iv)

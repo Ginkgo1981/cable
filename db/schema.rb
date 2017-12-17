@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171118151947) do
+ActiveRecord::Schema.define(version: 20171210141906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,24 @@ ActiveRecord::Schema.define(version: 20171118151947) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "type"
+  end
+
+  create_table "articles", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "book_id"
+    t.string   "title_cn"
+    t.string   "title_en"
+    t.string   "previous"
+    t.string   "audio_url"
+    t.string   "audio_name"
+    t.text     "lyric",                          array: true
+    t.text     "questions",                      array: true
+    t.text     "share_words"
+    t.string   "share_img_url"
+    t.string   "share_title"
+    t.string   "teacher_notes_url"
+    t.integer  "word_count"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "attachings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -52,6 +70,14 @@ ActiveRecord::Schema.define(version: 20171118151947) do
     t.string   "bookmarkable_type"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+  end
+
+  create_table "books", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "book_name"
+    t.string   "book_name_cn"
+    t.string   "book_cover_img_url"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   create_table "cells", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

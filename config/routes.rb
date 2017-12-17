@@ -1,10 +1,18 @@
 Rails.application.routes.draw do
 
+  #books
+
+  get 'books/get_article/:id', to: 'books#get_article'
+  get 'books/get_today', to: 'books#get_today'
+
+
+
   get 'hr/resumes', to: 'hr#resumes'
   post 'hr/receive_resume', to: 'hr#receive_resume'
 
   get 'wechats/echo', to: 'wechats#echo'
   post 'wechats/echo', to: 'wechats#echo'
+  post 'wechats/get_js_signature', to: 'wechats#get_js_signature'
 
   get 'wechats/mini_app_customer_service', to: 'wechats#mini_app_customer_service'
   post 'wechats/mini_app_customer_service', to: 'wechats#mini_app_customer_service'

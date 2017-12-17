@@ -14,6 +14,8 @@ class WechatMiniAppClient
     unless token
       url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{@appid}&secret=#{@appsecret}"
       res = Faraday.get(url)
+      puts "========="
+      puts res.body
       token = JSON(res.body)['access_token']
       $redis_cable.cache("wechat_mini_app_access_token_#{@appid}", token, 2 * 60 * 60)
     end
