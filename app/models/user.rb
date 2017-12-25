@@ -63,6 +63,14 @@ class User < ApplicationRecord
 
   has_many :red_packs
 
+  has_many :user_books
+  has_many :books, through: :user_books
+
+  has_many :user_lessons
+  has_many :lessons, through:  :user_lessons
+
+
+
 
   scope :online, -> {where('online_status = ?', 1)}
   scope :offline, -> {where('online_status = ?', 0)}
@@ -70,6 +78,17 @@ class User < ApplicationRecord
 
   # delegate :dsin, to: :identity
   before_create :generate_token
+
+
+  def buy_book book, begin_at
+    self.books << book
+    book.lessons.each_with_index do |lesson, index|
+      self.user_lessons.create book: book,
+          lesson: lesson,
+          reading_day: index + 1,
+          reading_date: (begin_at + index.day).strftime('%Y-%m-%d')
+    end
+  end
 
   def format
     {

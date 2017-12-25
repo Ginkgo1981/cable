@@ -10,12 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171210141906) do
+ActiveRecord::Schema.define(version: 20171223090544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
-  enable_extension "hstore"
   enable_extension "uuid-ossp"
 
   create_table "activities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -253,6 +252,35 @@ ActiveRecord::Schema.define(version: 20171210141906) do
     t.integer  "rating",                   default: 0
   end
 
+  create_table "lesson_questions", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "lesson_id"
+    t.string   "question"
+    t.text     "options",                 array: true
+    t.string   "answer"
+    t.text     "analysis"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "lessons", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "book_id"
+    t.string   "title_cn"
+    t.string   "title_en"
+    t.string   "previous"
+    t.string   "audio_url"
+    t.string   "audio_name"
+    t.text     "lyric",                                      array: true
+    t.text     "share_words"
+    t.string   "share_img_url"
+    t.string   "share_title"
+    t.string   "teacher_notes_url"
+    t.integer  "word_count"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "reading_day",       default: 0
+    t.string   "reading_date"
+  end
+
   create_table "likings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "user_id"
     t.uuid     "likable_id"
@@ -467,6 +495,16 @@ ActiveRecord::Schema.define(version: 20171210141906) do
     t.float    "longitude"
   end
 
+  create_table "user_books", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.uuid     "book_id"
+    t.date     "begin_at"
+    t.date     "end_at"
+    t.integer  "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "user_groups", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "user_id"
     t.uuid     "group_id"
@@ -481,6 +519,18 @@ ActiveRecord::Schema.define(version: 20171210141906) do
     t.uuid     "company_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "user_lessons", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.uuid     "book_id"
+    t.uuid     "lesson_id"
+    t.integer  "reading_day"
+    t.string   "reading_date"
+    t.integer  "state"
+    t.text     "answers",                   array: true
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

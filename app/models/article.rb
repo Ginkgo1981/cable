@@ -37,7 +37,8 @@ class Article < ApplicationRecord
         lyric = time_list.zip sentences
         share_words = json['article_info']['share_words']
         word_count = json['article_info']['words_count']
-        questions = json['problem_info'].map { |s| s.to_json }
+        # questions = json['problem_info'].map { |s| s.to_json }
+        questions = json['problem_info'].to_json
         book_cover_img_url = json['book_cover_img_url']
         book_name = json['book_name']
         book_name_cn = json['book_name_cn']
@@ -75,7 +76,7 @@ class Article < ApplicationRecord
         audio_url: audio_url,
         audio_name: audio_name,
         lyric: lyric,
-        questions: questions,
+        questions: questions_hash,
         share_words: share_words,
         share_img_url: share_img_url,
         share_title: share_title,

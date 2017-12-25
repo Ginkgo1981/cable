@@ -2,8 +2,11 @@ Rails.application.routes.draw do
 
   #books
 
-  get 'books/get_article/:id', to: 'books#get_article'
+  get 'books/get_lesson/:date', to: 'books#get_lesson'
   get 'books/get_today', to: 'books#get_today'
+  get 'books/get_schedules', to: 'books#get_schedules'
+  get 'books/get_questions/:user_lesson_id', to: 'books#get_questions'
+  post 'books/save_answers/:user_lesson_id', to: 'books#save_answers'
 
 
 
