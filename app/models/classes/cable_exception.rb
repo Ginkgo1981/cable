@@ -1,6 +1,25 @@
 class CableException < RuntimeError
   attr_reader :code
 
+
+  class DuplicatedLesson < CableException
+    def initialize(msg = nil)
+      msg ||= '请勿重复购买'
+      super
+      @code = 2001
+    end
+  end
+
+
+  class OngoingLesson < CableException
+    def initialize(msg = nil)
+      msg ||= '有正在进行的课程'
+      super
+      @code = 2002
+    end
+  end
+
+
   class TeacherNotFound < CableException
     def initialize(msg = nil)
       msg ||= 'The code submitted is not a valid one.'

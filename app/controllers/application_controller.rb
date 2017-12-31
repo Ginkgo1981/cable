@@ -19,7 +19,7 @@ class ApplicationController < ActionController::API
 
 
   def render_error(error)
-    render json: {code: error.code, error: error.message}
+    render json: {code: error.code, msg: error.message.to_s}
   end
 
 

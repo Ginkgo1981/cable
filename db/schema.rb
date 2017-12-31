@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171223090544) do
+ActiveRecord::Schema.define(version: 20171230135958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,23 @@ ActiveRecord::Schema.define(version: 20171223090544) do
     t.string   "dsin"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+  end
+
+  create_table "book_productions", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "book_id"
+    t.string   "title"
+    t.date     "lesson_start_at"
+    t.date     "lesson_end_at"
+    t.datetime "sell_start_at"
+    t.datetime "sell_end_at"
+    t.integer  "duration",        default: 0
+    t.text     "objectives",      default: [],              array: true
+    t.text     "requirements",    default: [],              array: true
+    t.integer  "limit"
+    t.integer  "state"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "sell_state",      default: 0
   end
 
   create_table "bookmarkings", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -258,6 +275,17 @@ ActiveRecord::Schema.define(version: 20171223090544) do
     t.text     "options",                 array: true
     t.string   "answer"
     t.text     "analysis"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "lesson_words", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "lesson_id"
+    t.string   "word"
+    t.string   "mean"
+    t.string   "accent"
+    t.integer  "level"
+    t.string   "audio_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

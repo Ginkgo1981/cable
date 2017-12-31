@@ -1,14 +1,18 @@
 Rails.application.routes.draw do
 
   #books
-
+  post 'books/buy_production/:production_id', to: 'books#buy_production'
+  get 'books/get_production/:production_id', to: 'books#get_production'
   get 'books/get_lesson/:date', to: 'books#get_lesson'
-  get 'books/get_today', to: 'books#get_today'
+  get 'books/get_books', to: 'books#get_books'
+  get 'books/get_book_productions', to: 'books#get_book_productions'
   get 'books/get_schedules', to: 'books#get_schedules'
   get 'books/get_questions/:user_lesson_id', to: 'books#get_questions'
   post 'books/save_answers/:user_lesson_id', to: 'books#save_answers'
 
 
+  get 'books/get_user_lesson', to: 'books#get_user_lesson'
+  get 'books/get_word_list', to: 'books#get_word_list'
 
   get 'hr/resumes', to: 'hr#resumes'
   post 'hr/receive_resume', to: 'hr#receive_resume'

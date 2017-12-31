@@ -80,14 +80,28 @@ class User < ApplicationRecord
   before_create :generate_token
 
 
-  def buy_book book, begin_at
-    self.books << book
-    book.lessons.each_with_index do |lesson, index|
-      self.user_lessons.create book: book,
-          lesson: lesson,
-          reading_day: index + 1,
-          reading_date: (begin_at + index.day).strftime('%Y-%m-%d')
+  def buy_book_producton book_production
+    book = book_production.book
+    raise CableException::DuplicatedLesson if self.books.include? book
+    if self.user_books.maximum(:end_at) && self.user_books.maximum(:end_at) > book_production.lesson_start_at
+      raise CableException::OngoingLesson
     end
+    self.user_books.create!  book: book,
+                             begin_at: book_production.lesson_start_at,
+                             end_at: book_production.lesson_end_at
+    book.lessons.each_with_index do |lesson, idx|
+      self.user_lessons.create! book: book,
+          lesson: lesson,
+          reading_day: idx + 1,
+          reading_date: (book_production.lesson_start_at + idx.day).strftime('%Y-%m-%d')
+    end
+    true
+  end
+
+
+  def remove_all_lessons
+    self.user_books.each &:destroy
+    self.user_lessons.each &:destroy
   end
 
   def format

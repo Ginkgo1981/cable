@@ -24,9 +24,40 @@
 class Lesson < ApplicationRecord
   belongs_to :book
   has_many :lesson_questions, dependent: :destroy
-
   has_many :user_lessons
   has_many :users, through: :user_lessons
+  has_many :lesson_words
+
+
+  def self.attach_word_list
+    %w(words-1-8 words-9-16 words-17-24).each do |date|
+      file_path = "/Users/chenjian/Desktop/reading-json/#{date}.json"
+      File.open(file_path, 'r') do |f|
+        f.each_line do |line|
+          json = JSON(line)
+          json.each do |h|
+            puts "=== day #{h['day']}"
+
+
+            lesson = Lesson.find_by reading_day: h['day']
+            if lesson
+              h['word_list'].each do |word|
+                lesson.lesson_words.create! word: word['word'],
+                                            mean: word['mean'],
+                                            accent: word['accent'],
+                                            level: word['level'],
+                                            audio_url: word['audio_url']
+              end
+
+            end
+          end
+        end
+      end
+    end
+
+  end
+
+
   def self.create_from_mint_reader(file_path=nil)
 
     Book.destroy_all
@@ -35,14 +66,8 @@ class Lesson < ApplicationRecord
     UserLesson.destroy_all
     UserBook.destroy_all
 
-    %w(
-    1102 1103 1104 1105 1106 1107 1108 1109 1110 1111 1112
-    1113 1114 1115 1116 1117 1118 1119 1120 1121 1122 1123
-    1124 1125 1126 1127 1128 1129 1130 1201 1202 1203 1204
-    1205 1206 1207 1208 1209 1210 1211 1212 1213 1214 1215
-    1216 1217 1218 1219 1220 1221 1222 1223 1224
-    ).each do |date|
-      file_path = "/Users/chenjian/Desktop/mintReading/day-#{date}.json"
+    (1102..1121).each do |date|
+      file_path = "/Users/chenjian/Desktop/reading-json/day-#{date}.json"
       File.open(file_path, 'r') do |f|
         f.each_line do |line|
           json = JSON(line)
@@ -54,7 +79,7 @@ class Lesson < ApplicationRecord
           audio_url = json['article_info']['audio_info']['audio_url']
 
           lyric = time_list.zip sentences
-          lyrics = lyric.map {|a,b| arr = [a];  arr << b[0]; arr << b[1]}
+          lyrics = lyric.map { |a, b| arr = [a]; arr << b[0]; arr << b[1] }
 
 
           share_words = json['article_info']['share_words']
@@ -75,17 +100,16 @@ class Lesson < ApplicationRecord
                                         title_en: title_en,
                                         share_words: share_words,
                                         word_count: word_count,
-                                        reading_day:Lesson.maximum(:reading_day).to_i + 1
+                                        reading_day: Lesson.maximum(:reading_day).to_i + 1
           questions = json['problem_info']
           questions.each do |q|
             lesson.lesson_questions.create question: q['question']['en'],
-                                           options:  q['options'].map{|o| o['en']},
+                                           options: q['options'].map { |o| o['en'] },
                                            answer: q['answer'][0],
                                            analysis: q['analysis'][0]
           end
         end
       end
-
 
 
     end
@@ -103,12 +127,13 @@ class Lesson < ApplicationRecord
         audio_url: audio_url,
         audio_name: audio_name,
         lyric: lyric,
-        questions: self.lesson_questions.map{|q| q.format},
+        questions: self.lesson_questions.map { |q| q.format },
         share_words: share_words,
         share_img_url: share_img_url,
         share_title: share_title,
         teacher_notes_url: teacher_notes_url,
-        word_count: word_count
+        word_count: word_count,
+        words: self.lesson_words.map{|lw| lw.format}
     }
   end
 end
