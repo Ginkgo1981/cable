@@ -42,9 +42,9 @@ class Book < ApplicationRecord
     Book.all.each_with_index do |book, idx|
       puts idx
       duration = book.lessons.size
-      sell_start_at = DateTime.new(2017,12,31) + idx.month
-      sell_end_at = DateTime.new(2017, 12, 31) + idx.month
-      lesson_start_at = Date.new(2017,12,31) + idx.month
+      sell_start_at = DateTime.new(2018,1,1) + idx.month
+      sell_end_at = DateTime.new(2018, 1, 31) + idx.month
+      lesson_start_at = Date.new(2018,1,1) + idx.month
       lesson_end_at = lesson_start_at + duration.days
       objectives = [
           "通过#{duration}天的学习, 完整读完一本英语原著",

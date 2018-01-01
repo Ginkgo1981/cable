@@ -31,7 +31,7 @@ class Lesson < ApplicationRecord
 
   def self.attach_word_list
     %w(words-1-8 words-9-16 words-17-24).each do |date|
-      file_path = "/Users/chenjian/Desktop/reading-json/#{date}.json"
+      file_path = "#{Rails.root}/reading-json/#{date}.json"
       File.open(file_path, 'r') do |f|
         f.each_line do |line|
           json = JSON(line)
@@ -67,7 +67,7 @@ class Lesson < ApplicationRecord
     UserBook.destroy_all
 
     (1102..1121).each do |date|
-      file_path = "/Users/chenjian/Desktop/reading-json/day-#{date}.json"
+      file_path = "#{Rails.root}/reading-json/day-#{date}.json"
       File.open(file_path, 'r') do |f|
         f.each_line do |line|
           json = JSON(line)
