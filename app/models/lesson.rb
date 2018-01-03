@@ -117,6 +117,14 @@ class Lesson < ApplicationRecord
 
   end
 
+
+  def replace_audio
+    arr = self.audio_url.split /audios\//
+    url = "https://images.gaokao2017.cn/audios-01-#{arr[1]}"
+    self.audio_url = url
+    self.save!
+  end
+
   def format
     {
         id: id,

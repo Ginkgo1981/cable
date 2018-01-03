@@ -227,9 +227,9 @@ class MembersController < ApplicationController
       @app_id = 'wx0f381a5501cad4a6'
       @app_secret = 'c03ee61337e4273ae5c89c186e95517c'
       @type = 'Student'
-    elsif params[:app_name] == '天马阅读'
-      @app_id = 'wxdfbc374fc090fd7c'
-      @app_secret = '6f851272e083c60764ccf17ca956379d'
+    elsif params[:app_name] == '百草英语'
+      @app_id = 'wxbeddbe15b456a582'
+      @app_secret = 'd043773699dbba089d49592984a2e638'
       @type = 'Reader'
     else
       @app_id = 'wx8887d1994c33935c'

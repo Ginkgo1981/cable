@@ -42,5 +42,27 @@
 
 class Reader < User
 
+  def membership
+    {
+        id: self.id,
+        cell: self.cell,
+        token: self.token,
+        type: self.type,
+        union_id: self.union_id,
+        name: self.name,
+        nickname: self.nickname,
+        sex: self.sex,
+        province: self.province,
+        city: self.city,
+        headimgurl: self.headimgurl,
+        avatar: self.avatar,
+        latitude: self.latitude,
+        longitude: self.longitude,
+        role: self.role,
+        user_lessons_count: self.user_lessons.count
+
+    }
+  end
+
 
 end
