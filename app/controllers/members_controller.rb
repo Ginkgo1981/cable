@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
 
-  before_action :find_user_by_token!, only: [:invitees,:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
+  before_action :find_user_by_token!, only: [:get_reading_stats, :invitees,:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
                                              :applying_job, :applied_jobs, :is_applied,:bind_hr_info, :read_business_card,
                                              :bookmarking_job, :is_bookmarked, :bookmarked_jobs, :deliver_resume_to_email]
   
@@ -54,6 +54,11 @@ class MembersController < ApplicationController
     info = wechat_client.get_user_info(access_token, openid).symbolize_keys!
     staff = Student.find_by union_id: info[:unionid]
     render json: {code: 0, member: staff.membership}
+  end
+
+  def get_reading_stats
+    stats = @user.stats
+    render json: {stats: stats}
   end
 
   def update_profile

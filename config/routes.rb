@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'books/get_questions/:user_lesson_id', to: 'books#get_questions'
   post 'books/save_answers/:user_lesson_id', to: 'books#save_answers'
 
+  get 'members/get_reading_stats', to: 'members#get_reading_stats'
 
   get 'books/get_user_lesson', to: 'books#get_user_lesson'
   get 'books/get_word_list', to: 'books#get_word_list'

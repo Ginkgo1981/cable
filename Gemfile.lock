@@ -169,6 +169,7 @@ GEM
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    imgkit (1.6.1)
     jar_wrapper (0.1.8)
       zip
     json (1.8.6)
@@ -321,6 +322,7 @@ GEM
     websocket-extensions (0.1.2)
     whenever (0.9.7)
       chronic (>= 0.6.3)
+    wkhtmltoimage-binary (0.12.4)
     zip (2.0.2)
 
 PLATFORMS
@@ -342,6 +344,7 @@ DEPENDENCIES
   faraday
   geocoder
   geokit-rails
+  imgkit
   kaminari
   listen (~> 3.0.5)
   mechanize
@@ -370,6 +373,7 @@ DEPENDENCIES
   tzinfo-data
   uuidtools
   whenever
+  wkhtmltoimage-binary
 
 BUNDLED WITH
    1.13.6

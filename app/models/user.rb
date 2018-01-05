@@ -80,6 +80,13 @@ class User < ApplicationRecord
   before_create :generate_token
 
 
+  def stats
+    word_counts = self.user_lessons.where(state: 1).map{|ul| ul.lesson.word_count}.sum
+    reading_day_count =  self.user_lessons.where(state: 1).count
+    {word_counts: word_counts, reading_day_count: reading_day_count}
+  end
+
+
   def buy_book_producton book_production
     book = book_production.book
     raise CableException::DuplicatedLesson if self.books.include? book

@@ -64,8 +64,9 @@ gem 'pry'
 gem 'pry-nav'
 gem 'pry-rails'
 
-# gem 'imgkit'
-# gem 'wkhtmltoimage-binary'
+gem 'imgkit'
+gem 'wkhtmltoimage-binary'
+
 gem 'aliyun-mns', github: 'ginkgo1981/aliyun-mns', branch: 'master'
 
 group :development, :test do
