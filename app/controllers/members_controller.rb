@@ -123,7 +123,7 @@ class MembersController < ApplicationController
     info = decrypt(session_key, @app_id, encrypted_data, iv).symbolize_keys
     @user.cell = info[:phoneNumber]
     @user.save!
-    render json: {code: 0, msg: 'succ'}
+    render json: {code: 0, member: @user.membership}
   end
 
   def bind_hr_info

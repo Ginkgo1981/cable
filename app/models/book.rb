@@ -17,6 +17,33 @@ class Book < ApplicationRecord
   has_many :user_books
   has_many :users
 
+
+  def export_to_txt
+    File.open("books/#{self.book_name}.txt", 'w') do |f|
+      self.lessons.order(:reading_day).each do |lesson|
+        f.puts ''
+        f.puts ''
+        f.puts ''
+        f.puts "==========    Day: #{lesson.reading_day}   ========"
+        f.puts ''
+        f.puts lesson.audio_url
+        f.puts ''
+        line = ''
+        lesson.lyric.each do |l|
+          if l[2] == 'con_start'
+            f.puts line
+            line = l[1]
+          else
+            line += l[1]
+          end
+        end
+        f.puts line
+      end
+    end
+  end
+
+
+
   def self.find_or_create json
     book = Book.find_by book_name: json[:book_name]
     if book.blank?

@@ -29,6 +29,7 @@ class Lesson < ApplicationRecord
   has_many :lesson_words
 
 
+
   def self.attach_word_list
     %w(words-1-8 words-9-16 words-17-24).each do |date|
       file_path = "#{Rails.root}/reading-json/#{date}.json"
@@ -59,15 +60,15 @@ class Lesson < ApplicationRecord
 
 
   def self.create_from_mint_reader(file_path=nil)
+    #
+    # Book.destroy_all
+    # Lesson.destroy_all
+    #
+    # UserLesson.destroy_all
+    # UserBook.destroy_all
 
-    Book.destroy_all
-    Lesson.destroy_all
-
-    UserLesson.destroy_all
-    UserBook.destroy_all
-
-    (1102..1121).each do |date|
-      file_path = "#{Rails.root}/reading-json/day-#{date}.json"
+    (1101..1131).each do |date|
+      file_path = "#{Rails.root}/reading-json-02/day-#{date}.json"
       File.open(file_path, 'r') do |f|
         f.each_line do |line|
           json = JSON(line)
@@ -116,6 +117,9 @@ class Lesson < ApplicationRecord
 
 
   end
+
+
+
 
 
   def replace_audio

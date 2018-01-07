@@ -44,16 +44,17 @@ class UserLesson < ApplicationRecord
     {
         id: self.id,
         day: self.reading_day,
-        questions: self.lesson.lesson_questions.map{|l| l.format},
+        questions: self.lesson.lesson_questions.map { |l| l.format },
         answers: self.answers || [],
         state: self.state.to_i
     }
   end
 
-
   def change_state
     if self.answers && self.answers.size > 0
-      self.state = 1 #complete
+      self.state = self.reading_date == Time.now.strftime('%Y-%m-%d') ? 1 : 2
     end
   end
+
 end
+

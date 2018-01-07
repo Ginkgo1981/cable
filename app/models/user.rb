@@ -63,10 +63,10 @@ class User < ApplicationRecord
 
   has_many :red_packs
 
-  has_many :user_books
+  has_many :user_books, dependent: :destroy
   has_many :books, through: :user_books
 
-  has_many :user_lessons
+  has_many :user_lessons, dependent: :destroy
   has_many :lessons, through:  :user_lessons
 
 
