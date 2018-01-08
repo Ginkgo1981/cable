@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+
+  get 'books/lessons_group_statistics', to: 'books#lessons_group_statistics'
+
   #books
   post 'books/buy_production/:production_id', to: 'books#buy_production'
   get 'books/get_production/:production_id', to: 'books#get_production'

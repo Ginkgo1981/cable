@@ -14,6 +14,10 @@ class BooksController < ApplicationController
 
   before_action :find_user_by_token!, only: [:get_word_list, :get_book_productions, :get_user_lesson,:get_lesson, :get_schedules, :get_production, :buy_production]
 
+  def lessons_group_statistics
+    stats = Reader.all.map{|r| [r.nickname, r.headimgurl, r.user_lessons.where(state: 1).count]}.sort_by{|a| -a[2]}
+    render json: {code: 0, stats: stats}
+  end
 
   def buy_production
     production = BookProduction.find_by id: params[:production_id]
