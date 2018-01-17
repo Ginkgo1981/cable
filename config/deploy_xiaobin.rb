@@ -27,7 +27,7 @@ set :user, 'deploy'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/aliyun_mns.yml','config/wechat_open.yml', 'config/wechat_oa.yml','config/wechat_redpack.yml','config/database.yml', 'config/secrets.yml', 'log']
+set :shared_paths, ['config/baidu.yml','config/aliyun_mns.yml','config/wechat_open.yml', 'config/wechat_oa.yml','config/wechat_redpack.yml','config/database.yml', 'config/secrets.yml', 'log', 'pcm']
 
 # Optional settings:
 #   set :user, 'foobar'    # Username in the server to SSH to.
@@ -63,6 +63,7 @@ task :setup => :environment do
   # queue! "sudo ln -nfs #{deploy_to}/#{shared_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
 
   queue! %[mkdir -p "#{deploy_to}/shared/pids/"]
+  queue! %[mkdir -p "#{deploy_to}/shared/pcm/"]
 
   if repository
     repo_host = repository.split(%r{@|://}).last.split(%r{:|\/}).first

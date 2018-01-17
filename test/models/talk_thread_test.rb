@@ -10,6 +10,7 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  recognize_result :string
+#  matches          :text             is an Array
 #
 
 require 'test_helper'

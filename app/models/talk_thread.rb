@@ -10,11 +10,14 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  recognize_result :string
+#  matches          :text             is an Array
 #
 
 class TalkThread < ApplicationRecord
   belongs_to :talk_topic
   belongs_to :user, class_name: Reader
+
+  after_create :calculating
 
   def format
     {
@@ -27,12 +30,26 @@ class TalkThread < ApplicationRecord
     }
   end
 
-  def matches
-    results = recognize_result.split(/[\s|,|.]/)
-    self.talk_topic.content.split(/[\s|,|.]/).map do |word|
+  # def matches
+  #   results = recognize_result.split(/[\s|,|.]/)
+  #   self.talk_topic.content.split(/[\s|,|.]/).map do |word|
+  #     word = ', ' if word == ''
+  #     results.include?(word) ? [word,1] : [word, 0]
+  #   end
+  # end
+
+
+  def calculating
+    recognize = recognize_result.split(/[\s|,|.]/)
+    matches = self.talk_topic.content.split(/[\s|,|.]/).map do |word|
       word = ', ' if word == ''
-      results.include?(word) ? [word,1] : [word, 0]
+      recognize.include?(word) ? [word,1] : [word, 0]
     end
+    m1 = matches.select{|m| m[1] == 0}.size
+    score = (m1 * 100 / matches.size) / 100.00 * 100
+    self.score = score
+    self.matches matches
+    self.save
   end
 
 
