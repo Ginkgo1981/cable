@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180116141010) do
+ActiveRecord::Schema.define(version: 20180117092700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -516,6 +516,7 @@ ActiveRecord::Schema.define(version: 20180116141010) do
     t.string   "banner"
     t.string   "chinese"
     t.string   "note"
+    t.string   "audio_url"
   end
 
   create_table "tasks", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

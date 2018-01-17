@@ -10,6 +10,7 @@
 #  banner     :string
 #  chinese    :string
 #  note       :string
+#  audio_url  :string
 #
 
 class TalkTopic < ApplicationRecord
