@@ -48,7 +48,7 @@ class TalkThread < ApplicationRecord
     m1 = matches.select{|m| m[1] == 0}.size
     score = (m1 * 100 / matches.size) / 100.00 * 100
     self.score = score
-    self.matches matches
+    self.matches = matches
     self.save
   end
 
