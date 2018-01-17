@@ -63,7 +63,7 @@ gem 'selenium-webdriver'
 gem 'pry'
 gem 'pry-nav'
 gem 'pry-rails'
-
+gem 'simhash'
 gem 'imgkit'
 gem 'wkhtmltoimage-binary'
 

@@ -69,6 +69,8 @@ class User < ApplicationRecord
   has_many :user_lessons, dependent: :destroy
   has_many :lessons, through:  :user_lessons
 
+  has_many :talk_threads
+
 
 
 

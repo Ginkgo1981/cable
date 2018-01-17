@@ -26,6 +26,9 @@ config/wechat_oa.yml
 config/wechat_open.yml
 config/aliyun_mns.yml
 story-*
+config/baidu.yml
+
+pcm/**
 
 
 # Ignore Byebug command history file.

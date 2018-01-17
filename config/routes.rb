@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
 
 
+  get 'books/get_mine_talk_topic', to: 'books#get_mine_talk_topic'
   get 'books/lessons_group_statistics', to: 'books#lessons_group_statistics'
+  get 'books/get_talk_topic', to: 'books#get_talk_topic'
+  get 'books/get_talk_thread/:thread_id', to: 'books#get_talk_thread'
 
   #books
   post 'books/buy_production/:production_id', to: 'books#buy_production'
@@ -112,6 +115,10 @@ Rails.application.routes.draw do
   # post 'dsin/:dsin/tag', to: 'dsins#tag'
   get 'tags/tag_list'
   #members
+
+  post 'members/recognize', to: 'members#recognize'
+  post 'members/bind_hr_info', to: 'members#bind_hr_info'
+
   post 'members/bind_hr_info', to: 'members#bind_hr_info'
   post 'members/read_business_card', to: 'members#read_business_card'
   post 'members/wechat_open_authorization', to: 'members#wechat_open_authorization'

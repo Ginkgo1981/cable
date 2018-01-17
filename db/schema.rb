@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171230135958) do
+ActiveRecord::Schema.define(version: 20180116141010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -496,6 +496,26 @@ ActiveRecord::Schema.define(version: 20171230135958) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.uuid     "tagged_by"
+  end
+
+  create_table "talk_threads", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "talk_topic_id"
+    t.uuid     "user_id"
+    t.string   "audio_url"
+    t.integer  "score"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.string   "recognize_result"
+  end
+
+  create_table "talk_topics", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "talk_date"
+    t.text     "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "banner"
+    t.string   "chinese"
+    t.string   "note"
   end
 
   create_table "tasks", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

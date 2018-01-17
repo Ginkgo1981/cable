@@ -1,6 +1,7 @@
 class MembersController < ApplicationController
 
-  before_action :find_user_by_token!, only: [:get_reading_stats, :invitees,:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
+  before_action :find_user_by_token!, only: [
+      :recognize, :get_reading_stats, :invitees,:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
                                              :applying_job, :applied_jobs, :is_applied,:bind_hr_info, :read_business_card,
                                              :bookmarking_job, :is_bookmarked, :bookmarked_jobs, :deliver_resume_to_email]
   
@@ -37,6 +38,22 @@ class MembersController < ApplicationController
   # end
 
 
+  def recognize
+    key = params[:qiniu_key]
+    client = BaiduClient.new
+    text = client.recognize key
+    puts "======== text "
+    puts text
+    talk_topic = TalkTopic.find_by id: params[:topic_id]
+    distance = BaiduClient.sim_hash('test', talk_topic.content)
+    puts "=====   distance "
+    puts distance
+    thread = @user.talk_threads.create! talk_topic: talk_topic,
+                               audio_url: "https://images.gaokao2017.cn/#{key}",
+                               score: 100 - distance * 2,
+                              recognize_result: text
+    render json: {code: 0, thread: thread.format}
+  end
 
   def wechat_open_authorization
     wechat_client = WechatOpenClient.new

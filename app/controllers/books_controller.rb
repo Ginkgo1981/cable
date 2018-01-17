@@ -12,7 +12,24 @@
 
 class BooksController < ApplicationController
 
-  before_action :find_user_by_token!, only: [:get_word_list, :get_book_productions, :get_user_lesson,:get_lesson, :get_schedules, :get_production, :buy_production]
+  before_action :find_user_by_token!, only: [:get_mine_talk_topic, :get_word_list, :get_book_productions, :get_user_lesson,:get_lesson, :get_schedules, :get_production, :buy_production]
+
+  def get_talk_topic #pure
+    topic = TalkTopic.find_by talk_date: params[:date]
+    render json: {code: 0, topic: topic.format}
+  end
+
+  def get_mine_talk_topic
+    topic = TalkTopic.find_by talk_date: params[:date]
+    thread = topic.talk_threads.where(user_id: @user.id).first
+    render json: {code: 0, topic: topic.format, thread: thread.try(:format)}
+  end
+
+  def get_talk_thread
+    thread = TalkThread.find_by id: params[:thread_id]
+    render json: {code: 0, thread: thread.format}
+  end
+
 
   def lessons_group_statistics
     stats = Reader.all.map{|r| [r.nickname, r.headimgurl, r.user_lessons.where(state: 1).count]}.sort_by{|a| -a[2]}
@@ -78,6 +95,8 @@ class BooksController < ApplicationController
     word_list = user_lesson.lesson.lesson_words
     render json: {code: 0, word_list: word_list}
   end
+
+
 
 
 end
