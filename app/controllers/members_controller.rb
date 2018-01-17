@@ -45,11 +45,8 @@ class MembersController < ApplicationController
     puts "======== text "
     puts text
     talk_topic = TalkTopic.find_by id: params[:topic_id]
-    # distance = BaiduClient.sim_hash(text || '', talk_topic.content)
-    # puts "=====   distance "
-    # puts distance
     thread = @user.talk_threads.create! talk_topic: talk_topic,
-                              audio_url: "https://images.gaokao2017.cn/#{key}",
+                              audio_url: "https://images.gaokao2017.cn/#{qiniu_key}",
                               recognize_result: text
     render json: {code: 0, thread: thread.format}
   end
