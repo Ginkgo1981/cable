@@ -31,6 +31,7 @@ class TalkTopic < ApplicationRecord
         chinese: self.chinese,
         note: self.note,
         content: self.content,
+        audio_url: self.audio_url,
         talk_threads: self.talk_threads.order('score desc').map{|t| t.format}
     }
   end
