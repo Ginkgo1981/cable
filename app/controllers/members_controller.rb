@@ -49,8 +49,7 @@ class MembersController < ApplicationController
     # puts "=====   distance "
     # puts distance
     thread = @user.talk_threads.create! talk_topic: talk_topic,
-                               audio_url: "https://images.gaokao2017.cn/#{key}",
-                               score: 100 - distance * 2,
+                              audio_url: "https://images.gaokao2017.cn/#{key}",
                               recognize_result: text
     render json: {code: 0, thread: thread.format}
   end
