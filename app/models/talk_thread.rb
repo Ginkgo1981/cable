@@ -18,7 +18,7 @@ class TalkThread < ApplicationRecord
   belongs_to :talk_topic
   belongs_to :user, class_name: Reader
 
-  after_update :calculating
+  after_save :calculating
 
   def format
     {
