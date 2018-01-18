@@ -45,6 +45,7 @@ class MembersController < ApplicationController
     puts "======== text "
     puts text
     talk_topic = TalkTopic.find_by id: params[:topic_id]
+    @user.talk_threads.delete_all
     thread = @user.talk_threads.create! talk_topic: talk_topic,
                               audio_url: "https://images.gaokao2017.cn/#{qiniu_key}",
                               recognize_result: text

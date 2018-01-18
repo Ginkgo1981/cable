@@ -31,10 +31,10 @@ class TalkThread < ApplicationRecord
   end
 
   def calculating
-    recognize = recognize_result.split(/[\s|,|.]/)
+    recognize = recognize_result.split(/[\s|,|.]/).map(&:downcase)
     matches = self.talk_topic.content.split(/[\s|,|.]/).map do |word|
       word = ', ' if word == ''
-      recognize.include?(word) ? [word,1] : [word, 0]
+      recognize.include?(word.downcase) ? [word,1] : [word, 0]
     end
     m1 = matches.select{|m| m[1] == 0}.size
     score = 100 - ((m1 * 100 / matches.size) / 100.00 * 100)
