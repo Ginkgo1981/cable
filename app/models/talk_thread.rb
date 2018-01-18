@@ -18,7 +18,8 @@ class TalkThread < ApplicationRecord
   belongs_to :talk_topic
   belongs_to :user, class_name: Reader
 
-  after_save :calculating
+  before_save :calculating
+
 
   def format
     {
@@ -41,7 +42,6 @@ class TalkThread < ApplicationRecord
     score = 100 - ((m1 * 100 / matches.size) / 100.00 * 100)
     self.score = score
     self.matches = matches
-    self.save
   end
 
 

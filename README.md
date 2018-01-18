@@ -40,3 +40,6 @@ watch -n 1 'netstat -na | grep 3000'
 sudo  tcpdump -i lo 'port 3000'
 
 
+TalkTopic.create! talk_date: '2018-01-25', content: h[:content], chinese: h[:note], audio_url: "https://images.gaokao2017.cn/talk-2018-01-25.mp3"
+
+
