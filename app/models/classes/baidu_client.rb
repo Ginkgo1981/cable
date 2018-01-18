@@ -10,13 +10,20 @@ class BaiduClient
   end
 
   def access_token
-    api_key = Rails.application.config_for('baidu')['AppID']
-    secret_key = Rails.application.config_for('baidu')['AppSecret']
-    url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=#{api_key}&client_secret=#{secret_key}"
-    res = Faraday.get(url)
-    access_token = JSON(res.body)['access_token']
-    puts access_token
-    access_token
+    token = $redis_cable.get('baidu_access_token')
+    if token
+      puts '===== cached access token ====='
+    else
+      api_key = Rails.application.config_for('baidu')['AppID']
+      secret_key = Rails.application.config_for('baidu')['AppSecret']
+      url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=#{api_key}&client_secret=#{secret_key}"
+      res = Faraday.get(url)
+      token = JSON(res.body)['access_token']
+      $redis_cable.cache('baidu_access_token', token, 2 * 60 * 60)
+      puts '===== NEW access token ====='
+    end
+    puts token
+    token
   end
 
 
