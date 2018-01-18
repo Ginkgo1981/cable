@@ -11,6 +11,7 @@
 #  updated_at       :datetime         not null
 #  recognize_result :string
 #  matches          :text             is an Array
+#  retry_count      :integer          default(0)
 #
 
 require 'test_helper'

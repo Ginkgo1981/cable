@@ -45,10 +45,19 @@ class MembersController < ApplicationController
     puts "======== text "
     puts text
     talk_topic = TalkTopic.find_by id: params[:topic_id]
-    @user.talk_threads.delete_all
-    thread = @user.talk_threads.create! talk_topic: talk_topic,
-                              audio_url: "https://images.gaokao2017.cn/#{qiniu_key}",
-                              recognize_result: text
+    thread = TalkThread.where(talk_topic: talk_topic, user: @user).first
+
+    if thread
+      thread.audio_url= "https://images.gaokao2017.cn/#{qiniu_key}"
+      thread.recognize_result = text
+      thread.retry_count = thread.retry_count + 1
+      thread.save
+    else
+      thread = TalkThread.create! talk_topic: talk_topic,
+                                  user: @user,
+                                  audio_url: "https://images.gaokao2017.cn/#{qiniu_key}",
+                                  recognize_result: text
+    end
     render json: {code: 0, thread: thread.format}
   end
 

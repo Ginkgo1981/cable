@@ -11,13 +11,14 @@
 #  updated_at       :datetime         not null
 #  recognize_result :string
 #  matches          :text             is an Array
+#  retry_count      :integer          default(0)
 #
 
 class TalkThread < ApplicationRecord
   belongs_to :talk_topic
   belongs_to :user, class_name: Reader
 
-  after_create :calculating
+  after_update :calculating
 
   def format
     {
