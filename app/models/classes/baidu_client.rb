@@ -10,7 +10,7 @@ class BaiduClient
   end
 
   def access_token
-    token = $redis_cable.get('baidu_access_token')
+    token = $redis.get('baidu_access_token')
     if token
       puts '===== cached access token ====='
     else
@@ -19,7 +19,7 @@ class BaiduClient
       url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=#{api_key}&client_secret=#{secret_key}"
       res = Faraday.get(url)
       token = JSON(res.body)['access_token']
-      $redis_cable.cache('baidu_access_token', token, 2 * 60 * 60)
+      $redis.cache('baidu_access_token', token, 2 * 60 * 60)
       puts '===== NEW access token ====='
     end
     puts token

@@ -39,6 +39,7 @@ end
 conf_file = File.join('config', 'redis.yml')
 conf = YAML.load(File.read(conf_file))
 redis = Redis.new(conf[Rails.env.to_s])
+$redis = Redis.new(conf[Rails.env.to_s])
 $redis_cable = Redis::Namespace.new(:cable, :redis => redis)
 $redis_crawler = Redis::Namespace.new(:crawler, :redis => redis)
 $redis_jobs = Redis::Namespace.new(:jobs, :redis => redis)
