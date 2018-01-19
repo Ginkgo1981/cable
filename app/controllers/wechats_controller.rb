@@ -11,19 +11,23 @@ class WechatsController < ApplicationController
     puts user_info
     #红包发放的逻辑
     #todo user is nil
-    user = User.find_by union_id: user_info[:unionid]
-    if user
-      user.mp_openid = openid
-      user.save
-      if event == 'subscribe'
-        if user.red_packs.size == 0
-          amount = (100..110).to_a.sample
-          user.red_packs.create! amount: amount, event: 'subscribe'
-          SlackSendJob.perform_later("[cable] send-redpack #{user.nickname} #{amount}")
-          WechatRedpack.send_redpack amount, openid
-        end
-      end
+    # user = User.find_by union_id: user_info[:unionid]
+    # if user
+    #   user.mp_openid = openid
+    #   user.save
+    #   if event == 'subscribe'
+    #     if user.red_packs.size == 0
+    #       amount = (100..110).to_a.sample
+    #       user.red_packs.create! amount: amount, event: 'subscribe'
+    #       SlackSendJob.perform_later("[cable] send-redpack #{user.nickname} #{amount}")
+    #       WechatRedpack.send_redpack amount, openid
+    #     end
+    #   end
+    # end
+    if event == 'subscribe'
+      binding.pry
     end
+
     render plain: 'success' #params[:echostr]
   end
 

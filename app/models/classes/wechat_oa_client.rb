@@ -25,14 +25,14 @@ class WechatOaClient
   end
 
   def access_token
-    token = $redis_cable.get("wechat_access_token_#{@appid}")
+    token = $redis.get("wechat_oa_access_token_#{@appid}")
     unless token
       url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{@appid}&secret=#{@appsecret}"
       res = Faraday.get(url)
       puts "==== access_token === "
       puts res.body
       token = JSON(res.body)['access_token']
-      $redis_cable.cache("wechat_access_token_#{@appid}", token, 2 * 60 * 60)
+      $redis.cache("wechat_oa_access_token_#{@appid}", token, 2 * 60 * 60)
     end
     token
   end
