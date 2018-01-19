@@ -34,7 +34,7 @@ class TalkThread < ApplicationRecord
 
   def calculating
     recognize = recognize_result.split(/[\s|,|.]/).map(&:downcase)
-    matches = self.talk_topic.content.split(/[\s|,|.]/).map do |word|
+    matches = self.talk_topic.content.split(/[\s|,|.|!|…]/).map(&:downcase).select{|c| c.present?}.map do |word|
       word = ', ' if word == ''
       recognize.include?(word.downcase) ? [word,1] : [word, 0]
     end
