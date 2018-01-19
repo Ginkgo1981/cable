@@ -25,14 +25,26 @@ class WechatsController < ApplicationController
     #   end
     # end
     if event == 'subscribe'
-      binding.pry
+      content =
+          <<EOM
+        hi~欢迎潜入百草英语阅读计划
+        小阅读 · 大世界 · 体验甜苦人生
+
+        百草英语阅读计划  尝鲜期
+        阅读书目：英语原版书《小王子》
+        现已上线~限量开放报名中~
+        ↓↓↓
+        戳此链接，立即体验：http://t.cn/RH8f1gF
+
+        期待与你一起开启一场悦读之旅~
+EOM
       payload =
           {
-              "touser":openid,
-              "msgtype":'text',
+              "touser": openid,
+              "msgtype": 'text',
               "text":
                   {
-                      "content":"test <a href='http://www.qq.com'> 外链</a>"
+                      "content": content
                   }
           }
 
