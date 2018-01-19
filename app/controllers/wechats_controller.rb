@@ -5,9 +5,9 @@ class WechatsController < ApplicationController
     doc = Nokogiri::XML request.body.read
     openid = doc.css('FromUserName').text
     event = doc.css('Event').text
-    wechat_client = WechatOaClient.new()
-    access_token = wechat_client.access_token
-    user_info = wechat_client.get_user_info(access_token, openid).symbolize_keys
+    wechat_oa_client = WechatOaClient.new()
+    access_token = wechat_oa_client.access_token
+    user_info = wechat_oa_client.get_user_info(access_token, openid).symbolize_keys
     puts user_info
     #红包发放的逻辑
     #todo user is nil
@@ -26,6 +26,17 @@ class WechatsController < ApplicationController
     # end
     if event == 'subscribe'
       binding.pry
+      payload =
+          {
+              "touser":openid,
+              "msgtype":'text',
+              "text":
+                  {
+                      "content":"test <a href='http://www.qq.com'> 外链</a>"
+                  }
+          }
+
+      wechat_oa_client.send_customer_message(payload)
     end
 
     render plain: 'success' #params[:echostr]
@@ -35,7 +46,7 @@ class WechatsController < ApplicationController
   def get_js_signature
     url = params[:url]
     client = WechatOaClient.new
-    signature =  client.get_js_signature("http://files.gaokao2017.cn/#{url}")
+    signature = client.get_js_signature("http://files.gaokao2017.cn/#{url}")
     render json: {code: 0, signature: signature}
   end
 
@@ -120,10 +131,10 @@ class WechatsController < ApplicationController
           event: 'customer-service-text',
       }
       #queue24
-      res24 = queue.send_message JSON(h),{:DelaySeconds => 82800, :Priority => 10}
+      res24 = queue.send_message JSON(h), {:DelaySeconds => 82800, :Priority => 10}
       puts "=====  aliyun mns queue 24 ====="
       puts res24.body
-      res48 = queue.send_message JSON(h),{:DelaySeconds => 169200, :Priority => 10}
+      res48 = queue.send_message JSON(h), {:DelaySeconds => 169200, :Priority => 10}
       puts "=====  aliyun mns queue 48 ====="
       puts res48.body
     end

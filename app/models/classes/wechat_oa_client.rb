@@ -61,9 +61,9 @@ class WechatOaClient
   end
 
   def send_customer_message(payload)
-    json_data = { touser: payload[:openid].to_s, msgtype: 'news', news: {articles: [payload[:article]]}}
+    # json_data = { touser: payload[:openid].to_s, msgtype: 'news', news: {articles: [payload[:article]]}}
     url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=#{access_token}"
-    Faraday.post url, JSON.generate(json_data)
+    Faraday.post url, JSON.generate(payload)
   end
 
 
