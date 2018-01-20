@@ -112,12 +112,15 @@ class MembersController < ApplicationController
     if user
       if user.union_id.blank?
         user.union_id = info[:unionId]
-        user.save
+        user.save!
         puts '====save union id===='
         puts user.union_id
       end
       if user.miniapp_openid.blank?
         user.miniapp_openid = info[:openId]
+        user.save!
+        puts '====save miniapp_openid ===='
+        puts user.miniapp_openid
       end
 
     else

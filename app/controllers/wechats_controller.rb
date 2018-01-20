@@ -32,7 +32,8 @@ class WechatsController < ApplicationController
       user = User.find_by union_id: user_info[:unionid]
       if user
         user.mp_openid = openid
-        user.save
+        user.save!
+        puts '==== update mp_openid ===='
       else
         user = User.create! mp_openid: openid,
                             nickname: info[:nickName],
@@ -43,6 +44,7 @@ class WechatsController < ApplicationController
                             headimgurl: info[:headimgurl],
                             union_id: info[:unionid],
                             type: 'Reader'
+        puts '====== create new user ========'
       end
 
       content =
