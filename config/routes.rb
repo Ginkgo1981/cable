@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   post 'books/save_answers/:user_lesson_id', to: 'books#save_answers'
 
   get 'members/get_reading_stats', to: 'members#get_reading_stats'
+  get 'members/get_web_share_info/:user_id', to: 'members#get_web_share_info'
 
   get 'books/get_user_lesson', to: 'books#get_user_lesson'
   get 'books/get_word_list', to: 'books#get_word_list'

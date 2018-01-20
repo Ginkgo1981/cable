@@ -79,6 +79,12 @@ class MembersController < ApplicationController
     render json: {code: 0, member: staff.membership}
   end
 
+
+  def get_web_share_info
+    user = User.find_by id: params[:user_id]
+    render json: {code: 0, share_info: user.share_info}
+  end
+
   def get_reading_stats
     stats = @user.stats
     render json: {stats: stats}

@@ -83,6 +83,46 @@ class BooksController < ApplicationController
     user_lesson = UserLesson.find_by id: params[:user_lesson_id]
     user_lesson.answers = params[:answers]
     user_lesson.save!
+
+    #send a notification
+
+
+    user = user_lesson.user
+
+
+    if user.mp_openid && user_lesson.reading_date == Time.now.strftime('%Y-%m-%d')
+
+      wechat_oa_client = WechatOaClient.new
+
+      payload =
+          {
+              "touser":"OPENID",
+              "msgtype":"news",
+              "news":{
+                  "articles": [
+                      {
+                          "title":"Happy Day",
+                          "description":"Is Really A Happy Day",
+                          "url":"URL",
+                          "picurl":"PIC_URL"
+                      }
+                  ]
+              }
+          }
+
+      wechat_oa_client.send_customer_message(payload)
+
+
+
+
+    end
+
+
+
+
+
+
+    render json: {code: 0, msg: 'succ'}
   end
 
   def get_user_lesson

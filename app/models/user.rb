@@ -113,6 +113,18 @@ class User < ApplicationRecord
     self.user_lessons.each &:destroy
   end
 
+  def share_info #打卡内容
+    {
+        id: self.id,
+        nickname: self.nickname,
+        province: self.province,
+        city: self.city,
+        headimgurl: self.headimgurl,
+        type: self.type,
+        stats: self.stats
+    }
+  end
+
   def format
     {
         id: self.id,
