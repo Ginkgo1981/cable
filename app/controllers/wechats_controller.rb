@@ -67,7 +67,7 @@ EOM
                     "media_id":'hxrynkVuPClWdUKnfEiZHnvZXDFWruI7F4HhNVbRlrU'
                 }
         }
-
+        wechat_oa_client.send_customer_message(payload)
       end
 
     end
