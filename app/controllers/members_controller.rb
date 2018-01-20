@@ -105,7 +105,22 @@ class MembersController < ApplicationController
     iv = params[:iv]
     info = decrypt(session_key, @app_id, encrypted_data, iv).symbolize_keys
     user = User.find_by miniapp_openid: info[:openId]
-    unless user
+    if user.nil?
+      user = User.find_by union_id: info[:unionId]
+    end
+
+    if user
+      if user.union_id.blank?
+        user.union_id = info[:unionId]
+        user.save
+        puts '====save union id===='
+        puts user.union_id
+      end
+      if user.miniapp_openid.blank?
+        user.miniapp_openid = info[:openId]
+      end
+
+    else
       user = User.create! miniapp_openid: info[:openId],
                                 nickname: info[:nickName],
                                 sex: info[:gender],
@@ -117,14 +132,7 @@ class MembersController < ApplicationController
                                 type: @type
       SlackSendJob.perform_later("[cable] register #{user.type} #{user.nickname}")
       user.resumes.create! if user.is_a? Student
-    else
-      SlackSendJob.perform_later("[cable] login #{user.type} #{user.nickname}")
     end
-    #inviter
-    # if params[:inviter_id] && student.id != params[:inviter_id]
-    #   inviter = User.find_by id: params[:inviter_id]
-    #   inviter.invitees << student if inviter
-    # end
     render json: {code: 0, member: user.membership, session_key: session_key}
   end
 

@@ -28,8 +28,23 @@ class WechatsController < ApplicationController
     #   end
     # end
 
-    # {"media_id"=>"hxrynkVuPClWdUKnfEiZHnvZXDFWruI7F4HhNVbRlrU", "url"=>"http://mmbiz.qpic.cn/mmbiz_jpg/cDiaBg8CQibEcEfpUDQibZMvWAqEvTV5hfGWtYUcEZzwWhgLuNjia5aG8UHibTNP1ib5Qf09sg2N46OY1icGb098PtvMg/0?wx_fmt=jpeg"}
     if event == 'subscribe'
+      user = User.find_by union_id: user_info[:unionid]
+      if user
+        user.mp_openid = openid
+        user.save
+      else
+        user = User.create! mp_openid: openid,
+                            nickname: info[:nickName],
+                            sex: info[:sex],
+                            language: info[:language],
+                            city: info[:city],
+                            province: info[:province],
+                            headimgurl: info[:headimgurl],
+                            union_id: info[:unionid],
+                            type: 'Reader'
+      end
+
       content =
 <<EOM
 hi~欢迎潜入百草英语阅读计划
