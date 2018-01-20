@@ -9,6 +9,9 @@ class WechatsController < ApplicationController
     access_token = wechat_oa_client.access_token
     user_info = wechat_oa_client.get_user_info(access_token, openid).symbolize_keys
     puts user_info
+
+    event_key = doc.css('EventKey').text
+
     #红包发放的逻辑
     #todo user is nil
     # user = User.find_by union_id: user_info[:unionid]
@@ -24,6 +27,8 @@ class WechatsController < ApplicationController
     #     end
     #   end
     # end
+
+    # {"media_id"=>"hxrynkVuPClWdUKnfEiZHnvZXDFWruI7F4HhNVbRlrU", "url"=>"http://mmbiz.qpic.cn/mmbiz_jpg/cDiaBg8CQibEcEfpUDQibZMvWAqEvTV5hfGWtYUcEZzwWhgLuNjia5aG8UHibTNP1ib5Qf09sg2N46OY1icGb098PtvMg/0?wx_fmt=jpeg"}
     if event == 'subscribe'
       content =
 <<EOM
@@ -49,6 +54,22 @@ EOM
           }
 
       wechat_oa_client.send_customer_message(payload)
+
+    else
+
+      if event_key == 'promotion'
+        payload =
+        {
+            "touser": openid,
+            "msgtype":'image',
+            "image":
+                {
+                    "media_id":'hxrynkVuPClWdUKnfEiZHnvZXDFWruI7F4HhNVbRlrU'
+                }
+        }
+
+      end
+
     end
 
     render plain: 'success' #params[:echostr]
