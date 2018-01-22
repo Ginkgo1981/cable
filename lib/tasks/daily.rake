@@ -3,7 +3,7 @@ namespace :daily do
   desc 'send_template_message'
   task send_template_message: :environment do
     Reader.all.each do |user|
-      if user.mp?
+      if user.mp? && user.role == 1
         puts '==== sending ====='
         puts user.nickname
         wechat_oa_client = WechatOaClient.new
@@ -17,10 +17,7 @@ EOM
 
         keyword1_value =
             <<EOM
-
 《暗红习作》
-
-
 EOM
 
         remark_value =
