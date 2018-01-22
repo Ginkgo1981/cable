@@ -82,6 +82,11 @@ class User < ApplicationRecord
   before_create :generate_token
 
 
+  def mp?
+    self.mp_openid.present?
+  end
+
+
   def stats
     word_counts = self.user_lessons.where(state: 1).map{|ul| ul.lesson.word_count}.sum
     reading_day_count =  self.user_lessons.where(state: 1).count

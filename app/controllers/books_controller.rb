@@ -102,15 +102,15 @@ class BooksController < ApplicationController
                       value: '恭喜完成今日的阅读计划',
                       color: '#173177'
                   },
-                  keynote1:{
+                  keyword1:{
                       value: '百草阅读',
                       color: '#173177'
                   },
-                  keynote2: {
+                  keyword2: {
                       value: '每日阅读签到',
                       color: '#173177'
                   },
-                  keynote3: {
+                  keyword3: {
                       value: Time.now.strftime('%Y-%m-%d'),
                       color: '#173177'
                   },
