@@ -55,9 +55,9 @@ class WechatOaClient
     js_ticket
   end
 
-  def send_template_message(json_data)
+  def send_template_message(payload)
     url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=#{access_token}"
-    Faraday.post url, json_data.to_json
+    Faraday.post url, JSON.generate(payload)
   end
 
   def send_customer_message(payload)

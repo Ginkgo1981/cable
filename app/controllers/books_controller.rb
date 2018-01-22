@@ -88,40 +88,40 @@ class BooksController < ApplicationController
 
 
     user = user_lesson.user
-
-
+    puts '==== save answers ===='
     if user.mp_openid && user_lesson.reading_date == Time.now.strftime('%Y-%m-%d')
-
+      puts '====== send template message ========'
       wechat_oa_client = WechatOaClient.new
-
       payload =
           {
-              "touser":"OPENID",
-              "msgtype":"news",
-              "news":{
-                  "articles": [
-                      {
-                          "title":"Happy Day",
-                          "description":"Is Really A Happy Day",
-                          "url":"URL",
-                          "picurl":"PIC_URL"
-                      }
-                  ]
+              touser: user.mp_openid,
+              template_id: 'ubhAAEJtgAJMfhohWnB-B9BSA7_TMEzDLpMQcF3liis',
+              url: "https://files.gaokao2017.cn/share/#{user.id}",
+              data:{
+                  first: {
+                      value: '恭喜完成今日的阅读计划',
+                      color: '#173177'
+                  },
+                  keynote1:{
+                      value: '百草阅读',
+                      color: '#173177'
+                  },
+                  keynote2: {
+                      value: '每日阅读签到',
+                      color: '#173177'
+                  },
+                  keynote3: {
+                      value: Time.now.strftime('%Y-%m-%d'),
+                      color: '#173177'
+                  },
+                  remark:{
+                      value:'点击查看今日阅读报告',
+                      color: '#173177'
+                  }
               }
           }
-
-      wechat_oa_client.send_customer_message(payload)
-
-
-
-
+      wechat_oa_client.send_template_message(payload)
     end
-
-
-
-
-
-
     render json: {code: 0, msg: 'succ'}
   end
 
