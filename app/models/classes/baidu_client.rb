@@ -30,10 +30,13 @@ class BaiduClient
   def recognize(key)
     # audio_url = '/Users/chenjian/16k.pcm'
     audio_url = "https://images.gaokao2017.cn/#{key}"
+    download = open(audio_url)
+    download_file_path = "#{Rails.root}/pcm/#{download.base_uri.to_s.split('/')[-1]}"
+    IO.copy_stream(download, download_file_path)
     pcm_file_path = "#{Rails.root}/pcm/#{Time.now.strftime('%Y%m%d%H%M%S') + '%04d' % rand(10**4)}.pcm"
-    self.convert(audio_url, pcm_file_path)
-    remote_file = open(pcm_file_path)
-    code64 = Base64.encode64(remote_file.read).gsub("\n", '')
+    self.convert(download_file_path, pcm_file_path)
+    pcm_file = open(pcm_file_path)
+    code64 = Base64.encode64(pcm_file.read).gsub("\n", '')
     # size = File.new(audio_url, 'r').stat.size
     url = 'http://vop.baidu.com/server_api'
     json = {
@@ -43,7 +46,7 @@ class BaiduClient
         channel:1,
         token:self.access_token,
         cuid:'9e:eb:e8:d4:67:00',
-        len:remote_file.stat.size,
+        len:pcm_file.stat.size,
         speech:code64
     }
     res = Faraday.post url, JSON.generate(json)
