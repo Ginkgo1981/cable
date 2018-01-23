@@ -96,7 +96,7 @@ EOM
   def get_js_signature
     url = params[:url]
     client = WechatOaClient.new
-    signature = client.get_js_signature("http://files.gaokao2017.cn/#{url}")
+    signature = client.get_js_signature(url)
     render json: {code: 0, signature: signature}
   end
 

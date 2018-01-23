@@ -26,14 +26,16 @@ class WechatOaClient
 
   def access_token
     token = $redis.get("wechat_oa_access_token_#{@appid}")
-    unless token
+    unless token.present?
       url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{@appid}&secret=#{@appsecret}"
       res = Faraday.get(url)
-      puts "==== access_token === "
+      puts "==== New access_token === "
       puts res.body
       token = JSON(res.body)['access_token']
       $redis.cache("wechat_oa_access_token_#{@appid}", token, 2 * 60 * 60)
     end
+    puts "==== cached access_token === "
+    puts token
     token
   end
 
@@ -51,6 +53,7 @@ class WechatOaClient
     url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=#{self.access_token}&type=jsapi"
     res = Faraday.get(url)
     js_ticket = JSON(res.body)['ticket']
+    puts '==== js-ticket ======='
     puts js_ticket
     js_ticket
   end
@@ -77,6 +80,9 @@ class WechatOaClient
         url: url
     }
     signature = Digest::SHA1.hexdigest(str)
+    puts "==== get_js_signature ===="
+    puts str
+    puts signature
     json =
       {
           signature: signature,

@@ -14,7 +14,7 @@
 class Redis
 
   def cache(key, value, expire=nil)
-    if get(key).nil?
+    if get(key).blank?
       set(key, value)
       expire(key, expire) if expire
       value
