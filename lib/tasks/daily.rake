@@ -64,7 +64,7 @@ EOM
     Reader.all.each do |user|
       if user.mp_openid
         user_lesson = user.user_lessons.find_by reading_date: '2018-01-23'
-        if user_lesson && user_lesson.answers.present?
+        if user_lesson && user_lesson.send_checkin_notify == 0 && user_lesson.answers.present?
           wechat_oa_client = WechatOaClient.new
           payload =
               {
@@ -73,24 +73,19 @@ EOM
                   url: "https://files.gaokao2017.cn/share/#{user.id}",
                   data:{
                       first: {
-                          value: '恭喜完成今日的阅读计划',
-                          color: '#173177'
+                          value: '恭喜完成今日的阅读计划'
                       },
                       keyword1:{
-                          value: '百草阅读',
-                          color: '#173177'
+                          value: '百草阅读'
                       },
                       keyword2: {
-                          value: '每日阅读签到',
-                          color: '#173177'
+                          value: '每日阅读签到'
                       },
                       keyword3: {
-                          value: Time.now.strftime('%Y-%m-%d'),
-                          color: '#173177'
+                          value: Time.now.strftime('%Y-%m-%d')
                       },
                       remark:{
-                          value:'点击查看今日阅读报告',
-                          color: '#173177'
+                          value:'点击查看今日阅读报告'
                       }
                   }
               }

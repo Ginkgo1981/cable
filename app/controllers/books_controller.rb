@@ -99,24 +99,19 @@ class BooksController < ApplicationController
               url: "https://files.gaokao2017.cn/share/#{user.id}",
               data:{
                   first: {
-                      value: '恭喜完成今日的阅读计划',
-                      color: '#173177'
+                      value: '恭喜完成今日的阅读计划'
                   },
                   keyword1:{
-                      value: '百草阅读',
-                      color: '#173177'
+                      value: '百草阅读'
                   },
                   keyword2: {
-                      value: '每日阅读签到',
-                      color: '#173177'
+                      value: '每日阅读签到'
                   },
                   keyword3: {
-                      value: Time.now.strftime('%Y-%m-%d'),
-                      color: '#173177'
+                      value: Time.now.strftime('%Y-%m-%d')
                   },
                   remark:{
-                      value:'点击查看今日阅读报告',
-                      color: '#173177'
+                      value:'点击查看今日阅读报告'
                   }
               }
           }
