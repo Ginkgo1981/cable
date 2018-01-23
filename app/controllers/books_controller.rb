@@ -121,6 +121,8 @@ class BooksController < ApplicationController
               }
           }
       wechat_oa_client.send_template_message(payload)
+      user_lesson.send_checkin_notify = 1
+      user_lesson.save
     end
     render json: {code: 0, msg: 'succ'}
   end

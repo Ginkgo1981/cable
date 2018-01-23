@@ -1,5 +1,4 @@
 namespace :daily do
-
   desc 'send_template_message'
   task send_template_message: :environment do
     Reader.all.each do |user|
@@ -59,6 +58,53 @@ EOM
       end
     end
   end
+
+  desc 'send_ping_message'
+  task send_ping_message: :environment do
+    Reader.all.each do |user|
+      if user.mp_openid
+        user_lesson = user.user_lessons.find_by reading_date: '2018-01-23'
+        if user_lesson && user_lesson.answers.present?
+          wechat_oa_client = WechatOaClient.new
+          payload =
+              {
+                  touser: user.mp_openid,
+                  template_id: 'ubhAAEJtgAJMfhohWnB-B9BSA7_TMEzDLpMQcF3liis',
+                  url: "https://files.gaokao2017.cn/share/#{user.id}",
+                  data:{
+                      first: {
+                          value: '恭喜完成今日的阅读计划',
+                          color: '#173177'
+                      },
+                      keyword1:{
+                          value: '百草阅读',
+                          color: '#173177'
+                      },
+                      keyword2: {
+                          value: '每日阅读签到',
+                          color: '#173177'
+                      },
+                      keyword3: {
+                          value: Time.now.strftime('%Y-%m-%d'),
+                          color: '#173177'
+                      },
+                      remark:{
+                          value:'点击查看今日阅读报告',
+                          color: '#173177'
+                      }
+                  }
+              }
+          puts "=== send to #{user.nickname} ======="
+          wechat_oa_client.send_template_message(payload)
+          user_lesson.send_checkin_notify = 1
+          user_lesson.save
+        end
+      end
+    end
+  end
+
+
+
 
 
 end
