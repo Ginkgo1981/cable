@@ -56,7 +56,7 @@ hi~欢迎潜入百草英语阅读计划
 阅读书目：英语原版书《小王子》
 现已上线~限量开放报名中~
 ↓↓↓
-戳此链接，立即体验：https://images.gaokao2017.cn/follow.jpg
+戳此链接，立即体验：http://t.cn/RQEE0jJ
 
 期待与你一起开启一场悦读之旅~
 EOM
@@ -81,7 +81,7 @@ EOM
             "msgtype":'image',
             "image":
                 {
-                    "media_id":'hxrynkVuPClWdUKnfEiZHnvZXDFWruI7F4HhNVbRlrU'
+                    "media_id":'hxrynkVuPClWdUKnfEiZHvN3i0NWx53AoYlsQYAIS_8' #http://mmbiz.qpic.cn/mmbiz_jpg/cDiaBg8CQibEeUkcAEpuDFTsbFica4icN9qlEOKOJT65cWBZvgzmpDBmJDRL8ccDNKkmD9y6a9QiaQLMicAn3APoMUibg/0?wx_fmt=jpeg
                 }
         }
         wechat_oa_client.send_customer_message(payload)
