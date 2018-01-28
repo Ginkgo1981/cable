@@ -53,6 +53,7 @@ class UserLesson < ApplicationRecord
 
   def change_state
     if self.answers && self.answers.size > 0
+      self.user.add_count(self)
       self.state = self.reading_date == Time.now.strftime('%Y-%m-%d') ? 1 : 2
     end
   end

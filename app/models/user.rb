@@ -38,6 +38,8 @@
 #  hr_approved_by               :uuid
 #  hr_approved_at               :datetime
 #  online_status                :integer          default(0)
+#  days_count                   :integer          default(0)
+#  words_count                  :integer          default(0)
 #
 
 class User < ApplicationRecord
@@ -87,10 +89,18 @@ class User < ApplicationRecord
   end
 
 
+  def add_count user_lesson
+    self.days_count =  self.days_count + 1
+    self.words_count = self.words_count + user_lesson.lesson.word_count
+    self.save!
+  end
+
+
+
   def stats
-    word_counts = self.user_lessons.where(state: 1).map{|ul| ul.lesson.word_count}.sum
-    reading_day_count =  self.user_lessons.where(state: 1).count
-    {word_counts: word_counts, reading_day_count: reading_day_count}
+    # word_counts = self.user_lessons.where(state: 1).map{|ul| ul.lesson.word_count}.sum
+    # reading_day_count =  self.user_lessons.where(state: 1).count
+    {word_counts: words_count, reading_day_count: days_count}
   end
 
 

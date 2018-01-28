@@ -38,6 +38,8 @@
 #  hr_approved_by               :uuid
 #  hr_approved_at               :datetime
 #  online_status                :integer          default(0)
+#  days_count                   :integer          default(0)
+#  words_count                  :integer          default(0)
 #
 
 class Student < User
