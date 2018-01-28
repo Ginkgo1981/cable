@@ -121,6 +121,11 @@ class BooksController < ApplicationController
 
   def get_lesson
     # params[:date] = '2017-11-06'
+    expired_date = Date.new(2018,1,27)
+    if expired_date > Date.parse(params[:date])
+      render json: {code: 1, msg: '由于版权等原因,已过期课程不能播放'}
+      return
+    end
     user_lesson = @user.user_lessons.find_by reading_date: params[:date]
     render json: {code: 0, user_lesson: user_lesson.format}
   end
