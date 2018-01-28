@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180123121856) do
+ActiveRecord::Schema.define(version: 20180126140817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,18 @@ ActiveRecord::Schema.define(version: 20180123121856) do
     t.uuid     "approved_by"
     t.datetime "approved_at"
     t.integer  "rating",                   default: 0
+  end
+
+  create_table "lesson_lyrics", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "lesson_id"
+    t.integer  "ord",        default: 0
+    t.float    "sec"
+    t.string   "en"
+    t.string   "sc"
+    t.string   "css"
+    t.string   "pic"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "lesson_questions", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

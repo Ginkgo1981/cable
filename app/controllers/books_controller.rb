@@ -58,11 +58,6 @@ class BooksController < ApplicationController
     render json: {code: 0, productions: productions}
   end
 
-  def get_lesson
-    # params[:date] = '2017-11-06'
-    user_lesson = @user.user_lessons.find_by reading_date: params[:date]
-    render json: {code: 0, user_lesson: user_lesson.format}
-  end
 
   def get_schedules
     today =Time.now.strftime('%Y-%m-%d')
@@ -123,8 +118,14 @@ class BooksController < ApplicationController
   end
 
   def get_user_lesson
-    user_lesson = @user.user_lessons.find_by reading_date: params[:date]
+    user_lesson = UserLesson.where(reading_day: 20).last #hotfix
     render json: {code: 0, user_lesson: user_lesson.try(:mini_format)}
+  end
+
+  def get_lesson
+    # params[:date] = '2017-11-06'
+    user_lesson = @user.user_lessons.find_by reading_date: params[:date]
+    render json: {code: 0, user_lesson: user_lesson.format}
   end
 
   def get_word_list

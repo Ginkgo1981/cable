@@ -27,8 +27,45 @@ class Lesson < ApplicationRecord
   has_many :user_lessons
   has_many :users, through: :user_lessons
   has_many :lesson_words
+  has_many :lesson_lyrics
+
+  # lesson = Lesson.find '0a11e1a7-c1cd-4808-8b07-d0348bf83de2'
+
+  def temp_split_to_lyrics
+    self.lyric.each_with_index do |l, idx |
+      self.lesson_lyrics.create! ord: idx,
+                                   sec: l[0],
+                                   en: l[1],
+                                   css: l[2]
+    end
 
 
+  end
+
+  def self.create_from_loki
+    file_path = '/Users/chenjian/Desktop/prince/01-en'
+    book = Book.find '16775c3e-dde0-4d90-ae27-62fd532f3c2c'
+    # lesson = book.lessons.create! previous: '',
+    #                               audio_url: '',
+    #                               title_en: 'chapter1',
+    #                               share_words: '',
+    #                               word_count: 0,
+    #                               reading_day: 1
+
+    lesson = Lesson.find '50bb7e71-8040-43e2-93fe-751f83ff49ec'
+    File.open(file_path, 'r') do |f|
+      f.each_line.with_index do |line, idx|
+        timeReg = /\[(?<min>\d{2}):(?<sec>\d{2}).(?<msec>\d{2})\]/
+        m = line.match timeReg
+        int_sec = m[:min].to_i * 60 + m[:sec].to_i +  m[:msec].to_i / 100.00
+        en = line.sub timeReg, ''
+        puts "#{idx} #{int_sec} #{en}"
+        lesson.lesson_lyrics.create! ord: idx,
+            sec: int_sec,
+            en: en.strip
+      end
+    end
+  end
 
   def self.attach_word_list
     %w(words-1-8 words-9-16 words-17-24).each do |date|
@@ -138,7 +175,8 @@ class Lesson < ApplicationRecord
         previous: previous,
         audio_url: audio_url,
         audio_name: audio_name,
-        lyric: lyric,
+        # lyric: lyric,
+        lesson_lyrics: lesson_lyrics.map(&:format),
         questions: self.lesson_questions.map { |q| q.format },
         share_words: share_words,
         share_img_url: share_img_url,
