@@ -28,8 +28,8 @@ class BookProduction < ApplicationRecord
         title:title,
         lesson_start_at: lesson_start_at.strftime('%Y-%m-%d'),
         lesson_end_at: lesson_end_at.strftime('%Y-%m-%d'),
-        sell_start_at: sell_start_at.strftime('%Y-%m-%d'),
-        sell_end_at: sell_end_at.strftime('%Y-%m-%d'),
+        # sell_start_at: sell_start_at.strftime('%Y-%m-%d'),
+        # sell_end_at: sell_end_at.strftime('%Y-%m-%d'),
         duration: duration,
         objectives: objectives,
         requirements: requirements,
@@ -37,6 +37,15 @@ class BookProduction < ApplicationRecord
         state: state,
         sell_state: sell_state
     }
+  end
+
+
+  def self.mock
+    book = Book.find 'cb79e72b-00fe-4965-b3b4-0c08680ed1e9'
+    BookProduction.create! book: book,
+                           title: "百草英语第 2 期",
+                           lesson_start_at: Time.now.to_date,
+                           sell_state: 1
   end
 
 
