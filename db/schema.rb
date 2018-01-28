@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180126140817) do
+ActiveRecord::Schema.define(version: 20180128075947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -633,6 +633,8 @@ ActiveRecord::Schema.define(version: 20180126140817) do
     t.uuid     "hr_approved_by"
     t.datetime "hr_approved_at"
     t.integer  "online_status",                           default: 0
+    t.integer  "days_count",                              default: 0
+    t.integer  "words_count",                             default: 0
   end
 
 end
