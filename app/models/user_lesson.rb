@@ -26,7 +26,7 @@ class UserLesson < ApplicationRecord
     {
         book: book.format,
         reading_day: reading_day,
-        reading_date: reading_date
+        reading_date: reading_date.strftime('%Y-%m-%d')
     }
   end
 
@@ -34,7 +34,7 @@ class UserLesson < ApplicationRecord
     {
         id: id,
         reading_day: reading_day,
-        reading_date: reading_date,
+        reading_date: reading_date.strftime('%Y-%m-%d'),
         lesson: lesson.format,
         answers: answers,
         book: book.format

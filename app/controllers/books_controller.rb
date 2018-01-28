@@ -60,11 +60,7 @@ class BooksController < ApplicationController
 
 
   def get_schedules
-    today =Time.now.strftime('%Y-%m-%d')
-    today_user_lesson =@user.user_lessons.find_by reading_date: today
-    today_reading_day = today_user_lesson.try(:reading_day) || 0
-    schedules = @user.user_lessons.where('reading_day <= ?', today_reading_day).order('reading_day').map{|ul| [ul.reading_date, ul.state.to_i]}.to_h
-    # schedules = @user.user_lessons.map{|ul| {"#{ul.reading_date}":  ul.state.to_i}}
+    schedules = @user.user_lessons.where('reading_date <= ?', Time.now.to_date).order('reading_date').map{|ul| [ul.reading_date.strftime('%Y-%m-%d'), ul.state.to_i]}.to_h
     render json: {code: 0, schedules: schedules}
   end
 
