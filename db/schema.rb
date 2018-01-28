@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180128075947) do
+ActiveRecord::Schema.define(version: 20180128115752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -589,7 +589,7 @@ ActiveRecord::Schema.define(version: 20180128075947) do
     t.uuid     "book_id"
     t.uuid     "lesson_id"
     t.integer  "reading_day"
-    t.string   "reading_date"
+    t.date     "reading_date"
     t.integer  "state"
     t.text     "answers",                                      array: true
     t.datetime "created_at",                      null: false
