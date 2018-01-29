@@ -85,7 +85,7 @@ class User < ApplicationRecord
 
   def remove_book book
     self.books.delete book
-    self.user_lessons.where(book: book).destroy
+    self.user_lessons.where(book: book).each &:destroy
   end
 
   def mp?
