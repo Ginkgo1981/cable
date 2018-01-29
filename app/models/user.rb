@@ -83,6 +83,10 @@ class User < ApplicationRecord
   # delegate :dsin, to: :identity
   before_create :generate_token
 
+  def remove_book book
+    self.books.delete book
+    self.user_lessons.where(book: book).destroy
+  end
 
   def mp?
     self.mp_openid.present?
@@ -121,6 +125,8 @@ class User < ApplicationRecord
     end
     true
   end
+
+
 
 
   def remove_all_lessons
