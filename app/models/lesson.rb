@@ -30,7 +30,7 @@ class Lesson < ApplicationRecord
   has_many :lesson_lyrics
 
   # lesson = Lesson.find '0a11e1a7-c1cd-4808-8b07-d0348bf83de2'
-  scope :by_reading_day, -> {order('reading_day')}
+  default_scope -> {order('reading_day')}
 
   def temp_split_to_lyrics
     self.lyric.each_with_index do |l, idx |
