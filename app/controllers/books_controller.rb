@@ -131,8 +131,7 @@ class BooksController < ApplicationController
 
     unless user_lesson
       render json: {code: 1, msg: '今日没有阅读内容, Take Rest or Contact With 二姐姐'}
-
-
+      return
     end
     render json: {code: 0, user_lesson: user_lesson.format}
   end
