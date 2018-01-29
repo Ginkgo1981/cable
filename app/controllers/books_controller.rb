@@ -114,19 +114,26 @@ class BooksController < ApplicationController
     render json: {code: 0, msg: 'succ'}
   end
 
-  def get_user_lesson
-    user_lesson = UserLesson.where(reading_day: 20).last #hotfix
-    render json: {code: 0, user_lesson: user_lesson.try(:mini_format)}
-  end
+  # def get_user_lesson
+  #   user_lesson = UserLesson.where(reading_day: 20).last #hotfix
+  #   render json: {code: 0, user_lesson: user_lesson.try(:mini_format)}
+  # end
 
   def get_lesson
     # params[:date] = '2017-11-06'
     expired_date = Date.new(2018,1,28)
     if expired_date > Date.parse(params[:date])
-      render json: {code: 1, msg: '由于版权等原因,已过期课程不能播放'}
+      render json: {code: 1, msg: '本课程已下架,不能播放'}
       return
     end
+
     user_lesson = @user.user_lessons.find_by reading_date: params[:date]
+
+    unless user_lesson
+      render json: {code: 1, msg: '今日没有阅读内容, Take Rest or Contact With 二姐姐'}
+
+
+    end
     render json: {code: 0, user_lesson: user_lesson.format}
   end
 
