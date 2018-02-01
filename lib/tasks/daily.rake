@@ -2,7 +2,7 @@ namespace :daily do
   desc 'send_template_message'
   task send_template_message: :environment do
     Reader.all.each do |user|
-      if user.mp? && user.role == 1
+      if user.mp?
         puts '==== sending ====='
         puts user.nickname
         wechat_oa_client = WechatOaClient.new
@@ -96,6 +96,14 @@ EOM
         end
       end
     end
+  end
+
+  desc 'reading_statistic'
+  task reading_statistic: :environment do
+    users = UserLesson.where(reading_date: 0.day.ago).where.not(answers: nil)
+    text = "阅读情况: #{0.day.ago.strftime('%Y-%m-%d')} - #{users.size}"
+    text += users.map{|ul| [ul.user.nickname, ul.user.cell]}.join('\n')
+    SlackService.alert text
   end
 
 
