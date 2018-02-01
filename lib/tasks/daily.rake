@@ -8,7 +8,7 @@ namespace :daily do
         wechat_oa_client = WechatOaClient.new
         first_value =
 <<EOM
-百草阅读 | 今日阅读提醒
+百草英语 | 今日阅读提醒
 
 hi~你未完成今日阅读, 别忘了哟~
 
@@ -16,7 +16,7 @@ EOM
 
         keyword1_value =
             <<EOM
-《暗红习作》
+《小王子》
 EOM
 
         remark_value =
@@ -76,7 +76,7 @@ EOM
                           value: '恭喜完成今日的阅读计划'
                       },
                       keyword1:{
-                          value: '百草阅读'
+                          value: '百草英语'
                       },
                       keyword2: {
                           value: '每日阅读签到'
