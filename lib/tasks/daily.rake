@@ -63,7 +63,7 @@ EOM
   task send_ping_message: :environment do
     Reader.all.each do |user|
       if user.mp_openid
-        user_lesson = user.user_lessons.find_by reading_date: '2018-01-23'
+        user_lesson = user.user_lessons.find_by reading_date: '2018-02-01'
         if user_lesson && user_lesson.send_checkin_notify == 0 && user_lesson.answers.present?
           wechat_oa_client = WechatOaClient.new
           payload =

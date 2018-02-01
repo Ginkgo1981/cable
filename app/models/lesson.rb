@@ -32,6 +32,23 @@ class Lesson < ApplicationRecord
   # lesson = Lesson.find '0a11e1a7-c1cd-4808-8b07-d0348bf83de2'
   default_scope -> {order('reading_day')}
 
+  def self.export_the_little_prince
+    book = Book.find 'ccdd79c9-0a93-4f5e-9c70-1803d7fce5e2'
+    File.open('the-little-prince-q-a.txt', 'w') do |file|
+      book.lessons.each do |lesson|
+        file.puts lesson.title_en
+        file.puts "前情概要: #{lesson.previous}"
+        lesson.lesson_questions.each_with_index do |question,idx|
+          file.puts "##{idx + 1} #{question.question}"
+          file.puts question.options
+          file.puts "答案: #{question.answer.to_i + 1 }"
+          file.puts "解析: #{question.analysis}"
+        end
+        file.puts "==============================="
+      end
+    end
+  end
+
   def temp_split_to_lyrics
     self.lyric.each_with_index do |l, idx |
       self.lesson_lyrics.create! ord: idx,

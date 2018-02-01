@@ -81,7 +81,7 @@ class BooksController < ApplicationController
 
     user = user_lesson.user
     puts '==== save answers ===='
-    if user.mp_openid && user_lesson.reading_date == Time.now.strftime('%Y-%m-%d')
+    if user.mp_openid
       puts '====== send template message ========'
       wechat_oa_client = WechatOaClient.new
       payload =

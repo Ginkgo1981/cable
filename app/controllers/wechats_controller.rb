@@ -36,13 +36,13 @@ class WechatsController < ApplicationController
         puts '==== update mp_openid ===='
       else
         user = User.create! mp_openid: openid,
-                            nickname: info[:nickName],
-                            sex: info[:sex],
-                            language: info[:language],
-                            city: info[:city],
-                            province: info[:province],
-                            headimgurl: info[:headimgurl],
-                            union_id: info[:unionid],
+                            nickname: user_info[:nickName],
+                            sex: user_info[:sex],
+                            language: user_info[:language],
+                            city: user_info[:city],
+                            province: user_info[:province],
+                            headimgurl: user_info[:headimgurl],
+                            union_id: user_info[:unionid],
                             type: 'Reader'
         puts '====== create new user ========'
       end
