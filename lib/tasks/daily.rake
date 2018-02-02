@@ -103,7 +103,7 @@ EOM
     user_lessons = UserLesson.where(reading_date: 1.day.ago).where.not(answers: nil)
     text = "阅读情况: #{0.day.ago.strftime('%Y-%m-%d')} - #{user_lessons.size} \n"
     user_lessons.each do |ul|
-      text += ul.user.nickname.to_s + '\n'
+      text += "#{ul.user.nickname.to_s} \n"
     end
     SlackService.alert text
   end
