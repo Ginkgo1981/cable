@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180128115752) do
+ActiveRecord::Schema.define(version: 20180202131640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -467,6 +467,15 @@ ActiveRecord::Schema.define(version: 20180128115752) do
     t.uuid     "user_id"
   end
 
+  create_table "sentances", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "term_id"
+    t.string   "en"
+    t.string   "zh"
+    t.integer  "ord"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "skills", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "resume_id"
     t.string   "title"
@@ -539,6 +548,19 @@ ActiveRecord::Schema.define(version: 20180128115752) do
     t.string   "redirect_to"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "terms", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "word"
+    t.string   "ctype"
+    t.string   "pronounce"
+    t.string   "audio_origin"
+    t.string   "audio_url"
+    t.string   "level"
+    t.string   "definition_en"
+    t.string   "definition_cn"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "universities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

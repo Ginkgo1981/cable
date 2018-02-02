@@ -7,7 +7,7 @@
 #  book_id             :uuid
 #  lesson_id           :uuid
 #  reading_day         :integer
-#  reading_date        :string
+#  reading_date        :date
 #  state               :integer
 #  answers             :text             is an Array
 #  created_at          :datetime         not null

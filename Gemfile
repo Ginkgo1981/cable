@@ -56,6 +56,8 @@ gem 'mechanize'
 gem 'nokogiri'
 gem 'geocoder'
 gem 'geokit-rails'
+gem 'mechanize'
+gem 'nokogiri'
 
 gem 'selenium'
 gem 'selenium-webdriver'
