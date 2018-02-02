@@ -100,9 +100,11 @@ EOM
 
   desc 'reading_statistic'
   task reading_statistic: :environment do
-    users = UserLesson.where(reading_date: 1.day.ago).where.not(answers: nil)
-    text = "阅读情况: #{0.day.ago.strftime('%Y-%m-%d')} - #{users.size} \n"
-    text += users.map{|ul| [ul.user.nickname, ul.user.cell]}.join('\n')
+    user_lessons = UserLesson.where(reading_date: 1.day.ago).where.not(answers: nil)
+    text = "阅读情况: #{0.day.ago.strftime('%Y-%m-%d')} - #{user_lessons.size} \n"
+    user_lessons.each do |ul|
+      text += ul.user.nickname + '\n'
+    end
     SlackService.alert text
   end
 
