@@ -18,12 +18,10 @@ class Cambridge
 
   def trans(article_url=nil)
     reg = /\s|\:|\,|\.|\"|\'|\?/
-    # article_url = 'https://www.freechildrenstories.com/guardians-of-lore'
-    #terms = doc.css('#page').text.split(reg).select{|term| term.present?}.uniq
-    article_url = 'https://www.odaha.com/antoine-de-saint-exupery/maly-princ/the-little-prince'
+    article_url = 'https://www.freechildrenstories.com/guardians-of-lore'
     page = web_agent.get article_url
     doc = Nokogiri::HTML(page.body)
-    terms = doc.css('.cnt').text.split(reg).select{|term| term.present?}.uniq
+    terms = doc.css('#page').text.split(reg).select{|term| term.present?}.uniq
     # s = 'little'
     # terms = s.split(' ')
     puts "================== terms: #{terms.size} ========="

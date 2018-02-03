@@ -66,31 +66,12 @@ class Lesson < ApplicationRecord
 
     ###### 01 ######
 
-    file_path = '/home/deploy/apps/cable/day3/label01.txt'
-    lesson = book.lessons.create! previous: '有一些人，世俗是关不住的，因为他们用心在看世界。',
-                                  audio_url: 'https://images.gaokao2017.cn/audio01.mp3',
-                                  title_en: 'Chapter 1',
-                                  share_words: '',
-                                  word_count: 0,
-                                  reading_day: 1
-
-    file_path = '/home/deploy/apps/cable/day3/label02.txt'
-    lesson = book.lessons.create! previous: '在成年人的打击之下，“我”放弃了画画，成为了一名飞行员。在一次事故中，“我”驾驶飞机坠落在了撒哈拉沙漠，在这里我遇见了一个能看懂“我”的画的小王子。',
-                                  audio_url: 'https://images.gaokao2017.cn/audio02.mp3',
-                                  title_en: 'Chapter 2',
-                                  share_words: '',
-                                  word_count: 0,
-                                  reading_day: 2
-
-
-    file_path = '/home/deploy/apps/cable/day3/label03.txt'
-    lesson = book.lessons.create! previous: '在昨天的故事中，“我”终于知道了小王子来自何方，那是一颗由一位土耳其天文学家发现的很小的行星，并且“我”很清楚这颗星球的发现过程。',
-                                  audio_url: 'https://images.gaokao2017.cn/audio03.mp3',
-                                  title_en: 'Chapter 3',
-                                  share_words: '',
-                                  word_count: 0,
-                                  reading_day: 3
-
+    file_path = '/home/deploy/apps/cable/lyrics/label1112.txt'
+    lesson = book.lessons.where(reading_day:10).first
+    lesson.previous= '今天是原版书中的11章12章合并，小王子拜访了一个爱虚荣的人和一个酒鬼，他们又发生了什么呢？'
+    lesson.audio_url= 'http://audios.gaokao2017.cn/audio-the-little-prince-05.mp3'
+    lesson.word_count= 457
+    lesson.save!
 
 
     #导入标注
@@ -109,11 +90,9 @@ class Lesson < ApplicationRecord
 
 
     #翻译
-    lesson = book.lessons[2]
-    t_file_path = '/home/deploy/apps/cable/day3/version03.txt'
+    t_file_path = '/home/deploy/apps/cable/translations/version1112.txt'
     File.open(t_file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
-
         lesson_lyric = lesson.lesson_lyrics.where(ord: idx).first
         lesson_lyric.sc = line.strip
         lesson_lyric.save
