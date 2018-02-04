@@ -41,7 +41,7 @@ class Cambridge
     terms = str.split(reg).select{|term| term.present?}.uniq
     puts "================== terms: #{terms.size} ========="
     terms.each do |item|
-      item = item.strip.downcase.singularize
+      item = item.strip.downcase.singularize.gsub(/[^0-9A-Za-z]/, '')
       if $redis.sismember 'terms', item
         puts '==== duplicate ======='
       else

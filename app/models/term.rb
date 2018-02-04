@@ -21,7 +21,7 @@ class Term < ApplicationRecord
 
   #add cache later
   def self.get_translation(word)
-    term = Term.find_by word: word.strip.downcase.singularize.gsub!(/[^0-9A-Za-z]/, '')
+    term = Term.find_by word: word.strip.downcase.singularize.gsub(/[^0-9A-Za-z]/, '')
     term.format
   end
 
