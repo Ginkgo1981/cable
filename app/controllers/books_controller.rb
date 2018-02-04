@@ -12,7 +12,7 @@
 
 class BooksController < ApplicationController
 
-  before_action :find_user_by_token!, only: [:get_mine_talk_topic, :get_word_list, :get_book_productions, :get_user_lesson,:get_lesson, :get_schedules, :get_production, :buy_production]
+  before_action :find_user_by_token!, only: [:get_translation, :get_lesson_terms,:get_mine_talk_topic, :get_word_list, :get_book_productions, :get_user_lesson,:get_lesson, :get_schedules, :get_production, :buy_production]
 
   def get_talk_topic #pure
     topic = TalkTopic.find_by talk_date: params[:date]
@@ -119,6 +119,13 @@ class BooksController < ApplicationController
   #   render json: {code: 0, user_lesson: user_lesson.try(:mini_format)}
   # end
 
+  def get_lesson_terms
+    user_lesson = @user.user_lessons.find_by reading_date: params[:date]
+    lesson = user_lesson.lesson
+    terms = lesson.terms
+    render json: {code: 0, terms: terms}
+  end
+
   def get_lesson
     # params[:date] = '2017-11-06'
     expired_date = Date.new(2018,1,28)
@@ -126,9 +133,7 @@ class BooksController < ApplicationController
       render json: {code: 1, msg: '本课程已下架,不能播放'}
       return
     end
-
     user_lesson = @user.user_lessons.find_by reading_date: params[:date]
-
     unless user_lesson
       render json: {code: 1, msg: '今日没有阅读内容, Take Rest or Contact With 二姐姐'}
       return
@@ -140,6 +145,11 @@ class BooksController < ApplicationController
     user_lesson = @user.user_lessons.find_by reading_date: params[:date]
     word_list = user_lesson.lesson.lesson_words
     render json: {code: 0, word_list: word_list}
+  end
+
+  def get_translation
+    term = Term.get_translation params[:word]
+    render json: {code: 0, translation: term}
   end
 
 

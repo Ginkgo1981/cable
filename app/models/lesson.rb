@@ -32,6 +32,16 @@ class Lesson < ApplicationRecord
   # lesson = Lesson.find '0a11e1a7-c1cd-4808-8b07-d0348bf83de2'
   default_scope -> {order('reading_day')}
 
+  def terms
+    self.lesson_lyrics.map do |lyric|
+      lyric.en.split(' ').map do |t|
+        term = Term.find_by word: t.strip.downcase.singularize
+        term.present? ? [t, 1]  : [t, 0]
+      end
+    end
+  end
+
+
   def self.export_the_little_prince
     book = Book.find 'ccdd79c9-0a93-4f5e-9c70-1803d7fce5e2'
     File.open('the-little-prince-q-a.txt', 'w') do |file|

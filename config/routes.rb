@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
 
-
+  get 'books/get_lesson_terms/:date', to: 'books#get_lesson_terms'
   get 'books/get_mine_talk_topic', to: 'books#get_mine_talk_topic'
   get 'books/lessons_group_statistics', to: 'books#lessons_group_statistics'
   get 'books/get_talk_topic', to: 'books#get_talk_topic'
   get 'books/get_talk_thread/:thread_id', to: 'books#get_talk_thread'
 
   #books
+  get 'books/get_translation/:word', to: 'books#get_translation'
   post 'books/buy_production/:production_id', to: 'books#buy_production'
   get 'books/get_production/:production_id', to: 'books#get_production'
   get 'books/get_lesson/:date', to: 'books#get_lesson'

@@ -33,4 +33,6 @@ class LessonLyric < ApplicationRecord
 
 
 
+
+
 end

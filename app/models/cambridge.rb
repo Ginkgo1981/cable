@@ -8,6 +8,18 @@ class Cambridge
   end
 
 
+  def get_file_as_string(filename)
+    data = ''
+    f = File.open(filename, "r")
+    f.each_line do |line|
+      data += line
+    end
+    return data
+  end
+
+
+
+
   def web_agent
     if @@machanize_agent.nil?
       @@machanize_agent = Mechanize.new
@@ -18,12 +30,15 @@ class Cambridge
 
   def trans(article_url=nil)
     reg = /\s|\:|\,|\.|\"|\'|\?/
-    article_url = 'https://www.freechildrenstories.com/guardians-of-lore'
-    page = web_agent.get article_url
-    doc = Nokogiri::HTML(page.body)
-    terms = doc.css('#page').text.split(reg).select{|term| term.present?}.uniq
-    # s = 'little'
+    # article_url = 'https://www.freechildrenstories.com/guardians-of-lore'
+    # page = web_agent.get article_url
+    # doc = Nokogiri::HTML(page.body)
+    # terms = doc.css('#page').text.split(reg).select{|term| term.present?}.uniq
+    # # s = 'little'
     # terms = s.split(' ')
+
+    str = get_file_as_string('/home/deploy/test.txt')
+    terms = str.split(reg).select{|term| term.present?}.uniq
     puts "================== terms: #{terms.size} ========="
     terms.each do |item|
       item = item.strip.downcase.singularize

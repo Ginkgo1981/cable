@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20180202131640) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
+  enable_extension "hstore"
   enable_extension "uuid-ossp"
 
   create_table "activities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -36,7 +37,7 @@ ActiveRecord::Schema.define(version: 20180202131640) do
     t.string   "audio_url"
     t.string   "audio_name"
     t.text     "lyric",                          array: true
-    t.text     "questions",                      array: true
+    t.hstore   "questions",                      array: true
     t.text     "share_words"
     t.string   "share_img_url"
     t.string   "share_title"

@@ -14,8 +14,12 @@
 class Sentance < ApplicationRecord
 
   belongs_to :term
-
-
-
+  default_scope -> {order('ord')}
+  def format
+    {
+        en: en,
+        zh: zh,
+    }
+  end
 
 end
