@@ -35,7 +35,7 @@ class Lesson < ApplicationRecord
   def terms
     self.lesson_lyrics.map do |lyric|
       lyric.en.split(' ').map do |t|
-        term = Term.find_by word: t.strip.downcase.singularize.gsub(/[^0-9A-Za-z]/, '')
+        term = Term.find_by word: t.gsub(/[^0-9A-Za-z]/, '').try(:strip).try(:downcase).try(:singularize)
         term.present? ? [t, 1]  : [t, 0]
       end
     end
