@@ -33,16 +33,28 @@ class Lesson < ApplicationRecord
   default_scope -> {order('reading_day')}
 
   def terms
-    self.lesson_lyrics.map do |lyric|
-      {
-          sc: lyric.sc,
-          terms:
-            lyric.en.split(' ').map do |t|
-              term = Term.find_by word: t.gsub(/[^0-9A-Za-z]/, '').try(:strip).try(:downcase).try(:singularize)
-              term.present? ? {t: t, s:1}  : {t: t, s: 0}
-            end
-      }
-    end
+      if json = $redis.get(self.id)
+        JSON.parse(json)
+      else
+        terms = self.lesson_lyrics.map do |lyric|
+          {
+              sc: lyric.sc,
+              terms:
+                  lyric.en.split(' ').map do |t|
+                    term = Term.find_by word: t.gsub(/[^0-9A-Za-z]/, '').try(:strip).try(:downcase).try(:singularize)
+                    if term.present?
+                      {t: t, s: 1}
+                    else
+                      UnknowTerm.create word: t
+                      #save to
+                      {t: t, s: 0}
+                    end
+                  end
+          }
+        end
+        $redis.set(self.id, JSON(terms))
+        terms
+      end
   end
 
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180202131640) do
+ActiveRecord::Schema.define(version: 20180207022905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -579,6 +579,12 @@ ActiveRecord::Schema.define(version: 20180202131640) do
     t.integer  "hot",        default: 0
     t.float    "latitude"
     t.float    "longitude"
+  end
+
+  create_table "unknow_terms", force: :cascade do |t|
+    t.string   "word"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "user_books", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

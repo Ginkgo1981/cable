@@ -10,7 +10,7 @@
 #  audio_url         :string
 #  audio_name        :string
 #  lyric             :text             is an Array
-#  questions         :text             is an Array
+#  questions         :hstore           is an Array
 #  share_words       :text
 #  share_img_url     :string
 #  share_title       :string
