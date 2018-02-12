@@ -113,11 +113,11 @@ class Lesson < ApplicationRecord
 
     ###### 01 ######
 
-    file_path = '/home/deploy/apps/cable/lyrics/label16.txt'
-    lesson = book.lessons.where(reading_day:14).first
-    lesson.title_en = 'Chapter 16',
-    lesson.previous= '今天内容为原著的18章19章20章合并，小王子穿过沙漠看到一朵小花，爬上高山，听到了回音，又走进了玫瑰花园，究竟一路上有什么奇闻怪事，让我们一探究竟。明天就是和狐狸见面的日子了，不要错过他们的故事哦！',
-    lesson.audio_url= 'http://audios.gaokao2017.cn/the-little-prince-chapter-181920-day-16.mp3',
+    file_path = '/home/deploy/apps/cable/lyrics/label27.txt'
+    lesson = book.lessons.where(reading_day:24).first
+    lesson.title_en = 'Chapter 27',
+    lesson.previous= '多年以后，“我”从未讲起这个故事，小王子怎么样了，或许我们想是什么样，就是什么样吧',
+    lesson.audio_url= 'http://audios.gaokao2017.cn/book-the-little-prince-27-day24.mp3',
     lesson.word_count= 457
     lesson.save!
 
@@ -138,7 +138,7 @@ class Lesson < ApplicationRecord
 
 
     #翻译
-    t_file_path = '/home/deploy/apps/cable/translations/version16.txt'
+    t_file_path = '/home/deploy/apps/cable/translations/version27.txt'
     File.open(t_file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         lesson_lyric = lesson.lesson_lyrics.where(ord: idx).first
@@ -147,15 +147,10 @@ class Lesson < ApplicationRecord
       end
     end
 
-
     #图片
-
-    lesson_lyric = book.lessons[1].lesson_lyrics.find_by(ord: 30)
-    lesson_lyric.pic = 'https://images.gaokao2017.cn/illustration0204.jpg'
+    lesson_lyric = book.lessons.where(reading_day:24).first.lesson_lyrics.find_by(ord: 21)
+    lesson_lyric.pic = 'http://audios.gaokao2017.cn/book-the-little-prince-chapter27-day24-01.jpg	'
     lesson_lyric.save
-
-
-
   end
 
 

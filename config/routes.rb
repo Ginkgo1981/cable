@@ -118,6 +118,11 @@ Rails.application.routes.draw do
   get 'tags/tag_list'
   #members
 
+  post 'members/daily_checkin', to: 'members#daily_checkin'
+
+  post 'members/reward_share_wechat_moment', to: 'members#reward_share_wechat_moment'
+
+
   get 'members/points_activities', to: 'members#points_activities'
   post 'members/recognize', to: 'members#recognize'
   post 'members/bind_hr_info', to: 'members#bind_hr_info'

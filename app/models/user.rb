@@ -101,6 +101,36 @@ class User < ApplicationRecord
     self.save!
   end
 
+  #每日使用奖励
+  def daily_checkin(preview=false)
+    if self.point_activities.where(activity: 'daily_checkin').at_today.present?
+      {preview: true, points: 0}
+    else
+      if preview
+        {preview: true, points: 10}
+      else
+        self.point_activities.create! points: 10,
+                                      activity: 'daily_checkin',
+                                      note: '签到奖励'
+        {preview: false, points: 10}
+      end
+    end
+  end
+
+  #分享朋友圈奖励
+
+  def reward_share_wechat_moment
+    binding.pry
+    if self.point_activities.where(activity: 'wechat_moment_share').at_today.present?
+      {preview: false, points: 0}
+    else
+      self.point_activities.create! points: 20,
+                                    activity: 'wechat_moment_share',
+                                    note: '分享朋友圈奖励'
+      {preview: false, points: 20}
+    end
+  end
+
 
 
   def stats

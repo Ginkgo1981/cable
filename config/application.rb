@@ -30,14 +30,9 @@ module Cable
     config.autoload_paths += Dir[Rails.root.join('app', 'jobs', '{**/}')]
     config.autoload_paths += Dir[Rails.root.join('app', 'serializers', '{**/}')]
     config.autoload_paths += Dir[Rails.root.join('lib', '{**/}')]
-
-
     config.active_job.queue_adapter = :sidekiq
-
-
     ActionCable.server.config.logger = Logger.new(nil)
-
-
+    config.time_zone = 'Beijing'
     config.api_only = true
   end
 end

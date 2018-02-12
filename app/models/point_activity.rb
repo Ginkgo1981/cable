@@ -12,10 +12,9 @@
 #
 
 class PointActivity < ApplicationRecord
-
   belongs_to :user
-
   after_create :calculate_points
+  scope :at_today, -> {where('created_at >= ? and created_at <= ?', Time.current.beginning_of_day, Time.current.end_of_day)}
 
 
 
@@ -29,11 +28,8 @@ class PointActivity < ApplicationRecord
     {
         points: points,
         activity: activity,
-        note: note,
-        created_at: created_at.strftime('%Y-%m-%d')
+        note:  created_at.strftime('%Y年%m月%d日') + note
     }
-
-
   end
 
 
