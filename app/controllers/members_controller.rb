@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
 
-  before_action :find_user_by_token!, only: [
+  before_action :find_user_by_token!, only: [:points_activities,
       :recognize, :get_reading_stats, :invitees,:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
                                              :applying_job, :applied_jobs, :is_applied,:bind_hr_info, :read_business_card,
                                              :bookmarking_job, :is_bookmarked, :bookmarked_jobs, :deliver_resume_to_email]
@@ -36,6 +36,12 @@ class MembersController < ApplicationController
   #                         cell: params[:cell]
   #   render json: {code: 0, member: staff.membership}
   # end
+
+
+  def points_activities
+    point_activities = @user.point_activities
+    render json: {code: 0, point_activities: point_activities.map(&:format)}
+  end
 
 
   def recognize

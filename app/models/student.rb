@@ -40,6 +40,7 @@
 #  online_status                :integer          default(0)
 #  days_count                   :integer          default(0)
 #  words_count                  :integer          default(0)
+#  points                       :integer          default(0)
 #
 
 class Student < User

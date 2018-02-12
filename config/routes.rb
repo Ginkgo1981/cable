@@ -118,6 +118,7 @@ Rails.application.routes.draw do
   get 'tags/tag_list'
   #members
 
+  get 'members/points_activities', to: 'members#points_activities'
   post 'members/recognize', to: 'members#recognize'
   post 'members/bind_hr_info', to: 'members#bind_hr_info'
 

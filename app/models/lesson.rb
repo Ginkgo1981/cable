@@ -32,6 +32,27 @@ class Lesson < ApplicationRecord
   # lesson = Lesson.find '0a11e1a7-c1cd-4808-8b07-d0348bf83de2'
   default_scope -> {order('reading_day')}
 
+
+  def ques
+    lesson = book.lessons.where(reading_day: 16).first
+    lesson.lesson_questions.create! question: 'What did the the flower think of the human being?',
+                                    options: [ 'dangerous', 'ugly', 'no roots(脚)'],
+                                    answer: 2,
+                                    analysis: 'They have no roots, and that makes their life very difficult.'
+
+    lesson.lesson_questions.create! question: ' Why did the little prince climb up a high mountain?',
+                                    options: ['find people.', 'find flowers', 'find water.'],
+                                    answer: 0,
+                                    analysis: '“From a mountain as high as this one,” he said to himself, “I shall be able to see the whole planet at one glance, and all the people . . .”所以答案为B。'
+
+
+    lesson.lesson_questions.create! question: "According to the fox, what is the meaning of 'tame'?",
+                                    options: [ 'establish ties(建立联系)', 'obey to admin', 'funny'],
+                                    answer: 0,
+                                    analysis: "\"It is an act too often neglected,\" said the fox. \"It means to establish ties.\""
+
+  end
+
   def terms
       if json = $redis.get(self.id)
         JSON.parse(json)
@@ -92,10 +113,11 @@ class Lesson < ApplicationRecord
 
     ###### 01 ######
 
-    file_path = '/home/deploy/apps/cable/lyrics/label1112.txt'
-    lesson = book.lessons.where(reading_day:10).first
-    lesson.previous= '今天是原版书中的11章12章合并，小王子拜访了一个爱虚荣的人和一个酒鬼，他们又发生了什么呢？'
-    lesson.audio_url= 'http://audios.gaokao2017.cn/audio-the-little-prince-05.mp3'
+    file_path = '/home/deploy/apps/cable/lyrics/label16.txt'
+    lesson = book.lessons.where(reading_day:14).first
+    lesson.title_en = 'Chapter 16',
+    lesson.previous= '今天内容为原著的18章19章20章合并，小王子穿过沙漠看到一朵小花，爬上高山，听到了回音，又走进了玫瑰花园，究竟一路上有什么奇闻怪事，让我们一探究竟。明天就是和狐狸见面的日子了，不要错过他们的故事哦！',
+    lesson.audio_url= 'http://audios.gaokao2017.cn/the-little-prince-chapter-181920-day-16.mp3',
     lesson.word_count= 457
     lesson.save!
 
@@ -116,7 +138,7 @@ class Lesson < ApplicationRecord
 
 
     #翻译
-    t_file_path = '/home/deploy/apps/cable/translations/version1112.txt'
+    t_file_path = '/home/deploy/apps/cable/translations/version16.txt'
     File.open(t_file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         lesson_lyric = lesson.lesson_lyrics.where(ord: idx).first

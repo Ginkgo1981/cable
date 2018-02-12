@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180207022905) do
+ActiveRecord::Schema.define(version: 20180211140730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -386,6 +386,15 @@ ActiveRecord::Schema.define(version: 20180207022905) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "point_activities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.integer  "points",     default: 0
+    t.string   "activity"
+    t.string   "note"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "positions", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -664,6 +673,7 @@ ActiveRecord::Schema.define(version: 20180207022905) do
     t.integer  "online_status",                           default: 0
     t.integer  "days_count",                              default: 0
     t.integer  "words_count",                             default: 0
+    t.integer  "points",                                  default: 0
   end
 
 end
