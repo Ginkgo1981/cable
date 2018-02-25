@@ -67,7 +67,6 @@ class CampaignsController < ApplicationController
     # if @user.joined_campaign?(campaign)
     #   (render json: {code: 1, msg: '已参加活动'}) and return
     # end
-    binding.pry
     res, message = @user.join_campaign! campaign
     if res
       render json: {code: 0, msg: '加入成功'}
@@ -86,7 +85,7 @@ class CampaignsController < ApplicationController
 
   def get_questions
     lesson = Lesson.find_by id: params[:id]
-    answers = lesson.user_campaign_progress.answers
+    answers = lesson.user_campaign_progress.try(:answers) || []
     render json: {code: 0, questions: lesson.lesson_questions.map { |l| l.format }, answers: answers}
   end
 

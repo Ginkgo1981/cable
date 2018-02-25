@@ -187,7 +187,6 @@ class User < ApplicationRecord
   #分享朋友圈奖励
 
   def reward_share_wechat_moment
-    binding.pry
     if self.point_activities.where(activity: 'wechat_moment_share').at_today.present?
       {preview: false, points: 0}
     else

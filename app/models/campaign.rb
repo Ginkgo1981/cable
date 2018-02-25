@@ -28,11 +28,11 @@ class Campaign < ApplicationRecord
 
   def self.mock_create_one
     book = Book.last
-    self.create! name: '小王子第二期',
+    Campaign.create! name: '小王子',
                  bucket: book,
                  start_at: Time.now.to_date,
-                 end_at: (Time.now + 10.days).to_date,
-                 duration: 20,
+                 end_at: (Time.now + 24.days).to_date,
+                 duration: 24,
                  sell_state: 1
   end
 
