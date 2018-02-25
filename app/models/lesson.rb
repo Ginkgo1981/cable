@@ -29,12 +29,19 @@ class Lesson < ApplicationRecord
   has_many :lesson_words
   has_many :lesson_lyrics
 
+  has_one :user_campaign_progress, as: :bucket_item
+
   # lesson = Lesson.find '0a11e1a7-c1cd-4808-8b07-d0348bf83de2'
   default_scope -> {order('reading_day')}
 
 
+  def next
+    Lesson.find_by reading_day: self.reading_day + 1
+  end
+
+
   def ques
-    lesson = book.lessons.where(reading_day: 16).first
+    lesson = book.lessons.where(reading_day: 18).first
     lesson.lesson_questions.create! question: 'What did the the flower think of the human being?',
                                     options: [ 'dangerous', 'ugly', 'no roots(脚)'],
                                     answer: 2,
@@ -113,9 +120,9 @@ class Lesson < ApplicationRecord
 
     ###### 01 ######
 
-    file_path = '/home/deploy/apps/cable/lyrics/label27.txt'
-    lesson = book.lessons.where(reading_day:24).first
-    lesson.title_en = 'Chapter 27',
+    file_path = '/home/deploy/apps/cable/lyrics/label2102.txt'
+    lesson = book.lessons.where(reading_day:18).first
+    lesson.title_en = 'Chapter 21 Part B',
     lesson.previous= '多年以后，“我”从未讲起这个故事，小王子怎么样了，或许我们想是什么样，就是什么样吧',
     lesson.audio_url= 'http://audios.gaokao2017.cn/book-the-little-prince-27-day24.mp3',
     lesson.word_count= 457
@@ -138,7 +145,7 @@ class Lesson < ApplicationRecord
 
 
     #翻译
-    t_file_path = '/home/deploy/apps/cable/translations/version27.txt'
+    t_file_path = '/home/deploy/apps/cable/translations/version2102.txt'
     File.open(t_file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         lesson_lyric = lesson.lesson_lyrics.where(ord: idx).first
@@ -263,6 +270,7 @@ class Lesson < ApplicationRecord
         previous: previous,
         audio_url: audio_url,
         audio_name: audio_name,
+        reading_day: reading_day,
         # lyric: lyric,
         lesson_lyrics: lesson_lyrics.map(&:format),
         questions: self.lesson_questions.map { |q| q.format },

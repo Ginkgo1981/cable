@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180211140730) do
+ActiveRecord::Schema.define(version: 20180225025531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,52 @@ ActiveRecord::Schema.define(version: 20180211140730) do
     t.string   "book_cover_img_url"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+  end
+
+  create_table "campagin_activities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "campaign_id"
+    t.uuid     "user_id"
+    t.uuid     "activity_id"
+    t.string   "activity_type"
+    t.string   "note"
+    t.integer  "ord",           default: 0
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "campaign_activities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "campaign_id"
+    t.uuid     "user_id"
+    t.uuid     "activity_id"
+    t.string   "activity_type"
+    t.string   "note"
+    t.integer  "ord",           default: 0
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "campaign_details", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "campaign_id"
+    t.integer  "ord",         default: 0
+    t.string   "stype"
+    t.string   "content"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  create_table "campaigns", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "bucket_id"
+    t.string   "bucket_type"
+    t.date     "start_at"
+    t.date     "end_at"
+    t.integer  "duration"
+    t.integer  "sell_state"
+    t.integer  "completed_days"
+    t.integer  "missed_days"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "name"
+    t.text     "tags",                        array: true
   end
 
   create_table "cells", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -604,6 +650,36 @@ ActiveRecord::Schema.define(version: 20180211140730) do
     t.integer  "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "user_campaign_progresses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.uuid     "campaign_id"
+    t.uuid     "bucket_id"
+    t.string   "bucket_type"
+    t.uuid     "bucket_item_id"
+    t.string   "bucket_item_type"
+    t.date     "task_date"
+    t.integer  "task_order"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "state",            default: 0
+    t.text     "answers",                                   array: true
+  end
+
+  create_table "user_campaigns", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.uuid     "campaign_id"
+    t.uuid     "bucket_id"
+    t.string   "bucket_type"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.uuid     "last_bucket_item_id"
+    t.string   "last_bucket_item_type"
+    t.integer  "done_items_count",      default: 0
+    t.integer  "total_items_count",     default: 0
+    t.boolean  "mark_as_deleted",       default: false
+    t.date     "last_bucket_item_date"
   end
 
   create_table "user_groups", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

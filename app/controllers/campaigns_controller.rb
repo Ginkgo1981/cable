@@ -1,46 +1,155 @@
+# == Schema Information
+#
+# Table name: campaigns
+#
+#  id             :uuid             not null, primary key
+#  bucket_id      :uuid
+#  bucket_type    :string
+#  start_at       :date
+#  end_at         :date
+#  duration       :integer
+#  sell_state     :integer
+#  completed_days :integer
+#  missed_days    :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  name           :string
+#  tags           :text             is an Array
+#
+
 class CampaignsController < ApplicationController
-  before_action :find_user_by_token!, only: [:scan_skycode, :campaign_list, :skycode_list, :update_skycode]
-  before_action :find_entity_by_dsin!, only: [:scan_skycode, :campaign_list, :skycode_list, :update_skycode]
-
-  def campaign_list
-    campaigns = @entity.campaigns
-    render json: campaigns,
-           meta: {code: 0},
-           each_serializer: CampaignSerializer
+  before_action :find_user_by_token!, only: [:get_lesson_by_date, :get_schedules, :finish_lesson, :get_lesson,:get_bucket_item, :get_campaign_activities, :get_campaign_members,:get_campaign_index,:my_campaigns,:buy_campaign, :get_promotion_campaign]
+  def list
+    campaigns = Campaign.all
+    render json: {code: 0, campaigns: campaigns.map(&:format)}
   end
 
-  def skycode_list
-    skycodes = @entity.following_skycodes.reverse_order
-    render json: skycodes,
-           meta: {code: 0},
-           each_serializer: SkycodeSerializer
+  def get_promotion_campaign
+    #再次参加
+    campaign = Campaign.find_by id: params[:id]
+    res, msg = @user.campaign_state campaign
+    render json: {code: 0, campaign: campaign.format, user_campaign_state: {flag: res,msg: msg}}
+  end
+
+  def get_campaign_index
+    campaign = Campaign.find_by id: params[:id]
+    user_campaign = UserCampaign.find_by user: @user,
+                                         campaign: campaign
+    today_finished, next_bucket_item = user_campaign.next_bucket_item
+    render json: {code: 0,
+                  campaign: campaign.format,
+                  user_campaign: {
+                      done_items_count: user_campaign.done_items_count,
+                      total_items_count: user_campaign.total_items_count,
+                      next_bucket_item: next_bucket_item,
+                      today_finished: today_finished
+                  }
+    }
   end
 
 
-  def update_skycode
-    @entity.name = params[:name]
-    @entity.save
-    render json: {code: 0, msg: '修改成功', entity: @entity.format}
+  def get_campaign_members
+    #todo
+    # campaign = Campaign.find_by id: params[:id]
+    # members =  campaign.users
+    members =  Reader.last 10
+    render json: {code: 0, members: members.map(&:format)}
   end
 
+  def get_campaign_activities
+    campaign = Campaign.find_by id: params[:id]
+    activities = campaign.campaign_activities
+    render json: {code: 0, activities: activities.map(&:format)}
+  end
 
-  def scan_skycode
-    if @student
-      @entity.followed_by_students << @student
-      @entity.campaign && (@entity.campaign.followed_by_students << @student)
-      @entity.university && (@entity.university.followed_by_students << @student)
-    elsif @teacher
-      if @entity.is_a? Skycode
-        # raise CableException::SkycodeNotFound unless @entity.is_a? Skycode
-        raise CableException::SkycodeAlreadyBinded if @entity.using?
-        @entity.update_attributes name: params[:name],
-                                  teacher: @teacher,
-                                  university: @university
-
-      elsif @entity.is_a? Student
-        @teacher.followed_by_students << @entity
-      end
+  def buy_campaign
+    campaign = Campaign.find_by id: params[:id]
+    # if @user.joined_campaign?(campaign)
+    #   (render json: {code: 1, msg: '已参加活动'}) and return
+    # end
+    binding.pry
+    res, message = @user.join_campaign! campaign
+    if res
+      render json: {code: 0, msg: '加入成功'}
+    else
+      render json: {code: -1, msg: '加入失败'}
     end
-    render json: {code: 0, msg: '扫码成功', entity: @entity.format}
   end
+
+
+
+  def my_campaigns
+    campaigns = @user.campaigns
+    render json: {code: 0, campaigns: campaigns.map(&:format)}
+  end
+
+
+  def get_questions
+    lesson = Lesson.find_by id: params[:id]
+    answers = lesson.user_campaign_progress.answers
+    render json: {code: 0, questions: lesson.lesson_questions.map { |l| l.format }, answers: answers}
+  end
+
+  def get_lesson
+    lesson = Lesson.find_by id: params[:id]
+    render json: {code: 0, lesson: lesson.format}
+  end
+
+
+  def get_lesson_by_date
+    user_campaign_progress = @user.user_campaign_progresses.find_by task_date: params[:date]
+    lesson = user_campaign_progress.bucket_item
+    render json: {code: 0, lesson: lesson.format}
+  end
+
+  def get_schedules
+    schedules = @user.user_campaign_progresses.where(campaign_id: params[:campaign_id]).map{|ul| [ul.task_date.strftime('%Y-%m-%d'), 1]}.to_h
+    render json: {code: 0, schedules: schedules}
+  end
+
+  def finish_lesson #save_answers
+    user_campaign = @user.user_campaigns.find_by campaign_id: params[:campaign_id]
+    lesson = Lesson.find_by id: params[:lesson_id]
+    user_campaign.mark_as_done lesson, params[:answers]
+    puts '==== send a notification ===='
+    if @user.mp_openid
+      puts '====== send template message ========'
+      wechat_oa_client = WechatOaClient.new
+      payload =
+          {
+              touser: @user.mp_openid,
+              template_id: 'ubhAAEJtgAJMfhohWnB-B9BSA7_TMEzDLpMQcF3liis',
+              url: "https://files.gaokao2017.cn/share/#{@user.id}",
+              data:{
+                  first: {
+                      value: '恭喜完成今日的阅读计划'
+                  },
+                  keyword1:{
+                      value: '百草阅读'
+                  },
+                  keyword2: {
+                      value: '每日阅读签到'
+                  },
+                  keyword3: {
+                      value: Time.now.strftime('%Y-%m-%d')
+                  },
+                  remark:{
+                      value:'点击查看今日阅读报告'
+                  }
+              }
+          }
+      wechat_oa_client.send_template_message(payload)
+    end
+    render json: {code: 0, msg: 'succ'}
+  end
+
+  def get_lesson_terms
+    user_lesson = @user.user_lessons.find_by reading_date: params[:date]
+    lesson = user_lesson.lesson
+    terms = lesson.terms
+    render json: {code: 0, terms: terms}
+  end
+
+
+
 end

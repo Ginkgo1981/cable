@@ -48,6 +48,10 @@ class User < ApplicationRecord
   include Bookmarkable
   # include Likable
 
+  has_many :user_campaigns
+  has_many :user_campaign_progresses
+  has_many :campaigns, through: :user_campaigns
+
   has_many :forms
   has_many :received_messages, class_name: Message, foreign_key: :user_id
   has_many :sended_messages, class_name: Message, foreign_key: :sender_id
@@ -76,6 +80,8 @@ class User < ApplicationRecord
 
   has_many :point_activities
 
+  has_many :campaign_activities
+
 
 
   scope :online, -> {where('online_status = ?', 1)}
@@ -84,6 +90,67 @@ class User < ApplicationRecord
 
   # delegate :dsin, to: :identity
   before_create :generate_token
+
+  def leave_campaign!(campaign)
+    user_campaign = UserCampaign.find_by(user: self, campaign: campaign)
+    user_campaign.mark_as_deleted = true
+    user_campaign.save!
+  end
+
+  def campaign_state(campaign)
+    self.campaigns.include? campaign
+
+    user_campaign = self.user_campaigns.find_by campaign: campaign
+
+    if user_campaign.present?
+      if user_campaign.mark_as_deleted #deleted
+        return 2, '已退出'
+      else
+        return 1, '已加入'
+      end
+    else
+      return 0, '未加入'
+    end
+
+  end
+
+  def join_campaign!(campaign)
+    user_campaign = self.user_campaigns.find_by campaign: campaign
+    if user_campaign.present?
+      return false, '请勿重复加入' if !user_campaign.mark_as_deleted
+      user_campaign.mark_as_deleted = false #to default
+      user_campaign.save!
+      return true, '再次加入成功'
+    end
+    bucket = campaign.bucket
+    bucket_items = []
+    if bucket.is_a? Book
+      bucket_items = bucket.lessons
+    end
+    self.user_campaigns.create! campaign: campaign,
+                                bucket: bucket,
+                                total_items_count: bucket_items.count
+    return true, '加入成功'
+  end
+
+  def buy_book_producton book_production
+    book = book_production.book
+    raise CableException::DuplicatedLesson if self.books.include? book
+    if self.user_books.maximum(:end_at) && self.user_books.maximum(:end_at) > book_production.lesson_start_at
+      raise CableException::OngoingLesson
+    end
+    self.user_books.create!  book: book,
+                             begin_at: book_production.lesson_start_at,
+                             end_at: book_production.lesson_end_at
+    book.lessons.each_with_index do |lesson, idx|
+      self.user_lessons.create! book: book,
+                                lesson: lesson,
+                                reading_day: idx + 1,
+                                reading_date: (book_production.lesson_start_at + idx.day).strftime('%Y-%m-%d')
+    end
+    true
+  end
+
 
   def remove_book book
     self.books.delete book
@@ -140,23 +207,6 @@ class User < ApplicationRecord
   end
 
 
-  def buy_book_producton book_production
-    book = book_production.book
-    raise CableException::DuplicatedLesson if self.books.include? book
-    if self.user_books.maximum(:end_at) && self.user_books.maximum(:end_at) > book_production.lesson_start_at
-      raise CableException::OngoingLesson
-    end
-    self.user_books.create!  book: book,
-                             begin_at: book_production.lesson_start_at,
-                             end_at: book_production.lesson_end_at
-    book.lessons.each_with_index do |lesson, idx|
-      self.user_lessons.create! book: book,
-          lesson: lesson,
-          reading_day: idx + 1,
-          reading_date: (book_production.lesson_start_at + idx.day).strftime('%Y-%m-%d')
-    end
-    true
-  end
 
 
 
@@ -214,7 +264,6 @@ class User < ApplicationRecord
   end
 
   def allow_send_notification_message?
-    #todo
     true
   end
 

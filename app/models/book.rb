@@ -17,6 +17,14 @@ class Book < ApplicationRecord
   has_many :user_books
   has_many :users
 
+  def next_bucket_item(p_bucket_item_id)
+    p_lesson = self.lessons.find_by p_bucket_item_id
+    p_lesson.next
+  end
+
+  def first_bucket_item
+    self.lessons.first
+  end
 
   def export_to_txt
     File.open("books/#{self.book_name}.txt", 'w') do |f|
@@ -57,6 +65,7 @@ class Book < ApplicationRecord
 
   def format
     {
+        id: id,
         book_name:  book_name,
         book_name_cn: book_name_cn,
         book_cover_img_url: book_cover_img_url

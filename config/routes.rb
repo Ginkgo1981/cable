@@ -105,28 +105,13 @@ Rails.application.routes.draw do
   get 'resumes/:resume_id', to: 'resumes#get_resume'
 
 
-  #dsin photo
-  #dsin
-  # get 'dsin/:dsin', to: 'dsins#show'
-  # get 'format_show/:dsin', to: 'dsins#format_show'
-  # get 'get_resume_by_dsin/:dsin', to: 'dsins#get_resume_by_dsin'
-  # post 'dsin/:dsin', to: 'dsins#update'
-  # delete 'dsin/:dsin', to: 'dsins#delete'
-  #dsin tags
-  # get 'dsin/:dsin/tags', to: 'dsins#tags'
-  # post 'dsin/:dsin/tag', to: 'dsins#tag'
   get 'tags/tag_list'
   #members
-
   post 'members/daily_checkin', to: 'members#daily_checkin'
-
   post 'members/reward_share_wechat_moment', to: 'members#reward_share_wechat_moment'
-
-
   get 'members/points_activities', to: 'members#points_activities'
   post 'members/recognize', to: 'members#recognize'
   post 'members/bind_hr_info', to: 'members#bind_hr_info'
-
   post 'members/bind_hr_info', to: 'members#bind_hr_info'
   post 'members/read_business_card', to: 'members#read_business_card'
   post 'members/wechat_open_authorization', to: 'members#wechat_open_authorization'
@@ -172,11 +157,8 @@ Rails.application.routes.draw do
 
 
   #likings
-
   get 'likings/:dsin', to: 'dsins#likings'
   post 'like_comment/:dsin', to: 'members#like_comment'
-
-
 
   post 'messages/batch_send_messages', to: 'messages#batch_send_messages'
   post 'messages/send_point_message', to: 'messages#send_point_message'
@@ -189,33 +171,31 @@ Rails.application.routes.draw do
   get 'stories/list/', to: 'stories#list'
   post 'stories/create_story', to: 'stories#create_story'
 
-  #universities
-  # get 'universities/list', to: 'universities#university_list'
-  # get 'universities/:dsin/major_list', to: 'universities#major_list'
-  # get 'universities/:dsin', to: 'universities#show'
+  #campaigns
+  get 'campaigns/my_campaigns', to: 'campaigns#my_campaigns'
+  get 'campaigns/list', to: 'campaigns#list'
+  get 'campaigns/get_bucket_item/:id', to: 'campaigns#get_bucket_item'
+  get 'campaigns/get_lesson/:id', to: 'campaigns#get_lesson'
+  get 'campaigns/get_questions/:id', to: 'campaigns#get_questions'
+  get 'campaigns/get_schedules/:campaign_id', to: 'campaigns#get_schedules'
+  post 'campaigns/finish_lesson', to: 'campaigns#finish_lesson'
+  get 'campaigns/get_lesson_by_date/:date', to: 'campaigns#get_lesson_by_date'
 
-  #新建专业
-  # post 'universities/create_major', to: 'universities#create_major'
+  get 'campaigns/get_campaign_index/:id', to: 'campaigns#get_campaign_index'
+  get 'campaigns/get_campaign_members/:id', to: 'campaigns#get_campaign_members'
+  get 'campaigns/get_campaign_activities/:id', to: 'campaigns#get_campaign_activities'
+
+
+
+  get 'campaigns/get_promotion_campaign/:id', to: 'campaigns#get_promotion_campaign'
+  post 'campaigns/buy_campaign/:id', to: 'campaigns#buy_campaign'
+
 
   #students
   # get 'students/followed_by_students/:dsin', to: 'students#followed_by_students'
 
-
   #campaigns / skycodes
   # get 'campaigns/campaign_list/:dsin', to: 'campaigns#campaign_list'
-  # get 'campaigns/skycode_list/:dsin', to: 'campaigns#skycode_list'
-
-
-  #scan
-  # post 'campaigns/scan_skycode/:dsin', to: 'campaigns#scan_skycode'
-
-  #change skycode, set naem
-  # post 'update_skycode/:dsin', to: 'campaigns#update_skycode'
-
-  # #scan skycodes
-  # post 'campaigns/student_scan_skycode', to: 'campaigns#student_scan_skycode'
-  # post 'campaigns/teacher_scan_skycode', to: 'campaigns#teacher_scan_skycode'
-
   # post 'comment_wishcard/:id', to: 'members#comment_wishcard'
   get 'wishcards/:group_id', to: 'cards#wishcards'
 
