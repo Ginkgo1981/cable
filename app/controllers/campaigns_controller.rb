@@ -19,6 +19,17 @@
 
 class CampaignsController < ApplicationController
   before_action :find_user_by_token!, only: [:list, :get_lesson_by_date, :get_schedules, :finish_lesson, :get_lesson,:get_bucket_item, :get_campaign_activities, :get_campaign_members,:get_campaign_index,:my_campaigns,:buy_campaign, :get_promotion_campaign]
+
+  def share_settings
+
+    render json: {
+        code: 1,
+        share_count:1,
+        black_list: ['e851ff90-6d27-4248-b627-0aa11ce8db69']
+    }
+
+  end
+
   def list
     campaigns = Campaign.all.map(&:format)
     my_campaigns_ids = @user.campaigns.ids

@@ -174,6 +174,7 @@ Rails.application.routes.draw do
   #campaigns
   get 'campaigns/my_campaigns', to: 'campaigns#my_campaigns'
   get 'campaigns/list', to: 'campaigns#list'
+  get 'campaigns/share_settings', to: 'campaigns#share_settings'
   get 'campaigns/get_bucket_item/:id', to: 'campaigns#get_bucket_item'
   get 'campaigns/get_lesson/:lesson_id', to: 'campaigns#get_lesson'
   get 'campaigns/get_lesson_terms/:lesson_id', to: 'campaigns#get_lesson_terms'

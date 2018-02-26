@@ -24,13 +24,9 @@ class UserCampaign < ApplicationRecord
   belongs_to :bucket, :polymorphic => true
   belongs_to :last_bucket_item, :polymorphic => true, optional: true
 
-
-
-
-
   def next_bucket_item
     if last_bucket_item.present?
-      if last_bucket_item_date == Time.current.to_date
+      if last_bucket_item_date == Time.now.to_date
         return 1, last_bucket_item #每天只能读一篇
       else
         return 0, last_bucket_item.next
@@ -43,7 +39,7 @@ class UserCampaign < ApplicationRecord
 
   def mark_as_done bucket_item, answers=[]
     self.last_bucket_item = bucket_item
-    self.last_bucket_item_date = Time.current.to_date
+    self.last_bucket_item_date = Time.now.to_date
     self.done_items_count += 1
     self.save!
     UserCampaignProgress.create! campaign: campaign,

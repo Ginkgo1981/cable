@@ -14,7 +14,7 @@
 class PointActivity < ApplicationRecord
   belongs_to :user
   after_create :calculate_points
-  scope :at_today, -> {where('created_at >= ? and created_at <= ?', Time.current.beginning_of_day, Time.current.end_of_day)}
+  scope :at_today, -> {where('created_at >= ? and created_at <= ?', Time.now.beginning_of_day, Time.now.end_of_day)}
 
 
 
