@@ -27,8 +27,8 @@ class Campaign < ApplicationRecord
   has_many :user_campaign_progresses
 
   def self.mock_create_one
-    book = Book.last
-    Campaign.create! name: '小王子',
+    book = Book.find '9e18725d-885c-4547-af22-e7983208e7a7'
+    Campaign.create! name: '假如给我三天光明',
                  bucket: book,
                  start_at: Time.now.to_date,
                  end_at: (Time.now + 24.days).to_date,

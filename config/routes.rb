@@ -175,8 +175,11 @@ Rails.application.routes.draw do
   get 'campaigns/my_campaigns', to: 'campaigns#my_campaigns'
   get 'campaigns/list', to: 'campaigns#list'
   get 'campaigns/get_bucket_item/:id', to: 'campaigns#get_bucket_item'
-  get 'campaigns/get_lesson/:id', to: 'campaigns#get_lesson'
-  get 'campaigns/get_questions/:id', to: 'campaigns#get_questions'
+  get 'campaigns/get_lesson/:lesson_id', to: 'campaigns#get_lesson'
+  get 'campaigns/get_lesson_terms/:lesson_id', to: 'campaigns#get_lesson_terms'
+
+
+  get 'campaigns/get_questions/:lesson_id', to: 'campaigns#get_questions'
   get 'campaigns/get_schedules/:campaign_id', to: 'campaigns#get_schedules'
   post 'campaigns/finish_lesson', to: 'campaigns#finish_lesson'
   get 'campaigns/get_lesson_by_date/:date', to: 'campaigns#get_lesson_by_date'

@@ -17,6 +17,13 @@ class Book < ApplicationRecord
   has_many :user_books
   has_many :users
 
+
+  def mock
+    Book.create! book_name: 'the story of my life',
+                 book_name_cn: '假如给我三天光明',
+                 book_cover_img_url: 'https://images.gaokao2017.cn/banner-2018-02-25.png'
+  end
+
   def next_bucket_item(p_bucket_item_id)
     p_lesson = self.lessons.find_by p_bucket_item_id
     p_lesson.next

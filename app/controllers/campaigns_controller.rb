@@ -75,25 +75,27 @@ class CampaignsController < ApplicationController
     end
   end
 
-
-
   def my_campaigns
     campaigns = @user.campaigns
     render json: {code: 0, campaigns: campaigns.map(&:format)}
   end
 
-
   def get_questions
-    lesson = Lesson.find_by id: params[:id]
+    lesson = Lesson.find_by id: params[:lesson_id]
     answers = lesson.user_campaign_progress.try(:answers) || []
     render json: {code: 0, questions: lesson.lesson_questions.map { |l| l.format }, answers: answers}
   end
 
   def get_lesson
-    lesson = Lesson.find_by id: params[:id]
+    lesson = Lesson.find_by id: params[:lesson_id]
     render json: {code: 0, lesson: lesson.format}
   end
 
+  def get_lesson_terms
+    lesson = Lesson.find_by id: params[:lesson_id]
+    terms = lesson.terms
+    render json: {code: 0, terms: terms}
+  end
 
   def get_lesson_by_date
     user_campaign_progress = @user.user_campaign_progresses.find_by task_date: params[:date]
@@ -142,12 +144,6 @@ class CampaignsController < ApplicationController
     render json: {code: 0, msg: 'succ'}
   end
 
-  def get_lesson_terms
-    user_lesson = @user.user_lessons.find_by reading_date: params[:date]
-    lesson = user_lesson.lesson
-    terms = lesson.terms
-    render json: {code: 0, terms: terms}
-  end
 
 
 

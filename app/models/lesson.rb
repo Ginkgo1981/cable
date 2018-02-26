@@ -115,18 +115,21 @@ class Lesson < ApplicationRecord
   end
 
   def self.create_from_loki
-    book = Book.find 'cb79e72b-00fe-4965-b3b4-0c08680ed1e9'
+    book = Book.find '9e18725d-885c-4547-af22-e7983208e7a7'
 
 
     ###### 01 ######
 
-    file_path = '/home/deploy/apps/cable/lyrics/label2102.txt'
-    lesson = book.lessons.where(reading_day:18).first
-    lesson.title_en = 'Chapter 21 Part B',
-    lesson.previous= '多年以后，“我”从未讲起这个故事，小王子怎么样了，或许我们想是什么样，就是什么样吧',
-    lesson.audio_url= 'http://audios.gaokao2017.cn/book-the-little-prince-27-day24.mp3',
-    lesson.word_count= 457
-    lesson.save!
+    file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-label-day1.txt'
+    # lesson = book.lessons.where(reading_day:1).first
+    
+    
+    lesson = book.lessons.create! title_en: 'Chapter 1 光明和声音',
+                        previous: '《我的生活》是海伦·凯勒的处女作。作品一发表；立即在美国引起了轰动，被称为“世界文学史上无与伦比的杰作”，出版的版本超过百余种，在世界上产生了巨大的影响。本书由海伦·凯勒的《我的生活》《走出黑暗》《老师》三本书以及发表在美国《大西洋月刊》上的著名散文《假如给我三天光明》编译而成，完整系统地介绍了海伦·凯勒丰富、生动、真实而伟大的一生.',
+                        audio_url: 'http://audios.gaokao2017.cn/the-story-of-my-life-audio-day1.mp3',
+                        word_count: 1234,
+                         reading_day: 1
+
 
 
     #导入标注
@@ -145,7 +148,7 @@ class Lesson < ApplicationRecord
 
 
     #翻译
-    t_file_path = '/home/deploy/apps/cable/translations/version2102.txt'
+    t_file_path = '/home/deploy/apps/cable/lyrics/translation01'
     File.open(t_file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         lesson_lyric = lesson.lesson_lyrics.where(ord: idx).first
