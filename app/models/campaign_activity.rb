@@ -28,7 +28,8 @@ class CampaignActivity < ApplicationRecord
     {
         user: user.format,
         recordable: recordable.try(:format),
-        note: note
+        note: note,
+        created_at: created_at.to_now_short
     }
 
   end
