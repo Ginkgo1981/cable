@@ -46,13 +46,17 @@ class UserCampaign < ApplicationRecord
     self.last_bucket_item_date = Time.current.to_date
     self.done_items_count += 1
     self.save!
-    UserCampaignProgress.create! campaign: self.campaign,
-                                 user: self.user,
-                                 bucket: self.bucket,
+    UserCampaignProgress.create! campaign: campaign,
+                                 user: user,
+                                 bucket: bucket,
                                  bucket_item: bucket_item,
                                  task_order: done_items_count,
                                  task_date: Time.current.to_date,
                                  answers: answers
+    CampaignActivity.create! campaign: campaign,
+                             user: user,
+                             note: "#{user.nickname} 完成了#{campaign.name}--第#{done_items_count}关"
+
   end
 
 end

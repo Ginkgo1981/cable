@@ -130,6 +130,9 @@ class User < ApplicationRecord
     self.user_campaigns.create! campaign: campaign,
                                 bucket: bucket,
                                 total_items_count: bucket_items.count
+    CampaignActivity.create! campaign: campaign,
+                             user: self,
+                             note: "#{self.nickname} 加入#{campaign.name}大家庭"
     return true, '加入成功'
   end
 
