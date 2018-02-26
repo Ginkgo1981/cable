@@ -18,10 +18,19 @@
 #
 
 class CampaignsController < ApplicationController
-  before_action :find_user_by_token!, only: [:get_lesson_by_date, :get_schedules, :finish_lesson, :get_lesson,:get_bucket_item, :get_campaign_activities, :get_campaign_members,:get_campaign_index,:my_campaigns,:buy_campaign, :get_promotion_campaign]
+  before_action :find_user_by_token!, only: [:list, :get_lesson_by_date, :get_schedules, :finish_lesson, :get_lesson,:get_bucket_item, :get_campaign_activities, :get_campaign_members,:get_campaign_index,:my_campaigns,:buy_campaign, :get_promotion_campaign]
   def list
-    campaigns = Campaign.all
-    render json: {code: 0, campaigns: campaigns.map(&:format)}
+    campaigns = Campaign.all.map(&:format)
+    my_campaigns_ids = @user.campaigns.ids
+    cs = campaigns.map do |c|
+      if my_campaigns_ids.include?(c[:id])
+        c['joined'] = 1
+      else
+        c['joined'] = 0
+      end
+      c
+    end
+    render json: {code: 0, campaigns: cs}
   end
 
   def get_promotion_campaign
@@ -50,15 +59,14 @@ class CampaignsController < ApplicationController
 
   def get_campaign_members
     #todo
-    # campaign = Campaign.find_by id: params[:id]
-    # members =  campaign.users
-    members =  Reader.last 10
+    campaign = Campaign.find_by id: params[:id]
+    members =  campaign.users
     render json: {code: 0, members: members.map(&:format)}
   end
 
   def get_campaign_activities
     campaign = Campaign.find_by id: params[:id]
-    activities = campaign.campaign_activities
+    activities = campaign.campaign_activities.order(created_at: :desc)
     render json: {code: 0, activities: activities.map(&:format)}
   end
 

@@ -42,22 +42,27 @@ class Lesson < ApplicationRecord
 
 
   def ques
-    lesson = book.lessons.where(reading_day: 18).first
-    lesson.lesson_questions.create! question: 'What did the the flower think of the human being?',
-                                    options: [ 'dangerous', 'ugly', 'no roots(脚)'],
-                                    answer: 2,
-                                    analysis: 'They have no roots, and that makes their life very difficult.'
-
-    lesson.lesson_questions.create! question: ' Why did the little prince climb up a high mountain?',
-                                    options: ['find people.', 'find flowers', 'find water.'],
+    lesson = book.lessons[0]
+    lesson.lesson_questions.create! question: " what's the emotions when the author begin to write the history of his life?",
+                                    options: [ "a kind of fear", "a kind of pleasure", "we don't know"],
                                     answer: 0,
-                                    analysis: '“From a mountain as high as this one,” he said to himself, “I shall be able to see the whole planet at one glance, and all the people . . .”所以答案为B。'
+                                    analysis: '原文: It is with a kind of fear that I begin to write the history of my life.'
 
-
-    lesson.lesson_questions.create! question: "According to the fox, what is the meaning of 'tame'?",
-                                    options: [ 'establish ties(建立联系)', 'obey to admin', 'funny'],
+    lesson.lesson_questions.create! question: ' How the author described her early life?',
+                                    options: ['simple and much like every other', 'blind at the beginning', "we don't know"],
                                     answer: 0,
-                                    analysis: "\"It is an act too often neglected,\" said the fox. \"It means to establish ties.\""
+                                    analysis: '原文: The beginning of my life was simple and much like every other little life. I came, I saw, I conquered, as the first baby in the family always does.'
+
+
+    lesson.lesson_questions.create! question: 'How serious the author sicked?',
+                                    options: [ 'a little bit', 'heavy',  "we don't know"],
+                                    answer: 0,
+                                    analysis: '原文: The doctor thought I could not live'
+
+    lesson.lesson_questions.create! question: 'what happened after I recovered?',
+                                    options: [ 'never see or hear again', 'get well（痊愈)',  "we don't know"],
+                                    answer: 0,
+                                    analysis: '原文: There was great rejoicing in the family that morning, but no one, not even the doctor, knew that I should never see or hear again.'
 
   end
 
