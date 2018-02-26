@@ -27,7 +27,7 @@ class CampaignActivity < ApplicationRecord
   def format
     {
         user: user.format,
-        activity: activity.try(:format),
+        recordable: recordable.try(:format),
         note: note
     }
 
