@@ -36,7 +36,8 @@ class Lesson < ApplicationRecord
 
 
   def next
-    Lesson.find_by reading_day: self.reading_day + 1
+    Lesson.find_by reading_day: self.reading_day + 1,
+                  book: self.book
   end
 
 
