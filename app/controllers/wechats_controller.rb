@@ -105,6 +105,13 @@ EOM
     # {:ToUserName=>"gh_d3c70c9c17bf", :FromUserName=>"opvsg0VHguzEeOtL2hGtznCjmg0g",
     # :CreateTime=>1508514634, :MsgType=>"event", :Event=>"user_enter_tempsession",
     # :SessionFrom=>"weapp"}
+
+
+
+    # media_id yjYVHybx8j6bC1RpX1VdJAdpalfHkcpUcdV6MTLOnXA4Cow9IEbJA3e7TUUQLbCR
+
+
+
     json = JSON(request.body.read).symbolize_keys
     puts json
     openid = json[:FromUserName]
@@ -114,57 +121,73 @@ EOM
 
     feedback = {}
 
-    if json[:Content] && json[:Content].include?('就业津贴')
+    # if json[:Content] && json[:Content].include?('就业津贴')
+    #   feedback = {
+    #       openid: openid,
+    #       msgtype: 'image',
+    #       payload: {
+    #           image:
+    #               {
+    #                   media_id: 'F4lOY2nJiW4vUGWiC0quXoaDiKdNOoEEbao_-S8Kl6vhpPLL1q4WGucXXUFirI-z'
+    #               }
+    #       }
+    #   }
+    # elsif json[:Content] && json[:Content].include?('找工作')
+    #   term = json[:Content].split(/找工作/)[1].try(:strip)
+    #   if term
+    #     feedback = {
+    #         openid: openid,
+    #         msgtype: 'miniprogrampage',
+    #         payload: {
+    #             miniprogrampage: {
+    #                 title: "招聘信息 - #{term}",
+    #                 pagepath: "pages/job-list-page/job-list-page?jobs_key=#{term}",
+    #                 thumb_media_id: 'F4lOY2nJiW4vUGWiC0quXoaDiKdNOoEEbao_-S8Kl6vhpPLL1q4WGucXXUFirI-z'
+    #             }
+    #         }
+    #     }
+    #     PointMessage.find_jobs(user.id, term)
+    #   end
+    #
+    # elsif user.mp_openid.nil? && user.customer_service_activities.size == 0
+    #   feedback = {
+    #       openid: openid,
+    #       msgtype: 'text',
+    #       payload: {
+    #           text:
+    #               {
+    #                   content: '回复就业津贴,可得微信现金红包'
+    #               }
+    #       }
+    #   }
+    # else
+    #   feedback = {
+    #       openid: openid,
+    #       msgtype: 'text',
+    #       payload: {
+    #           text:
+    #               {
+    #                   content: '你可以这样问我 找工作 南京 化学工程'
+    #               }
+    #       }
+    #   }
+    # end
+
+
+
       feedback = {
           openid: openid,
           msgtype: 'image',
           payload: {
               image:
                   {
-                      media_id: 'F4lOY2nJiW4vUGWiC0quXoaDiKdNOoEEbao_-S8Kl6vhpPLL1q4WGucXXUFirI-z'
+                      media_id: 'yjYVHybx8j6bC1RpX1VdJAdpalfHkcpUcdV6MTLOnXA4Cow9IEbJA3e7TUUQLbCR'
                   }
           }
       }
-    elsif json[:Content] && json[:Content].include?('找工作')
-      term = json[:Content].split(/找工作/)[1].try(:strip)
-      if term
-        feedback = {
-            openid: openid,
-            msgtype: 'miniprogrampage',
-            payload: {
-                miniprogrampage: {
-                    title: "招聘信息 - #{term}",
-                    pagepath: "pages/job-list-page/job-list-page?jobs_key=#{term}",
-                    thumb_media_id: 'F4lOY2nJiW4vUGWiC0quXoaDiKdNOoEEbao_-S8Kl6vhpPLL1q4WGucXXUFirI-z'
-                }
-            }
-        }
-        PointMessage.find_jobs(user.id, term)
-      end
 
-    elsif user.mp_openid.nil? && user.customer_service_activities.size == 0
-      feedback = {
-          openid: openid,
-          msgtype: 'text',
-          payload: {
-              text:
-                  {
-                      content: '回复就业津贴,可得微信现金红包'
-                  }
-          }
-      }
-    else
-      feedback = {
-          openid: openid,
-          msgtype: 'text',
-          payload: {
-              text:
-                  {
-                      content: '你可以这样问我 找工作 南京 化学工程'
-                  }
-          }
-      }
-    end
+
+
     wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6', 'c03ee61337e4273ae5c89c186e95517c')
     wechat_mini_app_client.send_customer_message feedback.to_json if feedback.present?
     user.customer_service_activities.create! openid: json[:FromUserName],
