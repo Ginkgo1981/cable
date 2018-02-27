@@ -31,7 +31,11 @@ class CampaignsController < ApplicationController
   end
 
   def list
-    campaigns = Campaign.all.map(&:format)
+    if @user.role == 1
+      campaigns = Campaign.all.map(&:format)
+    else
+      campaigns = Campaign.where(sell_state: 1).map(&:format)
+    end
     my_campaigns_ids = @user.campaigns.ids
     cs = campaigns.map do |c|
       if my_campaigns_ids.include?(c[:id])
