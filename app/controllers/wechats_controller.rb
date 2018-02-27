@@ -188,29 +188,29 @@ EOM
 
 
 
-    wechat_mini_app_client = WechatMiniAppClient.new('wx0f381a5501cad4a6', 'c03ee61337e4273ae5c89c186e95517c')
+    wechat_mini_app_client = WechatMiniAppClient.new('wxbeddbe15b456a582', 'd043773699dbba089d49592984a2e638')
     wechat_mini_app_client.send_customer_message feedback.to_json if feedback.present?
     user.customer_service_activities.create! openid: json[:FromUserName],
                                              msg_type: json[:MsgType],
                                              event: json[:Event],
                                              content: json[:Content]
 
-    SlackSendJob.perform_later("[cable] 大四小冰客服 #{user.nickname}")
+    # SlackSendJob.perform_later("[cable] 大四小冰客服 #{user.nickname}")
     #if user repleid, we have chance to send customer
-    if json[:Content]
-      queue = Aliyun::Mns::Queue["test24"]
-      h = {
-          user_id: user.id,
-          event: 'customer-service-text',
-      }
-      #queue24
-      res24 = queue.send_message JSON(h), {:DelaySeconds => 82800, :Priority => 10}
-      puts "=====  aliyun mns queue 24 ====="
-      puts res24.body
-      res48 = queue.send_message JSON(h), {:DelaySeconds => 169200, :Priority => 10}
-      puts "=====  aliyun mns queue 48 ====="
-      puts res48.body
-    end
+    # if json[:Content]
+    #   queue = Aliyun::Mns::Queue["test24"]
+    #   h = {
+    #       user_id: user.id,
+    #       event: 'customer-service-text',
+    #   }
+    #   #queue24
+    #   res24 = queue.send_message JSON(h), {:DelaySeconds => 82800, :Priority => 10}
+    #   puts "=====  aliyun mns queue 24 ====="
+    #   puts res24.body
+    #   res48 = queue.send_message JSON(h), {:DelaySeconds => 169200, :Priority => 10}
+    #   puts "=====  aliyun mns queue 48 ====="
+    #   puts res48.body
+    # end
     render plain: 'success'
   end
 
