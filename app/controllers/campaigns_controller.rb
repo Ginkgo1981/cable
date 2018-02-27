@@ -25,7 +25,7 @@ class CampaignsController < ApplicationController
     render json: {
         code: 1,
         share_count:1,
-        black_list: ['e851ff90-6d27-4248-b627-0aa11ce8db69']
+        black_list: ['e851ff90-6d27-4248-b627-0aa11ce8db69', 'c423fe48-9bd1-4216-baaa-c881ff128904']
     }
 
   end
@@ -101,7 +101,7 @@ class CampaignsController < ApplicationController
 
   def get_questions
     lesson = Lesson.find_by id: params[:lesson_id]
-    answers = lesson.user_campaign_progress.try(:answers) || []
+    answers = UserCampaignProgress.where(bucket_item: lesson, user: @user).first.try(:answers)
     render json: {code: 0, questions: lesson.lesson_questions.map { |l| l.format }, answers: answers}
   end
 
