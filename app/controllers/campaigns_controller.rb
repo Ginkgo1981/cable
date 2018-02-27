@@ -132,38 +132,35 @@ class CampaignsController < ApplicationController
     lesson = Lesson.find_by id: params[:lesson_id]
     user_campaign.mark_as_done lesson, params[:answers]
     puts '==== send a notification ===='
-    if @user.mp_openid
-      puts '====== send template message ========'
-      wechat_oa_client = WechatOaClient.new
-      payload =
-          {
-              touser: @user.mp_openid,
-              template_id: 'ubhAAEJtgAJMfhohWnB-B9BSA7_TMEzDLpMQcF3liis',
-              url: "https://files.gaokao2017.cn/share/#{@user.id}",
-              data:{
-                  first: {
-                      value: '恭喜完成今日的阅读计划'
-                  },
-                  keyword1:{
-                      value: '百草阅读'
-                  },
-                  keyword2: {
-                      value: '每日阅读签到'
-                  },
-                  keyword3: {
-                      value: Time.now.strftime('%Y-%m-%d')
-                  },
-                  remark:{
-                      value:'点击查看今日阅读报告'
-                  }
-              }
-          }
-      wechat_oa_client.send_template_message(payload)
-    end
+    # if @user.mp_openid
+    #   puts '====== send template message ========'
+    #   wechat_oa_client = WechatOaClient.new
+    #   payload =
+    #       {
+    #           touser: @user.mp_openid,
+    #           template_id: 'ubhAAEJtgAJMfhohWnB-B9BSA7_TMEzDLpMQcF3liis',
+    #           url: "https://files.gaokao2017.cn/share/#{@user.id}",
+    #           data:{
+    #               first: {
+    #                   value: '恭喜完成今日的阅读计划'
+    #               },
+    #               keyword1:{
+    #                   value: '百草阅读'
+    #               },
+    #               keyword2: {
+    #                   value: '每日阅读签到'
+    #               },
+    #               keyword3: {
+    #                   value: Time.now.strftime('%Y-%m-%d')
+    #               },
+    #               remark:{
+    #                   value:'点击查看今日阅读报告'
+    #               }
+    #           }
+    #       }
+    #   wechat_oa_client.send_template_message(payload)
+    # end
     render json: {code: 0, msg: 'succ'}
   end
-
-
-
 
 end

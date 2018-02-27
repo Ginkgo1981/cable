@@ -44,7 +44,7 @@ class MembersController < ApplicationController
   end
 
   def daily_checkin
-    res = @user.daily_checkin(params[:preview])
+    res = @user.daily_checkin
     render json: res
   end
 

@@ -172,19 +172,15 @@ class User < ApplicationRecord
   end
 
   #每日使用奖励
-  def daily_checkin(preview=false)
-    if self.point_activities.where(activity: 'daily_checkin').at_today.present?
-      {preview: true, points: 0}
-    else
-      if preview
-        {preview: true, points: 10}
-      else
-        self.point_activities.create! points: 10,
-                                      activity: 'daily_checkin',
-                                      note: '签到奖励'
-        {preview: false, points: 10}
-      end
+  def daily_checkin
+    new_points = 0
+    if self.point_activities.where(activity: 'daily_checkin').at_today.blank?
+      self.point_activities.create! points: 10,
+                                    activity: 'daily_checkin',
+                                    note: '每日签到奖励'
+      new_points = 10
     end
+    {new_points: new_points, total_points: self.reload.points}
   end
 
   #分享朋友圈奖励
