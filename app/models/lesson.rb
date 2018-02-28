@@ -54,16 +54,10 @@ class Lesson < ApplicationRecord
                                     analysis: '原文: The beginning of my life was simple and much like every other little life. I came, I saw, I conquered, as the first baby in the family always does.'
 
 
-    lesson.lesson_questions.create! question: 'How serious the author sicked?',
-                                    options: [ 'a little bit', 'heavy',  "we don't know"],
-                                    answer: 0,
-                                    analysis: '原文: The doctor thought I could not live'
-
-    lesson.lesson_questions.create! question: 'what happened after I recovered?',
-                                    options: [ 'never see or hear again', 'get well（痊愈)',  "we don't know"],
-                                    answer: 0,
-                                    analysis: '原文: There was great rejoicing in the family that morning, but no one, not even the doctor, knew that I should never see or hear again.'
-
+   lesson.lesson_questions.create! question: 'What the main story of this chapter?',
+                                   options: [ 'Introduce my childhood and families', ' I complained the unfortunate things that happened to me'],
+                                   answer: 0,
+                                   analysis: '原文: the whole chapter is supposed to introduce my little time and my whole families(including my dog)'
   end
 
   def terms
@@ -124,21 +118,22 @@ class Lesson < ApplicationRecord
     book = Book.find '9e18725d-885c-4547-af22-e7983208e7a7'
 
 
+
     ###### 01 ######
 
-    file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-label-day1.txt'
     # lesson = book.lessons.where(reading_day:1).first
     
     
-    lesson = book.lessons.create! title_en: 'Chapter 1 光明和声音',
-                        previous: '《我的生活》是海伦·凯勒的处女作。作品一发表；立即在美国引起了轰动，被称为“世界文学史上无与伦比的杰作”，出版的版本超过百余种，在世界上产生了巨大的影响。本书由海伦·凯勒的《我的生活》《走出黑暗》《老师》三本书以及发表在美国《大西洋月刊》上的著名散文《假如给我三天光明》编译而成，完整系统地介绍了海伦·凯勒丰富、生动、真实而伟大的一生.',
-                        audio_url: 'http://audios.gaokao2017.cn/the-story-of-my-life-audio-day1.mp3',
+    lesson = book.lessons.create! title_en: 'Chapter 2B 童年记忆',
+                        previous: '这是我已又盲又聋，处于双重孤独之中，当然不能领略亲热的语言和怜爱的行为以及伙伴之间所产生的感情。',
+                        audio_url: 'http://audios.gaokao2017.cn/the-story-of-my-life-audio-day3.mp3',
                         word_count: 1234,
-                         reading_day: 1
+                        reading_day: 3
 
 
 
     #导入标注
+    file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-label-day3.txt'
     File.open(file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         timeReg = /\[(?<min>\d{2}):(?<sec>\d{2}).(?<msec>\d{2})\]/
@@ -154,7 +149,7 @@ class Lesson < ApplicationRecord
 
 
     #翻译
-    t_file_path = '/home/deploy/apps/cable/lyrics/translation01'
+    t_file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-version-day3.txt'
     File.open(t_file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         lesson_lyric = lesson.lesson_lyrics.where(ord: idx).first

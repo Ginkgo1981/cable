@@ -174,20 +174,37 @@ EOM
     # end
 
 
+    # "link": {
+    #     "title": "Happy Day",
+    #     "description": "Is Really A Happy Day",
+    #     "url": "URL",
+    #     "thumb_url": "THUMB_URL"
+    # }
+
+
+    # feedback = {
+    #     openid: openid,
+    #     msgtype: 'image',
+    #     payload: {
+    #         image:
+    #             {
+    #                 media_id: 'yjYVHybx8j6bC1RpX1VdJAdpalfHkcpUcdV6MTLOnXA4Cow9IEbJA3e7TUUQLbCR'
+    #             }
+    #     }
+    # }
 
       feedback = {
           openid: openid,
-          msgtype: 'image',
+          msgtype: 'link',
           payload: {
-              image:
-                  {
-                      media_id: 'yjYVHybx8j6bC1RpX1VdJAdpalfHkcpUcdV6MTLOnXA4Cow9IEbJA3e7TUUQLbCR'
-                  }
+              "link": {
+                  "title": '加入群聊通知',
+                  "description": '为获得更多的咨询和更好的体验,立即加入群聊',
+                  "url": 'https://files.gaokao2017.cn/share.html',
+                  "thumb_url": 'http://audios.gaokao2017.cn/qrcode-wechat-group-20180228.jpg'
+              }
           }
       }
-
-
-
     wechat_mini_app_client = WechatMiniAppClient.new('wxbeddbe15b456a582', 'd043773699dbba089d49592984a2e638')
     wechat_mini_app_client.send_customer_message feedback.to_json if feedback.present?
     user.customer_service_activities.create! openid: json[:FromUserName],

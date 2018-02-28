@@ -45,3 +45,5 @@ TalkTopic.create! talk_date: '2018-03-05', content: h[:content], chinese: h[:not
 
 
 
+
+
