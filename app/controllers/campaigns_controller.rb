@@ -75,13 +75,13 @@ class CampaignsController < ApplicationController
   def get_campaign_members
     #todo
     campaign = Campaign.find_by id: params[:id]
-    members =  campaign.users
+    members =  campaign.users.first(50)
     render json: {code: 0, members: members.map(&:format)}
   end
 
   def get_campaign_activities
     campaign = Campaign.find_by id: params[:id]
-    activities = campaign.campaign_activities.order(created_at: :desc)
+    activities = campaign.campaign_activities.order(created_at: :desc).first(30)
     render json: {code: 0, activities: activities.map(&:format)}
   end
 
