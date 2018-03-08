@@ -42,22 +42,21 @@ class Lesson < ApplicationRecord
 
 
   def ques
-    lesson = book.lessons[0]
-    lesson.lesson_questions.create! question: " what's the emotions when the author begin to write the history of his life?",
-                                    options: [ "a kind of fear", "a kind of pleasure", "we don't know"],
-                                    answer: 0,
-                                    analysis: '原文: It is with a kind of fear that I begin to write the history of my life.'
+    lesson.lesson_questions.create! question: 'How I thought the north journey(北方之旅)？',
+                                    options: [ 'boring', 'a miracle journey(奇迹之旅)', 'we do not know'],
+                                     answer: 1,
+                                    analysis: '原文: I met many people who talked with me by spelling into my hand, and thought in joyous sympathy leaped up to meet thought, and behold, a miracle had been wrought! The barren places between my mind and the minds of others blossomed like the rose.我遇到过许多人，他们通过在我手掌上拼写的方式同我“交谈”，于是，快乐而富于同情心的思想在两个对话者之间碰撞了，所以你看，这真是一个神奇的过程！就是说，在我的思想和别人的思想之间的贫瘠地带上，同样可以绽放出美丽的玫瑰。'
 
-    lesson.lesson_questions.create! question: ' How the author described her early life?',
-                                    options: ['simple and much like every other', 'blind at the beginning', "we don't know"],
-                                    answer: 0,
-                                    analysis: '原文: The beginning of my life was simple and much like every other little life. I came, I saw, I conquered, as the first baby in the family always does.'
+    lesson.lesson_questions.create! question: 'Where I and my family spend all the autumn?',
+                                    options: [ 'Big city', 'a cottage(小屋)', 'we do not know'],
+                                    answer: 1,
+                                    analysis: 'I spent the autumn months with my family at our summer cottage, on a mountain about fourteen miles from Tuscumbia. 在距离图斯康比亚大约十四英里的山间小屋里，我和我的家人度过了整个秋天。'
 
 
-   lesson.lesson_questions.create! question: 'What the main story of this chapter?',
-                                   options: [ 'Introduce my childhood and families', ' I complained the unfortunate things that happened to me'],
-                                   answer: 0,
-                                   analysis: '原文: the whole chapter is supposed to introduce my little time and my whole families(including my dog)'
+   lesson.lesson_questions.create! question: 'What happened when we eventually arrived safely?',
+                                   options: [' Our family prepared lots of delicious foods for us', 'Empty, they were all out hunting for us'],
+                                   answer: 1,
+                                   analysis: '原文: Long after dark we reached home and found the cottage empty; the family were all out hunting for us.到家时天早已经黑了，小屋里阒无一人，原来家人们全都出去找我们了。'
   end
 
   def terms
@@ -124,16 +123,16 @@ class Lesson < ApplicationRecord
     # lesson = book.lessons.where(reading_day:1).first
     
     
-    lesson = book.lessons.create! title_en: 'Chapter 2B 童年记忆',
-                        previous: '这是我已又盲又聋，处于双重孤独之中，当然不能领略亲热的语言和怜爱的行为以及伙伴之间所产生的感情。',
-                        audio_url: 'http://audios.gaokao2017.cn/the-story-of-my-life-audio-day3.mp3',
+    lesson = book.lessons.create! title_en: 'Chapter 13(Day 15)',
+                        previous: '他就怎么也不会忘记，当他说出第一个字时，那像电流一样通遍全身的惊喜若狂的感觉。',
+                        audio_url: 'http://audios.gaokao2017.cn/the-story-of-my-life-audio-day15.mp3',
                         word_count: 1234,
-                        reading_day: 3
+                        reading_day: 15
 
 
 
     #导入标注
-    file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-label-day3.txt'
+    file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-label-day15.txt'
     File.open(file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         timeReg = /\[(?<min>\d{2}):(?<sec>\d{2}).(?<msec>\d{2})\]/
@@ -149,7 +148,7 @@ class Lesson < ApplicationRecord
 
 
     #翻译
-    t_file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-version-day3.txt'
+    t_file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-version-day15.txt'
     File.open(t_file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         lesson_lyric = lesson.lesson_lyrics.where(ord: idx).first

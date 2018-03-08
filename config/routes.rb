@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
 
+  get 'exams/get_rand_exam', to: 'exams#get_rand_exam'
+  get 'exams/get_user_exam', to: 'exams#get_user_exam'
+  post 'exams/review', to: 'exams#review'
+  post 'exams/save_exam_answers', to: 'exams#save_exam_answers'
+
   get 'books/get_lesson_terms/:date', to: 'books#get_lesson_terms'
   get 'books/get_mine_talk_topic', to: 'books#get_mine_talk_topic'
   get 'books/lessons_group_statistics', to: 'books#lessons_group_statistics'

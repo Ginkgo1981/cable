@@ -82,6 +82,9 @@ class User < ApplicationRecord
 
   has_many :campaign_activities
 
+  has_many :user_exams
+  has_many :exams, through: :user_exams
+
 
 
   scope :online, -> {where('online_status = ?', 1)}

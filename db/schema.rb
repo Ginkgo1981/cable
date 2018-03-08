@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226043535) do
+ActiveRecord::Schema.define(version: 20180308104805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -186,6 +186,28 @@ ActiveRecord::Schema.define(version: 20180226043535) do
     t.text     "images",                  array: true
     t.datetime "start_date"
     t.datetime "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "exam_questions", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "exam_id"
+    t.string   "title"
+    t.text     "options",    default: [],              array: true
+    t.string   "answer"
+    t.text     "analysis"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "idx",        default: 0
+  end
+
+  create_table "exams", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "title"
+    t.string   "note"
+    t.text     "tag",                     array: true
+    t.integer  "level"
+    t.integer  "use_count"
+    t.integer  "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -680,6 +702,17 @@ ActiveRecord::Schema.define(version: 20180226043535) do
     t.integer  "total_items_count",     default: 0
     t.boolean  "mark_as_deleted",       default: false
     t.date     "last_bucket_item_date"
+  end
+
+  create_table "user_exams", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id"
+    t.uuid     "exam_id"
+    t.text     "answers",                 array: true
+    t.text     "scores",                  array: true
+    t.integer  "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid     "parent_id"
   end
 
   create_table "user_groups", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
