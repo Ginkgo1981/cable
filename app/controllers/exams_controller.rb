@@ -45,12 +45,13 @@ class ExamsController < ApplicationController
 
   def get_user_exam
     user_exam =  UserExam.find params[:user_exam_id]
-    render json: {code: 0, user_exam: user_exam.format_as, is_mine: user_exam.is_mine?(@user.id)}
+    # render json: {code: 0, user_exam: user_exam.format_as, is_mine: user_exam.is_mine?(@user.id)}
+    render json: {code: 0, user_exam: user_exam.format_as}
   end
 
   def get_user_exams
     user_exams = @user.user_exams
-    render json: {code: 0, user_exams: user_exams.map{|user_exam| user_exam.format_as},is_mine: user_exams.is_mine?(@user.id)}
+    render json: {code: 0, user_exams: user_exams.map{|user_exam| user_exam.format_as}}
   end
 
 end
