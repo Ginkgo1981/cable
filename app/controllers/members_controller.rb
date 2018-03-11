@@ -133,19 +133,31 @@ class MembersController < ApplicationController
       user = User.find_by union_id: info[:unionId]
     end
 
+    binding.pry
     if user
-      if user.union_id.blank?
-        user.union_id = info[:unionId]
-        user.save!
-        puts '====save union id===='
-        puts user.union_id
-      end
-      if user.miniapp_openid.blank?
-        user.miniapp_openid = info[:openId]
-        user.save!
-        puts '====save miniapp_openid ===='
-        puts user.miniapp_openid
-      end
+      # if user.union_id.blank?
+      #   user.union_id = info[:unionId]
+      #   user.save!
+      #   puts '====save union id===='
+      #   puts user.union_id
+      # end
+      # if user.miniapp_openid.blank?
+      #   user.miniapp_openid = info[:openId]
+      #   user.save!
+      #   puts '====save miniapp_openid ===='
+      #   puts user.miniapp_openid
+      # end
+
+      user.update! union_id: info[:unionId],
+                   miniapp_openid: info[:openId],
+                   nickname: info[:nickName],
+                   sex: info[:gender],
+                   language: info[:language],
+                   city: info[:city],
+                   province: info[:province],
+                   headimgurl: info[:avatarUrl]
+
+
 
     else
       user = User.create! miniapp_openid: info[:openId],

@@ -19,6 +19,11 @@ class Exam < ApplicationRecord
 
   has_many :exam_questions,dependent: :destroy
 
+
+  def self.rand_one
+    Exam.find(Exam.pluck(:id).shuffle.first)
+  end
+
   def self.generate_mock_data
     terms = Term.where.not(word: nil).map{|t| {word:t.word,definition_cn: t.definition_cn, level: t.level}}
     (0..9).each do |i|

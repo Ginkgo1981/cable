@@ -21,15 +21,17 @@ class UserExam < ApplicationRecord
   belongs_to :exam
 
   belongs_to :parent_exam, class_name: UserExam, foreign_key: :parent_id, optional: true
-  has_many :child_exams, class_name: UserExam,  foreign_key: :parent_id
+  has_one :child_exam, class_name: UserExam,  foreign_key: :parent_id
 
 
-  def self.find_or_create_one!(user_id, exam_id, answers)
+  def self.find_or_create_one!(user_id, exam_id, answers, parent_id)
     user_exam = self.where(user_id: user_id, exam_id: exam_id).first
     unless user_exam
-      self.create! user_id: user_id,
+      user_exam = self.create! user_id: user_id,
                    exam_id: exam_id,
-                   answers: answers
+                   answers: answers,
+                   parent_id: parent_id
+
     end
     user_exam
   end
@@ -37,19 +39,72 @@ class UserExam < ApplicationRecord
 
   def format
     {
+        id: self.id,
         user: user.format,
         exam: exam.format,
         answers: answers,
         scores: scores,
-        state: state
+        state: state,
+        created_at: self.created_at.strftime('%m月%d日 %H:%M')
     }
   end
 
-  def format_as_parent
-    {
-        mine: self.format,
-        childs: self.child_exams.map(&:format)
+  def is_mine?(user_id)
+    user_id == self.user_id ? true : false
+  end
 
+  def correct_scores_num
+    self.scores.select{|s| s.to_i == 1}.size
+  end
+
+  def offense?
+    !self.parent_exam
+  end
+
+  def defense?
+    !!self.parent_exam
+  end
+
+  def scores_result
+    base_exam  =  self.parent_exam || self.child_exam
+    if base_exam
+      if self.correct_scores_num > base_exam.correct_scores_num
+        'win'
+      elsif self.correct_scores_num == base_exam.correct_scores_num
+        'equal'
+      else
+        'lose'
+      end
+    else
+      'unknow'
+    end
+  end
+
+  def format_as
+    self.parent_exam ? format_as_defense : format_as_offense
+  end
+
+
+  def format_as_offense
+    {
+        id: self.id,
+        scores_result: self.scores_result,
+        exam: exam.format,
+        offense: self.format,
+        defense: self.child_exam.try(:format),
+        state: self.state
+    }
+  end
+
+
+  def format_as_defense
+    {
+        id: self.id,
+        scores_result: self.scores_result,
+        exam: exam.format,
+        offense: self.parent_exam.try(:format),
+        defense: self.format,
+        state: self.state
     }
   end
 

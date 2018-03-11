@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
 
   get 'exams/get_rand_exam', to: 'exams#get_rand_exam'
-  get 'exams/get_user_exam', to: 'exams#get_user_exam'
+  get 'exams/get_user_exam/:user_exam_id', to: 'exams#get_user_exam'
+  get 'exams/get_user_exams', to: 'exams#get_user_exams'
   post 'exams/review', to: 'exams#review'
   post 'exams/save_exam_answers', to: 'exams#save_exam_answers'
 
