@@ -133,7 +133,6 @@ class MembersController < ApplicationController
       user = User.find_by union_id: info[:unionId]
     end
 
-    binding.pry
     if user
       # if user.union_id.blank?
       #   user.union_id = info[:unionId]
