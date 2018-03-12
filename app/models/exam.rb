@@ -19,15 +19,23 @@ class Exam < ApplicationRecord
 
   has_many :exam_questions,dependent: :destroy
 
-
   def self.rand_one
-    Exam.find(Exam.pluck(:id).shuffle.first)
+    exam = nil
+    loop do
+      exam = Exam.find(Exam.pluck(:id).shuffle.first)
+      if exam.state != 9
+        break
+      end
+    end
+    exam.state = 9
+    exam.save!
+    exam
   end
 
   def self.generate_mock_data
     terms = Term.where.not(word: nil).map{|t| {word:t.word,definition_cn: t.definition_cn, level: t.level}}
-    (0..9).each do |i|
-      exam = Exam.create! title: "中文选义 #{i}"
+    (0..1000).each do |i|
+      exam = Exam.create! title: "英文选义 #{i}"
       (0..4).each do |idx|
         g = terms.sample(4)
         answer_idx = (0..3).to_a.sample
