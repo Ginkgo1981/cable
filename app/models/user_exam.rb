@@ -47,7 +47,7 @@ class UserExam < ApplicationRecord
         answers: answers,
         scores: scores,
         state: state,
-        created_at: self.created_at.strftime('%m月%d日 %H:%M')
+        created_at: self.created_at.to_now_short
     }
   end
 
