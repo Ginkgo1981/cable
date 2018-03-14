@@ -15,7 +15,9 @@
 
 class UserExam < ApplicationRecord
 
-  before_create :calculating_scores
+  before_create :calculating_scores, :update_state
+
+  enum state: [:wait, :completed]
 
   belongs_to :user
   belongs_to :exam
@@ -111,5 +113,13 @@ class UserExam < ApplicationRecord
   def calculating_scores
     exam_answers = self.exam.exam_questions.map{|q| q.answer.to_i}
     self.scores = self.answers.each_with_index.map{|a,idx| a.to_i == exam_answers[idx] ? 1 : 0 }
+  end
+
+  def update_state
+    if self.parent_exam.present? || self.child_exam.present?
+      self.state = 'completed'
+      self.parent_exam&.update state: 'completed'
+      self.child_exam&.update state: 'completed'
+    end
   end
 end

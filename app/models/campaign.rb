@@ -27,13 +27,13 @@ class Campaign < ApplicationRecord
   has_many :user_campaign_progresses
 
   def self.mock_create_one
-    book = Book.find '9e18725d-885c-4547-af22-e7983208e7a7'
-    Campaign.create! name: '假如给我三天光明',
+    book = Book.find 'a84f6b1f-f28e-46c3-b323-a0c3f805afb1'
+    Campaign.create! name: '餐桌对话(5天)',
                  bucket: book,
                  start_at: Time.now.to_date,
                  end_at: (Time.now + 24.days).to_date,
-                 duration: 24,
-                 sell_state: 1
+                 duration: 5,
+                 sell_state: 0
   end
 
   def format

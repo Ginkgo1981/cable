@@ -42,21 +42,22 @@ class Lesson < ApplicationRecord
 
 
   def ques
-    lesson.lesson_questions.create! question: 'How I thought the north journey(北方之旅)？',
-                                    options: [ 'boring', 'a miracle journey(奇迹之旅)', 'we do not know'],
-                                     answer: 1,
-                                    analysis: '原文: I met many people who talked with me by spelling into my hand, and thought in joyous sympathy leaped up to meet thought, and behold, a miracle had been wrought! The barren places between my mind and the minds of others blossomed like the rose.我遇到过许多人，他们通过在我手掌上拼写的方式同我“交谈”，于是，快乐而富于同情心的思想在两个对话者之间碰撞了，所以你看，这真是一个神奇的过程！就是说，在我的思想和别人的思想之间的贫瘠地带上，同样可以绽放出美丽的玫瑰。'
+    lesson.lesson_questions.create! question: 'How did I learn to speak?',
+                                    options: ['keeping one hand on my throat.','listening to the sound.','through spelling'],
+                                     answer: 0,
+                                    analysis: '原文提到：I used to make noises, keeping one hand on my throat while the other hand felt the movements of my lips. (我常常会发出一些杂音，我会把一只手放在自己的喉咙上出声，而别人则用手感知我嘴唇的移动。)'
 
-    lesson.lesson_questions.create! question: 'Where I and my family spend all the autumn?',
-                                    options: [ 'Big city', 'a cottage(小屋)', 'we do not know'],
-                                    answer: 1,
-                                    analysis: 'I spent the autumn months with my family at our summer cottage, on a mountain about fourteen miles from Tuscumbia. 在距离图斯康比亚大约十四英里的山间小屋里，我和我的家人度过了整个秋天。'
+    lesson.lesson_questions.create! question: 'Which word can I still remember after I get sick?',
+                                    options: [ 'water', 'wawa', 'nothing'],
+                                    answer: 0,
+                                    analysis: ' There was, however, one word the meaning of which I still remembered, WATER. I pronounced it "wa-wa." (至今我仍然记得学习“water”这个词的过程，一开始，我总是发出“wawa”的声音。)'
 
 
-   lesson.lesson_questions.create! question: 'What happened when we eventually arrived safely?',
-                                   options: [' Our family prepared lots of delicious foods for us', 'Empty, they were all out hunting for us'],
-                                   answer: 1,
-                                   analysis: '原文: Long after dark we reached home and found the cottage empty; the family were all out hunting for us.到家时天早已经黑了，小屋里阒无一人，原来家人们全都出去找我们了。'
+   lesson.lesson_questions.create! question: 'What makes me feel upset?',
+                                   options: ['Only rely on sign language to communicate with people', "Can't speak", 'I am a blind girl'],
+                                   answer: 0,
+                                   analysis: ' 原文提到One who is entirely dependent upon the manual alphabet has always a sense of restraint, of narrowness. This feeling began to agitate me with a vexing, forward-reaching sense of a lack that should be filled.(一个完全依赖手写字母来交流的人总会感觉到处处受限。 这种挫折感既令我无比懊恼，又使我进一步意识到，我应该尽快弥补自己的交流缺陷。)                                  '
+
   end
 
   def terms
@@ -114,25 +115,24 @@ class Lesson < ApplicationRecord
   end
 
   def self.create_from_loki
-    book = Book.find '9e18725d-885c-4547-af22-e7983208e7a7'
+    book  = Book.find '9e18725d-885c-4547-af22-e7983208e7a7'
 
 
 
     ###### 01 ######
 
     # lesson = book.lessons.where(reading_day:1).first
-    
-    
-    lesson = book.lessons.create! title_en: 'Chapter 13(Day 15)',
-                        previous: '他就怎么也不会忘记，当他说出第一个字时，那像电流一样通遍全身的惊喜若狂的感觉。',
-                        audio_url: 'http://audios.gaokao2017.cn/the-story-of-my-life-audio-day15.mp3',
-                        word_count: 1234,
-                        reading_day: 15
 
+    lesson.destroy
+
+    lesson = book.lessons.create! title_en: 'chapter19-day22',
+                        previous: '有时候心灰意冷到了极点，而且还把这种情绪流露出来，至今思念及此，我就惭愧万分',
+                        audio_url: 'http://audios.gaokao2017.cn/the-story-of-my-life-audio-chapter19-day22.mp3',
+                        reading_day: 22
 
 
     #导入标注
-    file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-label-day15.txt'
+    file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-label-chapter19-day22.txt'
     File.open(file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         timeReg = /\[(?<min>\d{2}):(?<sec>\d{2}).(?<msec>\d{2})\]/
@@ -148,7 +148,7 @@ class Lesson < ApplicationRecord
 
 
     #翻译
-    t_file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-version-day15.txt'
+    t_file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-version-chapter19-day22.txt'
     File.open(t_file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         lesson_lyric = lesson.lesson_lyrics.where(ord: idx).first

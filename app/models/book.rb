@@ -19,9 +19,21 @@ class Book < ApplicationRecord
 
 
   def mock
-    Book.create! book_name: 'the story of my life',
-                 book_name_cn: '假如给我三天光明',
-                 book_cover_img_url: 'https://images.gaokao2017.cn/banner-2018-02-25.png'
+    # a84f6b1f-f28e-46c3-b323-a0c3f805afb1 01-中国文化
+    # 0da0ce54-ace2-444b-9741-6f27139acbd7 02-实用口语对话
+    # f113731a-4eab-41ee-888a-3a846be1202b 03-户外活动话题
+    # 75bf33ef-88fc-413e-9307-eea35cc4faf3 04-日常英文话题
+    # 7485a250-574b-458a-b89b-a9b2f88e1f53 05-美食话题
+    # bf8a7cef-94f0-4463-ad7e-cecf48754647 06-职场对话
+    # 995366a9-ec4f-4a84-917d-adfd144e49fc 07-英语对话中级篇
+    # a7b6636f-6cdc-4b00-96d8-fafd98d3c3a8 08-英语对话初级篇
+    # 31ef160f-0f37-4e8a-9b2d-ce7434b90d94 09-英语对话高级篇
+    # 4a985c0c-4912-4a36-8139-9c6639e6dd6f 10-餐桌对话
+
+
+    Book.create! book_name: '职场对话',
+                 book_name_cn: '职场对话',
+                 book_cover_img_url: ''
   end
 
   def next_bucket_item(p_bucket_item_id)
