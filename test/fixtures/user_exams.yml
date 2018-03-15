@@ -7,7 +7,7 @@
 #  exam_id    :uuid
 #  answers    :text             is an Array
 #  scores     :text             is an Array
-#  state      :integer
+#  state      :integer          default("wait")
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  parent_id  :uuid

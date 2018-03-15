@@ -134,7 +134,7 @@ class CampaignsController < ApplicationController
   def finish_lesson #save_answers
     user_campaign = @user.user_campaigns.find_by campaign_id: params[:campaign_id]
     lesson = Lesson.find_by id: params[:lesson_id]
-    user_campaign.mark_as_done lesson, params[:answers]
+    user_campaign.mark_as_done lesson, params[:answers] || []
     puts '==== send a notification ===='
     # if @user.mp_openid
     #   puts '====== send template message ========'
