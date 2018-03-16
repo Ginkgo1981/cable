@@ -42,21 +42,22 @@ class Lesson < ApplicationRecord
 
 
   def ques
-    lesson.lesson_questions.create! question: 'How did I learn to speak?',
-                                    options: ['keeping one hand on my throat.','listening to the sound.','through spelling'],
-                                     answer: 0,
-                                    analysis: '原文提到：I used to make noises, keeping one hand on my throat while the other hand felt the movements of my lips. (我常常会发出一些杂音，我会把一只手放在自己的喉咙上出声，而别人则用手感知我嘴唇的移动。)'
 
-    lesson.lesson_questions.create! question: 'Which word can I still remember after I get sick?',
-                                    options: [ 'water', 'wawa', 'nothing'],
+
+
+    lesson.lesson_questions.create! question: 'Which subject does Gilman think I should be mainly studied ?',
+                                    options:['mathematics', 'Greek and Latin.', 'physics, algebra, geometry, astronomy.'],
                                     answer: 0,
-                                    analysis: ' There was, however, one word the meaning of which I still remembered, WATER. I pronounced it "wa-wa." (至今我仍然记得学习“water”这个词的过程，一开始，我总是发出“wawa”的声音。)'
+                                    analysis: '原文提到：Gilman had agreed that that year I should study mathematics principally. (吉尔曼先生认为我在这一年里应该以学习数学为主。)'
 
 
-   lesson.lesson_questions.create! question: 'What makes me feel upset?',
-                                   options: ['Only rely on sign language to communicate with people', "Can't speak", 'I am a blind girl'],
-                                   answer: 0,
-                                   analysis: ' 原文提到One who is entirely dependent upon the manual alphabet has always a sense of restraint, of narrowness. This feeling began to agitate me with a vexing, forward-reaching sense of a lack that should be filled.(一个完全依赖手写字母来交流的人总会感觉到处处受限。 这种挫折感既令我无比懊恼，又使我进一步意识到，我应该尽快弥补自己的交流缺陷。)                                  '
+
+    lesson.lesson_questions.create! question: 'Why did the school find  Mr. Eugene C. Vining to copy the papers for me in American braille?',
+                                    options: ['Mr. Eugene C. Vining is one of the instructors at the Perkins Institution for the Blind. ', 'They did not allow Miss Sullivan to read the examination papers to me', "We don't know."],
+                                    answer: 1,
+                                    analysis: '原文提到：The college authorities did not allow Miss Sullivan to read the examination papers to me;so Mr. Eugene C. Vining, one of the instructors at the Perkins Institution for the Blind, was employed to copy the papers for me in American braille.  (校方不允许苏立文小姐为我读试卷,所以，学校就雇来了尤金·C.维宁先生为我把试卷译成美式布莱叶盲文。)'
+
+
 
   end
 

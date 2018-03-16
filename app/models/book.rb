@@ -17,6 +17,86 @@ class Book < ApplicationRecord
   has_many :user_books
   has_many :users
 
+  #todo lesson_id 2959f0b9-8634-4cd6-ae9a-86eb526d8145 找出来
+
+  def self.amend
+
+    [
+        '0da0ce54-ace2-444b-9741-6f27139acbd7',
+        'f113731a-4eab-41ee-888a-3a846be1202b',
+        '75bf33ef-88fc-413e-9307-eea35cc4faf3',
+        '7485a250-574b-458a-b89b-a9b2f88e1f53',
+        'bf8a7cef-94f0-4463-ad7e-cecf48754647',
+        '995366a9-ec4f-4a84-917d-adfd144e49fc',
+        'a7b6636f-6cdc-4b00-96d8-fafd98d3c3a8',
+        '31ef160f-0f37-4e8a-9b2d-ce7434b90d94',
+        '4a985c0c-4912-4a36-8139-9c6639e6dd6f'
+    ].each do |id|
+      book = Book.find id
+      book.lessons.each do |lesson|
+        lesson_lyric = lesson.lesson_lyrics.where(ord: 1).first
+        if lesson_lyric
+            lesson.title_cn = lesson_lyric.sc
+            lesson.title_en = lesson_lyric.en
+            lesson.save!
+            lesson_lyric.destroy
+        else
+          puts "===== wrong  lesson: #{lesson.id}"
+        end
+      end
+    end
+  end
+
+
+
+  def self.write_to_json
+
+    File.open('fix10_json.txt', 'w') do |file|
+      [
+          'a84f6b1f-f28e-46c3-b323-a0c3f805afb1',
+          '0da0ce54-ace2-444b-9741-6f27139acbd7',
+          'f113731a-4eab-41ee-888a-3a846be1202b',
+          '75bf33ef-88fc-413e-9307-eea35cc4faf3',
+          '7485a250-574b-458a-b89b-a9b2f88e1f53',
+          'bf8a7cef-94f0-4463-ad7e-cecf48754647',
+          '995366a9-ec4f-4a84-917d-adfd144e49fc',
+          'a7b6636f-6cdc-4b00-96d8-fafd98d3c3a8',
+          '31ef160f-0f37-4e8a-9b2d-ce7434b90d94',
+          '4a985c0c-4912-4a36-8139-9c6639e6dd6f',
+      ].each do |id|
+        book = Book.find id
+        book.lessons.each do |lesson|
+          lesson_lyric = lesson.lesson_lyrics.where(ord: 1).first
+          file.puts lesson_lyric.to_json
+        end
+      end
+    end
+
+  end
+
+  def self.read_from_json
+   File.open('fix10_json.txt', 'r') do |f|
+      f.each_line do |line|
+        begin
+          json = JSON(line)
+          lesson = Lesson.find json['lesson_id']
+          puts lesson.id
+          unless lesson.lesson_lyrics.where(ord:1).first
+            lesson.lesson_lyrics.create! ord: json['ord'],
+                                         sec: json['sec'],
+                                         en: json['en'],
+                                         sc: json['sc']
+          end
+        rescue => e
+          puts e.to_s
+        end
+      end
+    end
+  end
+
+
+
+
 
   def mock
     # a84f6b1f-f28e-46c3-b323-a0c3f805afb1 01-中国文化

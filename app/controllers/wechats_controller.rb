@@ -105,22 +105,43 @@ EOM
     # {:ToUserName=>"gh_d3c70c9c17bf", :FromUserName=>"opvsg0VHguzEeOtL2hGtznCjmg0g",
     # :CreateTime=>1508514634, :MsgType=>"event", :Event=>"user_enter_tempsession",
     # :SessionFrom=>"weapp"}
-
-
-
     # media_id yjYVHybx8j6bC1RpX1VdJAdpalfHkcpUcdV6MTLOnXA4Cow9IEbJA3e7TUUQLbCR
-
-
-
     json = JSON(request.body.read).symbolize_keys
     puts json
+    # add-wechat-group
+    session_from = json[:SessionFrom]
     openid = json[:FromUserName]
     user = User.find_by miniapp_openid: openid
-
     puts "======= mp_openid: #{user.mp_openid} ========="
 
     feedback = {}
 
+    if session_from == 'join-wechat-group'
+      feedback = {
+          openid: openid,
+          msgtype: 'link',
+          payload: {
+              "link": {
+                  "title": '群聊通知',
+                  "description": '为获得更多的咨询和更好的体验,立即免费加入群聊',
+                  "url": 'https://files.gaokao2017.cn',
+                  "thumb_url": 'http://audios.gaokao2017.cn/qrcode-wechat-group-20180228.jpg'
+              }
+          }
+      }
+
+    elsif session_from =~ /userexam/
+      user_exam_id = session_from.split(/_/)[1]
+      puts "==== user_exam: #{user_exam_id}"
+
+    end
+
+    wechat_mini_app_client = WechatMiniAppClient.new('wxbeddbe15b456a582', 'd043773699dbba089d49592984a2e638')
+    wechat_mini_app_client.send_customer_message feedback.to_json if feedback.present?
+    user.customer_service_activities.create! openid: json[:FromUserName],
+                                             msg_type: json[:MsgType],
+                                             event: json[:Event],
+                                             content: json[:Content]
     # if json[:Content] && json[:Content].include?('就业津贴')
     #   feedback = {
     #       openid: openid,
@@ -193,24 +214,6 @@ EOM
     #     }
     # }
 
-      feedback = {
-          openid: openid,
-          msgtype: 'link',
-          payload: {
-              "link": {
-                  "title": '群聊通知',
-                  "description": '为获得更多的咨询和更好的体验,立即免费加入群聊',
-                  "url": 'https://files.gaokao2017.cn',
-                  "thumb_url": 'http://audios.gaokao2017.cn/qrcode-wechat-group-20180228.jpg'
-              }
-          }
-      }
-    wechat_mini_app_client = WechatMiniAppClient.new('wxbeddbe15b456a582', 'd043773699dbba089d49592984a2e638')
-    wechat_mini_app_client.send_customer_message feedback.to_json if feedback.present?
-    user.customer_service_activities.create! openid: json[:FromUserName],
-                                             msg_type: json[:MsgType],
-                                             event: json[:Event],
-                                             content: json[:Content]
 
     # SlackSendJob.perform_later("[cable] 大四小冰客服 #{user.nickname}")
     #if user repleid, we have chance to send customer
