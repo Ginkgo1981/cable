@@ -126,7 +126,7 @@ EOM
               "link": {
                   "title": '群聊通知',
                   "description": '为获得更多的咨询和更好的体验,立即免费加入群聊',
-                  "url": 'https://files.gaokao2017.cn',
+                  "url": 'https://files.gaokao2017.cn/join-wechat-group/index.html',
                   "thumb_url": 'http://audios.gaokao2017.cn/qrcode-wechat-group-20180228.jpg'
               }
           }
