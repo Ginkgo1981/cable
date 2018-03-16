@@ -117,6 +117,11 @@ EOM
     feedback = {}
 
     if session_from == 'join-wechat-group'
+
+    if session_from =~ /userexam/
+      user_exam_id = session_from.split(/_/)[1]
+      puts "==== user_exam: #{user_exam_id}"
+    else
       feedback = {
           openid: openid,
           msgtype: 'link',
@@ -129,19 +134,16 @@ EOM
               }
           }
       }
-
-    elsif session_from =~ /userexam/
-      user_exam_id = session_from.split(/_/)[1]
-      puts "==== user_exam: #{user_exam_id}"
-
     end
 
     wechat_mini_app_client = WechatMiniAppClient.new('wxbeddbe15b456a582', 'd043773699dbba089d49592984a2e638')
-    wechat_mini_app_client.send_customer_message feedback.to_json if feedback.present?
-    user.customer_service_activities.create! openid: json[:FromUserName],
-                                             msg_type: json[:MsgType],
-                                             event: json[:Event],
-                                             content: json[:Content]
+    if feedback.present?
+      wechat_mini_app_client.send_customer_message feedback.to_json
+      user.customer_service_activities.create! openid: json[:FromUserName],
+                                               msg_type: json[:MsgType],
+                                               event: json[:Event],
+                                               content: json[:Content]
+    end
     # if json[:Content] && json[:Content].include?('就业津贴')
     #   feedback = {
     #       openid: openid,
