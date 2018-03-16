@@ -115,9 +115,6 @@ EOM
     puts "======= mp_openid: #{user.mp_openid} ========="
 
     feedback = {}
-
-    if session_from == 'join-wechat-group'
-
     if session_from =~ /userexam/
       user_exam_id = session_from.split(/_/)[1]
       puts "==== user_exam: #{user_exam_id}"
