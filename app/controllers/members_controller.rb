@@ -1,6 +1,6 @@
 class MembersController < ApplicationController
 
-  before_action :find_user_by_token!, only: [:points_activities,:daily_checkin,
+  before_action :find_user_by_token!, only: [:upload_form_id, :points_activities,:daily_checkin,
       :recognize, :get_reading_stats, :invitees,:bind_cell, :wechat_group, :wechat_phone, :update_profile, :my_resumes,
                                              :applying_job, :applied_jobs, :is_applied,:bind_hr_info, :read_business_card,
                                              :bookmarking_job, :is_bookmarked, :bookmarked_jobs, :deliver_resume_to_email]
@@ -37,6 +37,10 @@ class MembersController < ApplicationController
   #   render json: {code: 0, member: staff.membership}
   # end
 
+  def upload_form_id
+    @user.forms.create! form_id:  params[:form_id], from: params[:from]
+    render json: {code: 0,msg: 'succ'}
+  end
 
   def points_activities
     point_activities = @user.point_activities
