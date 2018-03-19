@@ -122,7 +122,7 @@ EOM
 EOM
       payload =
           {
-              touser: user.mp_openid,
+              touser: self.mp_openid,
               template_id: 'rRjhO2FPqxpHbrEMif224uBeTo6K7KgXvA95gJYMHLo',
               miniprogram:{
                   appid: 'wxbeddbe15b456a582',
