@@ -21,6 +21,22 @@ class WechatMiniAppClient
     token
   end
 
+
+  def send_template_message(json_data)
+
+    url = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{access_token}"
+    puts '====== url ===='
+    puts url
+    puts ' ======= json-data ====='
+    puts json_data
+    res = Faraday.post url, JSON.generate(json_data)
+    puts '====== res ========='
+    puts res.body
+
+
+
+  end
+
   def send_customer_message(json_str)
     # {
     #     "touser":"OPENID",
