@@ -25,6 +25,9 @@ class UserExam < ApplicationRecord
   belongs_to :parent_exam, class_name: UserExam, foreign_key: :parent_id, optional: true
   has_one :child_exam, class_name: UserExam,  foreign_key: :parent_id
 
+  def self.get_wait_one(user_id)
+    UserExam.where('state = 0 and user_id != ?', user_id).first
+  end
 
   def self.find_or_create_one!(user_id, exam_id, answers, parent_id)
     user_exam = self.where(user_id: user_id, exam_id: exam_id).first

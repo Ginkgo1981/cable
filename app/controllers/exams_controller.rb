@@ -27,7 +27,8 @@ class ExamsController < ApplicationController
   end
 
   def get_user_exam
-    user_exam =  UserExam.find params[:user_exam_id]
+    user_exam =  UserExam.find_by id:params[:user_exam_id]
+    user_exam ||=  UserExam.get_wait_one(@user.id)
     # render json: {code: 0, user_exam: user_exam.format_as, is_mine: user_exam.is_mine?(@user.id)}
     render json: {code: 0, user_exam: user_exam.format_as}
   end
