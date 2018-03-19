@@ -94,6 +94,66 @@ class User < ApplicationRecord
   # delegate :dsin, to: :identity
   before_create :generate_token
 
+
+
+  def daily_promotion
+    if self.mp?
+      wechat_oa_client = WechatOaClient.new
+      first_value =
+          <<EOM
+百草英语 | 活动上新提醒
+
+hi~我们上线了新的活动项目~
+
+EOM
+
+      keyword1_value =
+          <<EOM
+ << 日常英语话题(7天) >>
+EOM
+
+      remark_value =
+          <<EOM
+
+点击进入小程序开始阅读>>
+
+备注: 如你已完成阅读,请忽视此消息
+
+EOM
+      payload =
+          {
+              touser: user.mp_openid,
+              template_id: 'rRjhO2FPqxpHbrEMif224uBeTo6K7KgXvA95gJYMHLo',
+              miniprogram:{
+                  appid: 'wxbeddbe15b456a582',
+                  pagepath: 'pages/campaign-promotion-page/campaign-promotion-page?id=fa543c59-e9e1-4c05-b5c1-73eacc632b13'
+              },
+              data:{
+                  first: {
+                      value: first_value
+                  },
+                  keyword1:{
+                      value: keyword1_value,
+                      color: '#ff0000'
+                  },
+                  keyword2: {
+                      value: Time.now.strftime('%Y-%m-%d')
+                  },
+                  remark:{
+                      value: remark_value,
+                  }
+              }
+          }
+      res = wechat_oa_client.send_template_message(payload)
+
+    end
+
+
+
+
+
+  end
+
   def leave_campaign!(campaign)
     user_campaign = UserCampaign.find_by(user: self, campaign: campaign)
     user_campaign.mark_as_deleted = true
