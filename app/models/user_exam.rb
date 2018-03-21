@@ -124,5 +124,9 @@ class UserExam < ApplicationRecord
       self.parent_exam&.update state: 'completed'
       self.child_exam&.update state: 'completed'
     end
+
+    if self.parent_exam.present?
+      Form.send_user_exam_notification self.parent_exam.user.id,self.parent_exam.id
+    end
   end
 end

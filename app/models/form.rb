@@ -51,4 +51,30 @@ class Form < ApplicationRecord
       end
     end
   end
+
+  def self.send_user_exam_notification user_id,user_exam_id
+    wechat_mini_app_client = WechatMiniAppClient.new('wxbeddbe15b456a582', 'd043773699dbba089d49592984a2e638')
+    form = Form.where(user_id: user_id).first
+    user  = User.find user_id
+    if form
+      template =
+          {
+              'touser': user.miniapp_openid,
+              'template_id': 'piLIBVyxJobEmkckQ5645ayTArT4OQgAHvWcmOfUyO8',
+              'page': "pages/exam-friend-defense-page/exam-friend-defense-page?user_exam_id=#{user_exam_id}",
+              'form_id': form.form_id,
+              'data': {
+                  'keyword1': {
+                      'value': '有人挑战你啦!!!'
+                  },
+                  'keyword2': {
+                      'value': '快去看看!',
+                  }
+              }
+          }
+      form.destroy
+      wechat_mini_app_client.send_template_message template
+      puts "======== send_user_exam_notification #{user_id}"
+    end
+  end
 end
