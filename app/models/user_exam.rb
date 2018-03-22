@@ -125,10 +125,15 @@ class UserExam < ApplicationRecord
     end
 
     if self.parent_exam.present?
+      self.parent_exam.present.calculating_score_result!
       Form.send_user_exam_notification self.parent_exam.user.id,self.parent_exam.id
     end
   end
 
+  def calculating_score_result!
+    self.calculating_score_result
+    self.save!
+  end
 
   def calculating_score_result
     base_exam  =  self.parent_exam || self.child_exam
