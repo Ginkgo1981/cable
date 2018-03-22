@@ -111,8 +111,7 @@ EOM
   desc 'user_exam_daily_prmmotion'
   task user_exam_daily_prmmotion: :environment do
     wechat_mini_app_client = WechatMiniAppClient.new('wxbeddbe15b456a582', 'd043773699dbba089d49592984a2e638')
-    # Form.pluck(:user_id).uniq.each do |user_id|
-      ['0f87c760-73e8-48b9-9b6e-5064c6834430'].uniq.each do |user_id|
+    Form.pluck(:user_id).uniq.each do |user_id|
       user = User.find_by id: user_id
       if user
         form = user.forms.first
