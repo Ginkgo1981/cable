@@ -2,28 +2,40 @@
 #
 # Table name: user_exams
 #
-#  id         :uuid             not null, primary key
-#  user_id    :uuid
-#  exam_id    :uuid
-#  answers    :text             is an Array
-#  scores     :text             is an Array
-#  state      :integer          default("wait")
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  parent_id  :uuid
+#  id           :uuid             not null, primary key
+#  user_id      :uuid
+#  exam_id      :uuid
+#  answers      :text             is an Array
+#  scores       :text             is an Array
+#  state        :integer          default("wait")
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  parent_id    :uuid
+#  score_result :integer          default("unknow")
 #
 
 class UserExam < ApplicationRecord
 
-  before_create :calculating_scores, :update_state
+  before_create :calculating_scores, :calculating_score_result, :update_state
 
   enum state: [:wait, :completed]
+  enum score_result: [:unknow, :lose, :equal, :win]
 
   belongs_to :user
   belongs_to :exam
 
   belongs_to :parent_exam, class_name: UserExam, foreign_key: :parent_id, optional: true
   has_one :child_exam, class_name: UserExam,  foreign_key: :parent_id
+
+
+  def self.migrate_data
+    UserExam.all.each do |user_exam|
+      user_exam.score_result = user_exam.scores_result
+      user_exam.save!
+    end
+  end
+
+
 
   def self.get_wait_one(user_id)
     UserExam.where('state = 0 and user_id != ?', user_id).first
@@ -70,20 +82,7 @@ class UserExam < ApplicationRecord
     !!self.parent_exam
   end
 
-  def scores_result
-    base_exam  =  self.parent_exam || self.child_exam
-    if base_exam
-      if self.correct_scores_num > base_exam.correct_scores_num
-        'win'
-      elsif self.correct_scores_num == base_exam.correct_scores_num
-        'equal'
-      else
-        'lose'
-      end
-    else
-      'unknow'
-    end
-  end
+
 
   def format_as
     self.parent_exam ? format_as_defense : format_as_offense
@@ -93,7 +92,7 @@ class UserExam < ApplicationRecord
   def format_as_offense
     {
         id: self.id,
-        scores_result: self.scores_result,
+        scores_result: self.score_result,
         exam: exam.format,
         offense: self.format,
         defense: self.child_exam.try(:format),
@@ -105,7 +104,7 @@ class UserExam < ApplicationRecord
   def format_as_defense
     {
         id: self.id,
-        scores_result: self.scores_result,
+        scores_result: self.score_result,
         exam: exam.format,
         offense: self.parent_exam.try(:format),
         defense: self.format,
@@ -128,5 +127,22 @@ class UserExam < ApplicationRecord
     if self.parent_exam.present?
       Form.send_user_exam_notification self.parent_exam.user.id,self.parent_exam.id
     end
+  end
+
+
+  def calculating_score_result
+    base_exam  =  self.parent_exam || self.child_exam
+    self.score_result =
+      if base_exam
+        if self.correct_scores_num > base_exam.correct_scores_num
+          'win'
+        elsif self.correct_scores_num == base_exam.correct_scores_num
+          'equal'
+        else
+          'lose'
+        end
+      else
+        'unknow'
+      end
   end
 end

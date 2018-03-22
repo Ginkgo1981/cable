@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180315060327) do
+ActiveRecord::Schema.define(version: 20180322144838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
   enable_extension "hstore"
   enable_extension "pgcrypto"
-  enable_extension "uuid-ossp"
 
   create_table "activities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "user_id"
@@ -696,12 +696,13 @@ ActiveRecord::Schema.define(version: 20180315060327) do
   create_table "user_exams", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "user_id"
     t.uuid     "exam_id"
-    t.text     "answers",                             array: true
-    t.text     "scores",                              array: true
-    t.integer  "state",      default: 0
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.text     "answers",                               array: true
+    t.text     "scores",                                array: true
+    t.integer  "state",        default: 0
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.uuid     "parent_id"
+    t.integer  "score_result", default: 0
   end
 
   create_table "user_groups", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
