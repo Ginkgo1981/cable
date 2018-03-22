@@ -125,19 +125,13 @@ class UserExam < ApplicationRecord
     end
 
     if self.parent_exam.present?
-      self.parent_exam.calculating_score_result!
       Form.send_user_exam_notification self.parent_exam.user.id,self.parent_exam.id
     end
   end
 
-  def calculating_score_result!
-    self.calculating_score_result
-    self.save!
-  end
-
   def calculating_score_result
     base_exam  =  self.parent_exam || self.child_exam
-    self.score_result =
+    score_result =
       if base_exam
         if self.correct_scores_num > base_exam.correct_scores_num
           'win'
@@ -149,5 +143,20 @@ class UserExam < ApplicationRecord
       else
         'unknow'
       end
+
+    if self.parent_exam.present?
+      parent_exam_score_result =
+          if score_result == 'win'
+            'lose'
+          elsif  score_result == 'lose'
+            'win'
+          else
+            'unknow'
+          end
+      self.parent_exam.update(score_result: parent_exam_score_result)
+    end
+
+    self.score_result = score_result
+
   end
 end
