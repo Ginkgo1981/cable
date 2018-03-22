@@ -45,17 +45,17 @@ class Lesson < ApplicationRecord
 
 
 
-    lesson.lesson_questions.create! question: 'Which subject does Gilman think I should be mainly studied ?',
-                                    options:['mathematics', 'Greek and Latin.', 'physics, algebra, geometry, astronomy.'],
+    lesson.lesson_questions.create! question: "Who is one of my oldest friends with me?",
+                                    options:['Dr. Edward Everett Hale.','Miss Sullivan.', 'Mrs. William Thaw'],
                                     answer: 0,
-                                    analysis: '原文提到：Gilman had agreed that that year I should study mathematics principally. (吉尔曼先生认为我在这一年里应该以学习数学为主。)'
+                                    analysis: "原文提到：Dr. Edward Everett Hale is one of my very oldest friends. (爱德华·埃弗里特·黑尔博士是同我交往时间最久的朋友之一)"
 
 
 
-    lesson.lesson_questions.create! question: 'Why did the school find  Mr. Eugene C. Vining to copy the papers for me in American braille?',
-                                    options: ['Mr. Eugene C. Vining is one of the instructors at the Perkins Institution for the Blind. ', 'They did not allow Miss Sullivan to read the examination papers to me', "We don't know."],
-                                    answer: 1,
-                                    analysis: '原文提到：The college authorities did not allow Miss Sullivan to read the examination papers to me;so Mr. Eugene C. Vining, one of the instructors at the Perkins Institution for the Blind, was employed to copy the papers for me in American braille.  (校方不允许苏立文小姐为我读试卷,所以，学校就雇来了尤金·C.维宁先生为我把试卷译成美式布莱叶盲文。)'
+    lesson.lesson_questions.create! question: "Why do we love Dr. Edward Everett Hale?",
+                                    options: ['Both B and C', 'He brings people hope.',  'He has made great achievements.'],
+                                    answer: 0,
+                                    analysis: '原文提到： we love him alike for what he himself has achieved and for what he has evoked from others.(我们爱他，不只是因为他所取得的伟大成就，还因为他唤醒了他人心中的希望。)'
 
 
 
@@ -117,8 +117,7 @@ class Lesson < ApplicationRecord
 
   def self.create_from_loki
     book  = Book.find '9e18725d-885c-4547-af22-e7983208e7a7'
-
-
+    #
 
     ###### 01 ######
 
@@ -126,14 +125,14 @@ class Lesson < ApplicationRecord
 
     lesson.destroy
 
-    lesson = book.lessons.create! title_en: 'chapter19-day22',
-                        previous: '有时候心灰意冷到了极点，而且还把这种情绪流露出来，至今思念及此，我就惭愧万分',
-                        audio_url: 'http://audios.gaokao2017.cn/the-story-of-my-life-audio-chapter19-day22.mp3',
-                        reading_day: 22
+    lesson = book.lessons.create! title_en: 'chapter23b-day32',
+                        previous: '我有许多忘年交朋友，爱德华。埃弗雷特。黑尔就是其中一位。我8 岁那年就认识他，随着年岁的增长，就越发敬重他。',
+                        audio_url: 'http://audios.gaokao2017.cn/the-story-of-my-life-audio-chapter23b-day32.mp3',
+                        reading_day: 32
 
 
     #导入标注
-    file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-label-chapter19-day22.txt'
+    file_path = '/home/deploy/apps/cable/23/the-story-of-my-life-label-chapter23b-day32.txt'
     File.open(file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         timeReg = /\[(?<min>\d{2}):(?<sec>\d{2}).(?<msec>\d{2})\]/
@@ -149,7 +148,7 @@ class Lesson < ApplicationRecord
 
 
     #翻译
-    t_file_path = '/home/deploy/apps/cable/lyrics/the-story-of-my-life-version-chapter19-day22.txt'
+    t_file_path = '/home/deploy/apps/cable/23/the-story-of-my-life-version-chapter23b-day32.txt'
     File.open(t_file_path, 'r') do |f|
       f.each_line.with_index do |line, idx|
         lesson_lyric = lesson.lesson_lyrics.where(ord: idx).first
