@@ -14,7 +14,13 @@
 #
 
 class ExamsController < ApplicationController
-  before_action :find_user_by_token!, only: [:get_user_exams, :get_user_exam, :save_exam_answers]
+  before_action :find_user_by_token!, only: [:score_result_statistics, :get_user_exams, :get_user_exam, :save_exam_answers]
+
+
+  def score_result_statistics
+    score_result_statistics = UserExam.my_score_result_statistics(@user.id)
+    render json: {code: 0, score_result_statistics: score_result_statistics}
+  end
 
   def get_rand_exam
     exam = Exam.rand_one

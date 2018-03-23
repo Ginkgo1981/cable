@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  get 'exams/score_result_statistics', to: 'exams#score_result_statistics'
   get 'exams/get_rand_exam', to: 'exams#get_rand_exam'
   get 'exams/get_user_exam/:user_exam_id', to: 'exams#get_user_exam'
   get 'exams/get_user_exams', to: 'exams#get_user_exams'

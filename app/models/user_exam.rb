@@ -27,6 +27,11 @@ class UserExam < ApplicationRecord
   belongs_to :parent_exam, class_name: UserExam, foreign_key: :parent_id, optional: true
   has_one :child_exam, class_name: UserExam,  foreign_key: :parent_id
 
+  def self.my_score_result_statistics(user_id)
+    wins = UserExam.where(user_id: user_id, score_result: 'win').count
+    loses = UserExam.where(user_id: user_id, score_result: 'lose').count
+    {wins: wins,  loses: loses}
+  end
 
   def self.migrate_data
     UserExam.all.each do |user_exam|

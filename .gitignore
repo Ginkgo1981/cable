@@ -27,7 +27,7 @@ config/wechat_open.yml
 config/aliyun_mns.yml
 story-*
 config/baidu.yml
-
+config/database.yml
 pcm/**
 
 
