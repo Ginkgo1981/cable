@@ -44,4 +44,21 @@ class ExamsController < ApplicationController
     render json: {code: 0, user_exams: user_exams.map{|user_exam| user_exam.format_as}}
   end
 
+
+  def group_statistics
+    sql = '
+select user_id, users.nickname, users.headimgurl,
+sum(case when user_exams.score_result = 1 then 1 else 0 end) as loses,
+sum(case when user_exams.score_result = 2 then 1 else 0 end) as equals,
+sum(case when user_exams.score_result = 3 then 1 else 0 end) as wins
+from user_exams
+join users
+on users.id = user_exams.user_id
+group by user_exams.user_id, users.headimgurl, users.nickname
+order by wins desc
+'
+    statistics = ActiveRecord::Base.connection.execute(sql).to_a
+    render json: {code: 0, statistics: statistics}
+  end
+
 end
