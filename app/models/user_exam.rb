@@ -155,6 +155,8 @@ class UserExam < ApplicationRecord
             'lose'
           elsif  score_result == 'lose'
             'win'
+          elsif score_result == 'equal'
+            'equal'
           else
             'unknow'
           end

@@ -46,7 +46,7 @@ class ExamsController < ApplicationController
 
 
   def group_statistics
-    sql = '
+    sql_1 = '
 select user_id, users.nickname, users.headimgurl,
 sum(case when user_exams.score_result = 1 then 1 else 0 end) as loses,
 sum(case when user_exams.score_result = 2 then 1 else 0 end) as equals,
@@ -58,8 +58,25 @@ group by user_exams.user_id, users.headimgurl, users.nickname
 having sum(case when user_exams.score_result = 3 then 1 else 0 end) > 0
 order by wins desc
 '
-    statistics = ActiveRecord::Base.connection.execute(sql).to_a
-    render json: {code: 0, statistics: statistics}
+    statistics_1 = ActiveRecord::Base.connection.execute(sql_1).to_a
+
+
+    sql_2 = "
+select user_id, users.nickname, users.headimgurl,
+sum(case when user_exams.score_result = 1 then 1 else 0 end) as loses,
+sum(case when user_exams.score_result = 2 then 1 else 0 end) as equals,
+sum(case when user_exams.score_result = 3 then 1 else 0 end) as wins
+from user_exams
+join users
+on users.id = user_exams.user_id
+where user_exams.created_at > now() at time zone 'utc' - interval '24 hour'
+group by user_exams.user_id, users.headimgurl, users.nickname
+having sum(case when user_exams.score_result = 3 then 1 else 0 end) > 0
+order by wins desc
+"
+    statistics_2 = ActiveRecord::Base.connection.execute(sql_2).to_a
+
+    render json: {code: 0, statistics_1: statistics_1,statistics_2: statistics_2}
   end
 
 end
