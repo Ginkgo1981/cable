@@ -55,6 +55,7 @@ from user_exams
 join users
 on users.id = user_exams.user_id
 group by user_exams.user_id, users.headimgurl, users.nickname
+having sum(case when user_exams.score_result = 3 then 1 else 0 end) > 0
 order by wins desc
 '
     statistics = ActiveRecord::Base.connection.execute(sql).to_a
